@@ -22,7 +22,7 @@
 }
 
 .mainContext{
-    flex: 4;
+    flex: 6;
     display: flex;
     flex-direction: column;
 }
