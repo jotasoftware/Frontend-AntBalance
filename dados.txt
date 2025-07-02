@@ -4,7 +4,7 @@ dashboard: import { IoGridOutline } from "react-icons/io5";
 
 Gastos: import { RiCoinsLine } from "react-icons/ri";
 
-add: import { IoAddOutline } from "react-icons/io5";
+add: import { CiSquarePlus } from "react-icons/ci";
 
 close: import { IoClose } from "react-icons/io5";
 
