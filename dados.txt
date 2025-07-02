@@ -1,0 +1,24 @@
+-> Ícones:
+
+add: import { IoAddOutline } from "react-icons/io5";
+
+close: import { IoIosClose } from "react-icons/io";
+
+menu: import { IoIosMenu } from "react-icons/io";
+
+refresh: import { IoIosRefresh } from "react-icons/io";
+
+seta direita: import { IoMdArrowRoundForward } from "react-icons/io";
+
+seta esquerda: import { IoMdArrowRoundBack } from "react-icons/io";
+
+dropdown: import { IoMdArrowDropdown } from "react-icons/io";
+
+settings: import { IoSettingsSharp } from "react-icons/io5";
+
+logout: import { IoLogOutOutline } from "react-icons/io5";
+
+expand: import { IoIosArrowDown } from "react-icons/io";
+
+
+
