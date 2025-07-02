@@ -1,5 +1,9 @@
 -> Ícones:
 
+dashboard: import { IoApps } from "react-icons/io5";
+
+Gastos: import { RiCoinsLine } from "react-icons/ri";
+
 add: import { IoAddOutline } from "react-icons/io5";
 
 close: import { IoIosClose } from "react-icons/io";
