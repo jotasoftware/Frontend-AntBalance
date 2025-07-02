@@ -1,0 +1,37 @@
+.layoutContainer{
+    display: flex;
+    background-color: green;
+    height: 100vh;
+}
+
+.sidebarContainer{
+    background-color: blue;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.logoContainer{
+    flex: 1;
+    background-color: red;
+}
+
+.menuContainer{
+    flex: 5;
+    background-color: rgb(140, 255, 0);
+}
+
+.mainContext{
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContext .headerContainer{
+    flex: 1;
+    background-color: blue;
+}
+
+.mainContext .contentContainer{
+    flex: 5;
+}
