@@ -1,37 +1,36 @@
 .layoutContainer{
     display: flex;
-    background-color: green;
     height: 100vh;
 }
 
 .sidebarContainer{
-    background-color: blue;
+    background-color: #191919;
     flex: 1;
     display: flex;
     flex-direction: column;
+    color: white;
 }
 
 .sidebarContainer .logoContainer{
     flex: 1;
-    background-color: red;
 }
 
 .sidebarContainer .menuContainer{
     flex: 6;
-    background-color: rgb(140, 255, 0);
 }
 
 
 
 .mainContext{
-    flex: 6;
+    flex: 5;
     display: flex;
     flex-direction: column;
 }
 
 .mainContext .headerContainer{
     flex: 1;
-    background-color: blue;
+    background: linear-gradient(to right, #050518, #2320ef);
+    background: #1a45b8;
 }
 
 .mainContext .contentContainer{
