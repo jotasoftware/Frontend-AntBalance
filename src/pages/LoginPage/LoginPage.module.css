@@ -14,7 +14,7 @@
     justify-content: center;
     background-color: white;
     width: 30vw;
-    border: #3533CD 1px solid;
+    border: #191919 1px solid;
     border-radius: 25px;
     padding-top: 40px;
 }
@@ -57,11 +57,11 @@
     margin-bottom: 6px;
 }
 
-form button{
+.buttonSubmit{
     margin-top: 15px;
     border: #CFCFCF 1px solid;
     color: white;
-    background-color: #3533CD;
+    background-color: #1a45b8;
     cursor: pointer;
     outline: none;
     border-radius: 8px;
@@ -69,8 +69,8 @@ form button{
     width: 100%;
     transition: .2s ease-in-out background;
 }
-form button:hover{
-    background-color: #181684;
+.buttonSubmit:hover{
+    background-color: #191919;
 }
 .create{
     margin: 30px 0;

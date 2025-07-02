@@ -1,16 +1,17 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import styles from './MainLayout.module.css';
+import Menu from '../../components/menu/Menu';
 
 function MainLayout() {
     return (
         <div className={styles.layoutContainer}>
             <div className={styles.sidebarContainer}>
                 <div className={styles.logoContainer}>
-                    <p>logo</p>
+                    <img src="logo.svg" alt="" />
                 </div>
                 <div className={styles.menuContainer}>
-                    <p>menu</p>
+                    <Menu></Menu>
                 </div>
             </div>
 

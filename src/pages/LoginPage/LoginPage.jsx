@@ -124,8 +124,8 @@ function LoginPage() {
                         />
                     </div>
                     {type === 'login' ? 
-                        <button type="submit">Entrar</button>
-                        : <button type="submit">Criar conta</button>}
+                        <button type="submit" className={styles.buttonSubmit}>Entrar</button>
+                        : <button type="submit" className={styles.buttonSubmit}>Criar conta</button>}
                 </form>
                 <div className={styles.create}>
                     {type === 'login' ? 
