@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
+import GastosPage from './pages/GastosPage/GastosPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
 import MainLayout from './layouts/MainLayout/MainLayout';
 
@@ -40,6 +41,7 @@ function App() {
             >
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="gastos" element={<GastosPage />} />
             </Route>
             {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
           </Routes>

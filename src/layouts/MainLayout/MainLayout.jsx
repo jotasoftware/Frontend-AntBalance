@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import styles from './MainLayout.module.css';
 import Menu from '../../components/menu/Menu';
+import Header from '../../components/header/Header';
 
 function MainLayout() {
     return (
@@ -10,15 +11,11 @@ function MainLayout() {
                 <div className={styles.logoContainer}>
                     <img src="logo.svg" alt="" />
                 </div>
-                <div className={styles.menuContainer}>
-                    <Menu></Menu>
-                </div>
+                <Menu></Menu>
             </div>
 
         <div className={styles.mainContext}>
-            <header className={styles.headerContainer}>
-                <p>header</p>
-            </header>
+            <Header></Header>
             <main className={styles.contentContainer}>
                 <Outlet />
             </main>

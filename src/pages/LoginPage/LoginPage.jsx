@@ -5,7 +5,7 @@ import styles from './LoginPage.module.css';
 import { toast } from 'react-toastify';
 
 function LoginPage() {
-    const {login} = useAuth();
+    const {login, register} = useAuth();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -45,6 +45,9 @@ function LoginPage() {
         try{
             await login({ email, password });
             toast.success('Login bem sucedido.');
+            setEmail("");
+            setName("")
+            setPassword("");
             navigate('/dashboard', { replace: true});
         } catch (err){
             toast.error('Email ou senha invalida, tente novamente.');
@@ -54,14 +57,16 @@ function LoginPage() {
         }
     };
 
-    const handleSubmitLogout = async () => {
+    const handleSubmitCreate = async () => {
         setIsLoading(true);
         try{
-            await login({email, password});
-            toast.success('Login bem sucedido.');
-            navigate('/dashboard', { replace: true});
+            await register({email, password, name});
+            toast.success('Usuário criado com sucesso.');
+            setPassword("");
+            setName("")
+            setType('login')
         } catch (err){
-            toast.error('Email ou senha invalida, tente novamente.');
+            toast.error('Usuário não foi criado.');
             console.error("Falha no login:", err);
         } finally {
             setIsLoading(false);
@@ -81,12 +86,13 @@ function LoginPage() {
         if (type === 'login') {
             handleSubmitLogin();
         } else {
-            handleSubmitLogout();
+            handleSubmitCreate();
         }
     };
 
     return (
         <div className={styles.loginContainer}>
+            <img src="logo.svg" alt="" />
             <div className={styles.container}>
                 <form onSubmit={handleFormSubmit}>
                     {type === 'signup' &&

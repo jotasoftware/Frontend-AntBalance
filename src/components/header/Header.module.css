@@ -1,0 +1,20 @@
+.headerContainer{
+  flex: 1;
+  background: #1a45b8;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 35px;
+  align-items: center;
+}
+
+.headerContainer p{
+  text-align: start;
+}
+
+.headerContainer .infoContainer{
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}

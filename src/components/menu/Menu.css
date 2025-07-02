@@ -1,36 +1,24 @@
-
-
-p{
-    color: white;
-    margin: 0;
-}
-
-.logo{
+.menuContainer{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    justify-content: space-between;
+    height: 100%;
+    flex: 6;
 }
 
-.logo p{
-    font-weight: 700;
-    letter-spacing: 8px;
-}
-
-.logo img{
-    width: 150px;
-}
-
-.menuItens{
+.menuItens1, .menuItens2{
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    gap: 10px;
+}
+
+.menuItens2{
+    margin-bottom: 30px;
 }
 
 .menuLink{
-    width: 80%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,26 +27,15 @@ p{
 .menuLink a{
     display: flex;
     align-items: center;
+    gap: 10px;
     justify-content: center;
     height: 50px;
     color: white;
     text-decoration: none;
     width: 100%;
-    border-radius: 5px;
     transition: .3s background-color linear;
 }
 
 .menuLink a:hover{
-    background-color: #e10600;
-}
-
-select {
-    background-color: transparent;
-    border: 1px solid #ccc;
-    padding: 5px;
-    color: #000;
-    border: none;
-    color: white;
-    font-size: 18px;
-    font-family: 'Poppins', sans-serif;
+    background-color: #1a45b8;
 }

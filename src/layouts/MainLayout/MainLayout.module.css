@@ -3,6 +3,8 @@
     height: 100vh;
 }
 
+
+
 .sidebarContainer{
     background-color: #191919;
     flex: 1;
@@ -17,15 +19,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 0;
 }
 
 .sidebarContainer .logoContainer img{
-    height: 70%;
-}
-
-
-.sidebarContainer .menuContainer{
-    flex: 6;
+    width: 58%;
 }
 
 
@@ -34,11 +32,7 @@
     flex: 5;
     display: flex;
     flex-direction: column;
-}
 
-.mainContext .headerContainer{
-    flex: 1;
-    background: #1a45b8;
 }
 
 .mainContext .contentContainer{

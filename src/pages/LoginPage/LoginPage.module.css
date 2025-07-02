@@ -3,8 +3,10 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    margin-top: 10vh;
+    gap: 8vh;
 }
 
 .container{
@@ -14,7 +16,7 @@
     justify-content: center;
     background-color: white;
     width: 30vw;
-    border: #191919 1px solid;
+    border: #191919 2px solid;
     border-radius: 25px;
     padding-top: 40px;
 }

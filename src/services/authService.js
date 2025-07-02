@@ -1,22 +1,27 @@
-import { API_CONFIG } from '../config/apiConfig';
-
 export const login = async (credentials) => {
-    try{
-      const response = await axios.post(API_CONFIG.auth.login, credentials);
-      return response.data;
-    }catch(error){
-      console.error("Erro no serviço de login:", error.response?.data || error.message);
-      throw error;
-    }
-}
-  
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const { email, password } = credentials;
+
+            if (email === "joao@gmail.com" && password === "Bolinha123@") {
+                resolve({
+                    token: "fake-jwt-token-123456",
+                    name: "João Pedro"
+                });
+            } else {
+                reject({ message: "Credenciais inválidas" });
+            }
+        }, 1000);
+    });
+};
 
 export const register = async (userData) => {
-    try{
-        const response = await axios.post(API_CONFIG.auth.register, userData);
-        return response.data;
-    }catch(error){
-        console.error("Erro no serviço de registro:", error.response?.data || error.message);
-        throw error;
-    }
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                token: "fake-jwt-token-registered",
+                name: userData.name || "Usuário Novo"
+            });
+        }, 1000);
+    });
 };

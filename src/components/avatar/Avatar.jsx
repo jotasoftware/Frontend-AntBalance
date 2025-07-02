@@ -1,11 +1,11 @@
 import React from "react";
 
-const Avatar = ({ name, size = 50, backgroundColor = "#3533cd", textColor = "white" }) => {
+const Avatar = ({ name, size = 55, backgroundColor = "rgb(235, 235, 235)", textColor = "#191919" }) => {
   const getInitials = (fullName) => {
     if (!fullName) return "";
     const parts = fullName.trim().split(" ");
     return parts.map(p => p[0].toUpperCase()).slice(0, 2).join("");
-  };
+  }
 
   const initials = getInitials(name);
 

@@ -1,0 +1,11 @@
+.botaoContainer{
+  background-color: #1a45b8;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  padding: 10px 15px;
+  gap: 15px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 500;
+}
