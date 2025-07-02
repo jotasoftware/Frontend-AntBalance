@@ -1,12 +1,14 @@
 -> Ícones:
 
-dashboard: import { IoApps } from "react-icons/io5";
+dashboard: import { IoGridOutline } from "react-icons/io5";
 
 Gastos: import { RiCoinsLine } from "react-icons/ri";
 
 add: import { IoAddOutline } from "react-icons/io5";
 
-close: import { IoIosClose } from "react-icons/io";
+close: import { IoClose } from "react-icons/io5";
+
+filtrar: import { IoFilterOutline } from "react-icons/io5";
 
 menu: import { IoIosMenu } from "react-icons/io";
 
@@ -23,6 +25,11 @@ settings: import { IoSettingsSharp } from "react-icons/io5";
 logout: import { IoLogOutOutline } from "react-icons/io5";
 
 expand: import { IoIosArrowDown } from "react-icons/io";
+
+print: import { IoPrintOutline } from "react-icons/io5";
+
+checkmark: import { IoCheckmark } from "react-icons/io5";
+
 
 
 
