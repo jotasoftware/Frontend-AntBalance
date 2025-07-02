@@ -11,15 +11,17 @@
     flex-direction: column;
 }
 
-.logoContainer{
+.sidebarContainer .logoContainer{
     flex: 1;
     background-color: red;
 }
 
-.menuContainer{
-    flex: 5;
+.sidebarContainer .menuContainer{
+    flex: 6;
     background-color: rgb(140, 255, 0);
 }
+
+
 
 .mainContext{
     flex: 6;
@@ -33,5 +35,5 @@
 }
 
 .mainContext .contentContainer{
-    flex: 5;
+    flex: 6;
 }
