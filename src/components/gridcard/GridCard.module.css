@@ -1,7 +1,10 @@
 .cardContainer{
-    border: #80808071 1px solid;
-    border-radius: 10px;
+    border: #80808047 1px solid;
+    border-radius: 16px;
     padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .cardContainer h4{

@@ -1,0 +1,44 @@
+.valoresContainer{
+  background-color: #1a45b8;
+  border: #80808047 1px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+  gap: 15px;
+  color: white;
+  border-radius: 16px;
+  align-items: stretch; 
+}
+
+.valoresContainer h5{
+  font-weight: 500;
+}
+
+.valoresContainer p{
+  display: flex;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.valoresContainer .sifraoSpan{
+  font-size: 25px;
+  line-height: 1;
+  padding-top: 5px;
+}
+
+.valoresContainer .inteiroSpan{
+  font-size: 54px;
+  line-height: 1;
+  font-weight: 500;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.valoresContainer .centsSpan{
+  font-size: 25px;
+  letter-spacing: 1.3px;
+  align-self: flex-end;
+  line-height: 1;
+  padding-bottom: 3px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+}

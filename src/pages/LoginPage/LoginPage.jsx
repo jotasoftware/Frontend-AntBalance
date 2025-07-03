@@ -92,7 +92,7 @@ function LoginPage() {
 
     return (
         <div className={styles.loginContainer}>
-            <img src="logo.svg" alt="" />
+            <img src="logomini.svg" alt="" />
             <div className={styles.container}>
                 <form onSubmit={handleFormSubmit}>
                     {type === 'signup' &&

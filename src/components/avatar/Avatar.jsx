@@ -23,7 +23,8 @@ const Avatar = ({ name, size = 55, backgroundColor = "rgb(235, 235, 235)", textC
     fontFamily: "sans-serif",
     textTransform: "uppercase",
     userSelect: "none",
-    cursor: 'pointer'
+    cursor: 'pointer',
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.573)'
   }
 
   return <div style={style}>{initials}</div>;
