@@ -32,4 +32,51 @@ checkmark: import { IoCheckmark } from "react-icons/io5";
 
 
 
+import React from 'react';
+import './Valor.css';
+
+const ValorFormatado = ({ valor }) => {
+  // Garante que é número
+  const numero = typeof valor === 'string' ? parseFloat(valor) : valor;
+
+  // Formata em pt-BR
+  const formatado = numero.toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  // Divide parte inteira dos centavos
+  const [inteiro, centavos] = formatado.split(',');
+
+  return (
+    <p className="valor">
+      {inteiro},<span className="centavos">{centavos}</span>
+    </p>
+  );
+};
+
+export default function App() {
+  return <ValorFormatado valor={5254.5} />;
+  // ou <ValorFormatado valor="5254.5" />
+}
+
+
+
+
+.valor {
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+  background-color: #1a45b8; /* tom roxinho igual da imagem */
+  padding: 10px;
+  display: inline-block;
+}
+
+.centavos {
+  font-size: 28px;
+  vertical-align: super;
+  margin-left: 2px;
+}
+
+
 
