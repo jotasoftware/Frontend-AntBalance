@@ -30,7 +30,8 @@ print: import { IoPrintOutline } from "react-icons/io5";
 
 checkmark: import { IoCheckmark } from "react-icons/io5";
 
-sifrão: import { FaDollarSign } from "react-icons/fa";
+sifrão: import { FaDollarSign } from "react-icons/fa6";
+
 
 
 
