@@ -5,12 +5,20 @@ import styles from './DashboardPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6"
+import GridCard from '../../components/gridcard/GridCard';
 
 function DashboardPage() {
 
     return (
         <div className={styles.dashboardContainer}>
-            <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
+            <GridCard flex={2}>
+                <h4>Resumo</h4>
+                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
+            </GridCard>
+            <GridCard flex={3}>
+                <h4>Ultimos gastos</h4>
+                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
+            </GridCard>
         </div>
     );
 }
