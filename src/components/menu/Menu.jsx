@@ -4,6 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext';
 import { RiCoinsLine } from "react-icons/ri"
 import { IoSettingsSharp, IoLogOutOutline, IoApps } from "react-icons/io5"
+import { toast } from 'react-toastify';
 
 const Menu = () => {
 
@@ -13,7 +14,7 @@ const Menu = () => {
   const handleLogout = async () => {
     try{
       logout();
-      toast.success('Login bem sucedido.');
+      toast.success('Logout realizado com sucesso.');
       navigate('/login', { replace: true});
     } catch (err){
         toast.error('Erro ao fazer logout. Tente novamente.');

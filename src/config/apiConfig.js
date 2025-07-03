@@ -1,10 +1,10 @@
-const MS_AUTH_URL = 'http://localhost:8081';
+const MS_AUTH_URL = 'http://localhost:8080';
 const MS_EXPENSES_URL = 'http://localhost:8082';
 
 export const API_CONFIG = {
     auth: {
-        login: `${MS_AUTH_URL}/api/auth/login`,
-        register: `${MS_AUTH_URL}/api/auth/register`,
+        login: `${MS_AUTH_URL}/auth/login`,
+        register: `${MS_AUTH_URL}/auth/register`,
     },
     expenses: {
         getAll: `${MS_EXPENSES_URL}/api/expenses`,

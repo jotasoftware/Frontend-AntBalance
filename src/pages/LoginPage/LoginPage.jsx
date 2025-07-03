@@ -33,8 +33,8 @@ function LoginPage() {
             toast.error(`Email invalido`);
             return false;
         }
-        if(!regexPass.test(password)){
-            toast.error(`Senha invalida`);
+        if(!regexPass.test(password) && (type === 'signup')){
+            toast.warn("Senha deve ter 8+ caracteres, com maiúscula, minúscula, número e símbolo.");
             return false;
         }
         return true;

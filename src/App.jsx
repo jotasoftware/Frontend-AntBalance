@@ -12,13 +12,14 @@ import GastosPage from './pages/GastosPage/GastosPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
 import MainLayout from './layouts/MainLayout/MainLayout';
 import CadastroGastoPage from './pages/CadastroGastoPage/CadastroGastoPage'
+import Private from './components/private/Private';
 
 function App() {
   return (
     <BrowserRouter>
     <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -35,9 +36,9 @@ function App() {
             <Route
               path="/"
               element={
-                // <Private>
+                <Private>
                   <MainLayout />
-                // </Private>
+                </Private>
               }
             >
               <Route index element={<Navigate to="/dashboard" replace />} />
@@ -45,7 +46,7 @@ function App() {
               <Route path="gastos" element={<GastosPage />} />
               <Route path="cadastrogasto" element={<CadastroGastoPage />} />
             </Route>
-            {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         {/* </ExpenseProvider> */}
       </AuthProvider>

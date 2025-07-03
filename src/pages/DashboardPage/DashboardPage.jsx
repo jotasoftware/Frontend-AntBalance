@@ -21,6 +21,7 @@ function DashboardPage() {
             <GridCard flex={3}>
                 <h4>Ultimos gastos</h4>
                 <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
+                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
             </GridCard>
         </div>
     );

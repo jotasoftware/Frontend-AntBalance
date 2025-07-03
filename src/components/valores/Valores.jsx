@@ -18,7 +18,7 @@ const Valores = ({mes, valor, bgColor, mesColor, valorColor}) => {
   return (
     <div className={styles.valoresContainer} style={containerStyle}>
         <h5>{mes}</h5>
-        <p style={{ color: valorColor }}><span className={styles.sifraoSpan}>$</span><span className={styles.inteiroSpan}>{inteiro}</span><span className={styles.centsSpan}>,{centavos}</span></p>
+        <p style={{ color: valorColor }}><span className={styles.sifraoSpan}>R$</span><span className={styles.inteiroSpan}>{inteiro}</span><span className={styles.centsSpan}>,{centavos}</span></p>
     </div>
   )
 }
