@@ -1,0 +1,193 @@
+/* Container principal */
+.cadastroGastoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* Container de input individual */
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+}
+
+/* Labels */
+.inputContainer label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+/* Inputs e Selects */
+.inputContainer input,
+.inputContainer select {
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    transition: all 0.2s ease;
+}
+
+/* Focus state */
+.inputContainer input:focus,
+.inputContainer select:focus {
+    outline: none;
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(64, 83, 214, 0.1);
+}
+
+/* Container de informações de parcelas */
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px;
+    background-color: #1a45b8;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.valorParcela {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.valorTotal {
+    font-size: 14px;
+    color: #ffffff;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Container do botão */
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Estilo para o botão */
+.buttonContainer button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #1a45b8;
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 200px;
+}
+
+.buttonContainer button:hover {
+    background-color: #1a45b8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(64, 83, 214, 0.3);
+}
+
+.buttonContainer button:active {
+    transform: translateY(0);
+}
+
+/* Campo de valor com estilo especial */
+.inputContainer:has(input[name="valor"]) {
+    position: relative;
+}
+
+.inputContainer input[name="valor"] {
+    font-size: 20px;
+    font-weight: 600;
+    padding-left: 40px;
+}
+
+.inputContainer:has(input[name="valor"])::before {
+    content: 'R$';
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-2px);
+    color: #666666;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Estados de validação sutis */
+.inputContainer input:invalid:not(:focus):not(:placeholder-shown),
+.inputContainer select:invalid:not(:focus) {
+    border-color: #dc3545;
+}
+
+.inputContainer input:valid:not(:focus):not(:placeholder-shown),
+.inputContainer select:valid:not(:focus):not(:has(option[value=""]:checked)) {
+    border-color: #28a745;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+    .cadastroGastoContainer {
+        padding: 20px;
+        max-width: 100%;
+    }
+    
+    .inputContainer {
+        padding: 16px;
+    }
+    
+    .buttonContainer button {
+        width: 100%;
+    }
+}
+
+/* Animação de loading */
+.buttonContainer button.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.buttonContainer button.loading::after {
+    content: '...';
+    animation: dots 1s steps(3, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+/* Placeholder styling */
+.inputContainer input::placeholder {
+    color: #999999;
+}
+
+/* Select arrow customization */
+.inputContainer select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+}

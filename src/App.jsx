@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import GastosPage from './pages/GastosPage/GastosPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
 import MainLayout from './layouts/MainLayout/MainLayout';
+import CadastroGastoPage from './pages/CadastroGastoPage/CadastroGastoPage'
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="gastos" element={<GastosPage />} />
+              <Route path="cadastrogasto" element={<CadastroGastoPage />} />
             </Route>
             {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
           </Routes>
