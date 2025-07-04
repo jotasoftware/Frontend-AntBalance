@@ -387,24 +387,3 @@
         opacity: 1;
     }
 }
-
-
-.inputContainer input:invalid:not(:focus):not(:placeholder-shown),
-.inputContainer select:invalid:not(:focus),
-.modalContent:invalid:not(:focus):not(:placeholder-shown),
-.valorInputContainer input:invalid:not(:focus):not(:placeholder-shown) {
-    border-color: #dc3545;
-}
-
-.inputContainer input:valid:not(:focus):not(:placeholder-shown),
-.inputContainer select:valid:not(:focus),
-.modalContent:valid:not(:focus):not(:placeholder-shown),
-.valorInputContainer input:valid:not(:focus):not(:placeholder-shown) {
-    border-color: #28a745;
-}
-
-.inputContainer input::placeholder,
-.valorInputContainer input::placeholder,
-.modalContent::placeholder {
-    color: #999999;
-}
