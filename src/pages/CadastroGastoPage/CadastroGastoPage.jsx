@@ -5,13 +5,34 @@ import styles from './CadastroGastoPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6";
+import { FaTimes, FaPlus, FaUtensils, FaShoppingCart, FaFileInvoiceDollar, FaMoneyCheckAlt, FaEllipsisH } from "react-icons/fa";
+import ModalCategoria from './ModalCategoria';
+
+// Modal de Seleção de Categoria
+
 
 function CadastroGastoPage() {
+    const navigate = useNavigate();
+    const { create } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    
     const [nome, setNome] = useState('');
     const [valor, setValor] = useState('');
     const [categoria, setCategoria] = useState('');
     const [fonte, setFonte] = useState('');
     const [parcelas, setParcelas] = useState(1);
+    const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
+    
+    // Lista inicial de categorias
+    const [categorias, setCategorias] = useState([
+        'Supermercado',
+        'Alimentação',
+        'Assinaturas',
+        'Investimentos',
+        'Contas',
+        'Taxas',
+        'Outros'
+    ]);
     
     const handleChangeNome = (event) => {
         setNome(event.target.value);
@@ -39,10 +60,6 @@ function CadastroGastoPage() {
         setValor(valorFormatado);
     }
 
-    const handleChangeCategoria = (event) => {
-        setCategoria(event.target.value);
-    }
-
     const handleChangeFonte = (event) => {
         setFonte(event.target.value);
     }
@@ -52,9 +69,46 @@ function CadastroGastoPage() {
         setParcelas(numParcelas); 
     }
 
+    const handleSelectCategoria = (categoriaSelecionada) => {
+        setCategoria(categoriaSelecionada);
+    }
+
+    const handleAddCategoria = (novaCategoria) => {
+        if (!categorias.includes(novaCategoria)) {
+            setCategorias([...categorias, novaCategoria]);
+            setCategoria(novaCategoria);
+        }
+    }
+
+    const handleFormSubmit = async(event) => {
+        event.preventDefault();
+        if(!nome || !valor || !categoria || !fonte || !parcelas){
+            toast.warn('Por favor, preencha todos os campos.');
+            return;
+        }
+
+        setIsLoading(true);
+
+        try{
+            await create({ nome, valor, categoria, fonte, parcelas });
+            toast.success('Gasto adicionado com sucesso.');
+            setNome("")
+            setValor("");
+            setCategoria("");
+            setFonte("");
+            setParcelas(1);
+            navigate('/gastos', { replace: true});
+        } catch (err){
+            toast.error('Dados inválidos, tente novamente.');
+            console.error("Falha no cadastro do gasto:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className={styles.cadastroGastoContainer}>
-            <div className={styles.formContainer}>
+            <form className={styles.formContainer} onSubmit={handleFormSubmit}>
                 <header>
                     <span>Cadastrar Novo Gasto</span>
                 </header>
@@ -85,14 +139,13 @@ function CadastroGastoPage() {
                 </div>
                 <div className={styles.inputContainer}>
                     <label htmlFor="categoria">Categoria de Gasto: </label>
-                    <input 
-                        type="text"
-                        name='categoria'
-                        id='categoria'
-                        placeholder='Selecione a categoria' 
-                        value={categoria}
-                        onChange={handleChangeCategoria}
-                    />
+                    <button
+                        type="button"
+                        className={styles.categoriaSelectButton}
+                        onClick={() => setModalCategoriaAberto(true)}
+                    >
+                        {categoria || 'Selecione a categoria'}
+                    </button>
                 </div>
                 <div className={styles.inputContainer}>
                     <label htmlFor="fonte">Fonte: </label>
@@ -141,9 +194,26 @@ function CadastroGastoPage() {
                     </select>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Cadastrar"}/>
+                    <button 
+                        type="submit" 
+                        className={styles.buttonSubmit}
+                        disabled={isLoading}
+                    >
+                        <Botao 
+                            icon={<FaSquarePlus size={24} color={"white"}/>} 
+                            name={isLoading ? "Cadastrando..." : "Cadastrar"}
+                        />
+                    </button>
                 </div>
-            </div>
+            </form>
+
+            <ModalCategoria
+                isOpen={modalCategoriaAberto}
+                onClose={() => setModalCategoriaAberto(false)}
+                onSelectCategoria={handleSelectCategoria}
+                categorias={categorias}
+                onAddCategoria={handleAddCategoria}
+            />
         </div>
     );
 }
