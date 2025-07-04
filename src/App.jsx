@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // import Private from './components/private/Private';
 import { AuthProvider } from './context/AuthContext';
+import { ExpenseProvider } from './context/ExpenseContext';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
 import GastosPage from './pages/GastosPage/GastosPage';
@@ -30,7 +31,7 @@ function App() {
         theme="colored"
       />
       <AuthProvider>
-        {/* <ExpenseProvider> */}
+        <ExpenseProvider>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route
@@ -48,7 +49,7 @@ function App() {
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        {/* </ExpenseProvider> */}
+        </ExpenseProvider>
       </AuthProvider>
     </BrowserRouter>
   );

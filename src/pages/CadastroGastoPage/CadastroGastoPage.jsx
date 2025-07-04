@@ -1,42 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useExpenses } from '../../context/ExpenseContext';
 import styles from './CadastroGastoPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6";
-import { FaTimes, FaPlus, FaUtensils, FaShoppingCart, FaFileInvoiceDollar, FaMoneyCheckAlt, FaEllipsisH } from "react-icons/fa";
 import ModalCategoria from './ModalCategoria';
-
-// Modal de Seleção de Categoria
 
 
 function CadastroGastoPage() {
     const navigate = useNavigate();
-    const { create } = useAuth();
+    const { createGasto, createCategoria, fetchCategorias, categorias} = useExpenses();
+
     const [isLoading, setIsLoading] = useState(false);
     
     const [nome, setNome] = useState('');
     const [valor, setValor] = useState('');
-    const [categoria, setCategoria] = useState('');
     const [fonte, setFonte] = useState('');
     const [parcelas, setParcelas] = useState(1);
     const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
-    
-    // Lista inicial de categorias
-    const [categorias, setCategorias] = useState([
-        'Supermercado',
-        'Alimentação',
-        'Assinaturas',
-        'Investimentos',
-        'Contas',
-        'Taxas',
-        'Outros'
-    ]);
+    const [categoria, setCategoria] = useState('');
+    const [categoriaId, setCategoriaId] = useState(null);
     
     const handleChangeNome = (event) => {
         setNome(event.target.value);
     }
+
+    useEffect(() => {
+        if (categorias.length === 0) {
+            fetchCategorias();
+        }
+    }, []);
 
     const formatarValorMonetario = (valor) => {
         const apenasNumeros = valor.replace(/\D/g, '');
@@ -69,14 +63,20 @@ function CadastroGastoPage() {
         setParcelas(numParcelas); 
     }
 
-    const handleSelectCategoria = (categoriaSelecionada) => {
+    const handleSelectCategoria = (categoriaSelecionada, id) => {
         setCategoria(categoriaSelecionada);
+        setCategoriaId(id)
     }
 
-    const handleAddCategoria = (novaCategoria) => {
+    const handleAddCategoria = async (novaCategoria) => {
         if (!categorias.includes(novaCategoria)) {
-            setCategorias([...categorias, novaCategoria]);
-            setCategoria(novaCategoria);
+            try {
+                await createCategoria({ nome: novaCategoria }); 
+                setCategoria(novaCategoria);
+                toast.success(`Categoria "${novaCategoria}" criada com sucesso!`);
+            } catch (error) {
+                toast.error("Não foi possível criar a categoria.");
+            }
         }
     }
 
@@ -90,7 +90,7 @@ function CadastroGastoPage() {
         setIsLoading(true);
 
         try{
-            await create({ nome, valor, categoria, fonte, parcelas });
+            await createGasto({ nome, valor, categoriaId, fonte, parcelas });
             toast.success('Gasto adicionado com sucesso.');
             setNome("")
             setValor("");

@@ -42,21 +42,23 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                 </div>
 
                 <div className={styles.categoriasGrid}>
-                    {categorias.map((categoria) => (
-                        <button
-                            key={categoria}
-                            className={styles.categoriaItem}
-                            onClick={() => {
-                                onSelectCategoria(categoria);
-                                onClose();
-                            }}
-                        >
-                            <span className={styles.categoriaIcon}>
-                                {iconesCategorias[categoria] || <FaEllipsisH size={20} />}
-                            </span>
-                            <span className={styles.categoriaNome}>{categoria}</span>
-                        </button>
-                    ))}
+                {categorias.map((categoria) => (
+                    <button
+                        key={categoria.id}
+                        className={styles.categoriaItem}
+                        onClick={() => {
+                            onSelectCategoria(categoria.nome, categoria.id);
+                            onClose();
+                        }}
+                    >
+                        <span className={styles.categoriaIcon}>
+                            {iconesCategorias[categoria.nome] || <FaEllipsisH size={20} />}
+                        </span>
+                        <span className={styles.categoriaNome}>
+                            {categoria.nome}
+                        </span>
+                    </button>
+                ))}
 
                     {!mostrarInputNova ? (
                         <button

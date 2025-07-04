@@ -1,14 +1,19 @@
-const MS_AUTH_URL = 'http://localhost:8080';
-const MS_EXPENSES_URL = 'http://localhost:8082';
+const URL = 'http://localhost:8080';
 
 export const API_CONFIG = {
     auth: {
-        login: `${MS_AUTH_URL}/auth/login`,
-        register: `${MS_AUTH_URL}/auth/register`,
+        login: `${URL}/auth/login`,
+        register: `${URL}/auth/register`,
     },
     expenses: {
-        getAll: `${MS_EXPENSES_URL}/api/expenses`,
-        create: `${MS_EXPENSES_URL}/api/expenses`,
+        getAll: `${URL}/gastos`,
+        create: `${URL}/gastos`,
+        delete: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
+        update: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
+    },
+    categories: {
+        getAll: `${URL}/categorias/usuario`,
+        create: `${URL}/categorias`,
         delete: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
         update: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
     },

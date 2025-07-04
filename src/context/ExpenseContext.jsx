@@ -1,59 +1,115 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { login as apiLogin, register as apiRegister } from '../services/authService';
+import { useAuth } from './AuthContext';
+import { 
+    createCategoria as apiCreateCategoria, 
+    createGasto as apiCreateGasto, 
+    fetchCategorias as apiFetchCategorias, 
+    fetchGastos as apiFetchGastos
+} from '../services/expenseService';
 
 export const ExpenseContext = createContext(null);
 
 export const ExpenseProvider = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [userName, setUserName] = useState(null);
+    const { isLoggedIn } = useAuth(); 
+
+    const [loading, setLoading] = useState(false);
+    const [gastos, setGastos] = useState([]);
+    const [categorias, setCategorias] = useState([]);
+
+    function converterStringParaNumero(valorString) {
+        if(typeof valorString !== 'string' || !valorString) {
+          return 0;
+        }
+        const stringSemPontos = valorString.replaceAll('.', '');
+        const stringFormatoNumerico = stringSemPontos.replace(',', '.');
+        const numero = parseFloat(stringFormatoNumerico);
+        return isNaN(numero) ? 0 : numero;
+      }
+
+    const fetchGastos = async () => {
+        setLoading(true);
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            const response = await apiFetchGastos(tokenLocal);
+            setGastos(response);
+        } catch (error) {
+            console.error("Erro ao buscar gastos:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchCategorias = async () => {
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            const response = await apiFetchCategorias(tokenLocal);
+            setCategorias(response);
+        } catch (error) {
+            console.error("Erro ao buscar categorias:", error);
+        }
+    };
+
+    const createGasto = async (data) => {
+        try {
+            const valorNumerico = converterStringParaNumero(data.valor)
+            const payloadParaAPI = {
+                descricao: data.nome,
+                valorTotal: valorNumerico, 
+                categoriaId: data.categoriaId, 
+                parcelado: true,
+                fonte: data.fonte,
+                numeroParcelas: data.parcelas,
+                data: new Date().toISOString()
+            };
+            const tokenLocal = localStorage.getItem('token');
+            const novoGasto = await apiCreateGasto(payloadParaAPI, tokenLocal);
+            setGastos(prevGastos => [...prevGastos, novoGasto]);
+            console.log(categorias)
+            console.log(gastos)
+        } catch (error) {
+            console.error("Erro ao criar gasto:", error);
+            throw error;
+        }
+    };
+
+    const createCategoria = async (data) => {
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            const novaCategoria = await apiCreateCategoria(data, tokenLocal);
+            setCategorias(prevCategorias => [...prevCategorias, novaCategoria]);
+        } catch (error) {
+            console.error("Erro ao criar categoria:", error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const storedName = localStorage.getItem('userName');
-        if (token) {
-            setIsLoggedIn(true);
-            setUserName(storedName);
-        }
-        setLoading(false);
-    }, []);
-
-    const login = async (credentials) => {
-        try{
-            const response = await apiLogin(credentials);
-            if(response.token && response.name) {
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('userName', response.name);
-                setIsLoggedIn(true);
-                setUserName(response.name);
-            }else{
-                throw new Error("Token não retornado pela API");
+        const loadInitialData = async () => {
+            if (isLoggedIn) {
+                setLoading(true);
+                const tokenLocal = localStorage.getItem('token');
+                try {
+                    const [gastosData, categoriasData] = await Promise.all([
+                        apiFetchGastos(tokenLocal),
+                        apiFetchCategorias(tokenLocal)
+                    ]);
+                    setGastos(gastosData);
+                    setCategorias(categoriasData);
+                } catch (error) {
+                    console.error("Erro ao buscar dados iniciais:", error);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                setGastos([]);
+                setCategorias([]);
             }
-        }catch(error){
-            throw error;
-        }
-    };
+        };
 
-    const register = async (userData) => {
-        try {
-            const response = await apiRegister(userData);
-            if (response.token) {
-                localStorage.setItem('token', response.token);
-                setIsLoggedIn(true);
-            }
-        } catch (error) {
-            throw error;
-        }
-    };
+        loadInitialData();
+    }, [isLoggedIn]);
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userName');
-        setIsLoggedIn(false);
-        setUserName(null);
-    };
-
-    const value = { isLoggedIn, loading, login, logout, register, userName };
+    const value = { loading, gastos, categorias, createGasto, fetchGastos, fetchCategorias, createCategoria };
 
     return (
         <ExpenseContext.Provider value={value}>
@@ -62,10 +118,10 @@ export const ExpenseProvider = ({ children }) => {
     );
 };
 
-export const useAuth = () => {
+export const useExpenses = () => {
     const context = useContext(ExpenseContext);
     if (!context) {
-        throw new Error('useAuth deve ser usado dentro de um ExpenseProvider');
+        throw new Error('useExpenses deve ser usado dentro de um ExpenseProvider');
     }
     return context;
 };
