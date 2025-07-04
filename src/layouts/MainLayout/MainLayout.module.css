@@ -37,4 +37,5 @@
 
 .mainContext .contentContainer{
     flex: 6;
+    overflow-y: auto;
 }

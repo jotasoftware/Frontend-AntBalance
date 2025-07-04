@@ -9,6 +9,13 @@
     gap: 8vh;
 }
 
+.logoContainer{
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .container{
     display: flex;
     align-items: center;

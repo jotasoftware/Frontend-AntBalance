@@ -1,16 +1,17 @@
-import { useContext, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
+
 import { Navigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useAuth } from '../../context/AuthContext';
+import Loading from '../loading/Loading';
 
 const Private = ({ children }) => {
-  const {isLoggedIn} = useAuth();
-  useEffect(()=>{
-    if(!isLoggedIn){
-      toast.error('Faça login para acessar o sistema.');
-    }
-  }, [])
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
-};
+  const { isLoggedIn, loading } = useAuth();
+  if (loading) {
+    return <Loading />;
+  }
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
 
 export default Private;

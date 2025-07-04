@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import styles from './LoginPage.module.css';
 import { toast } from 'react-toastify';
+import Loading from '../../components/loading/Loading';
 
 function LoginPage() {
     const {login, register} = useAuth();
@@ -92,7 +93,9 @@ function LoginPage() {
 
     return (
         <div className={styles.loginContainer}>
-            <img src="logomini.svg" alt="" />
+            <div className={styles.logoContainer}>
+                {isLoading ? <Loading /> : <img src="logomini.svg" alt="" />}
+            </div>
             <div className={styles.container}>
                 <form onSubmit={handleFormSubmit}>
                     {type === 'signup' &&
@@ -137,11 +140,21 @@ function LoginPage() {
                     {type === 'login' ? 
                     <>
                         <p>Não tem uma conta? </p>
-                        <span onClick={() => setType('signup')} className={styles.setType}>Criar conta</span>
+                        <span onClick={() => {
+                            setType('signup')
+                            setEmail("");
+                            setName("")
+                            setPassword("");
+                        }} className={styles.setType}>Criar conta</span>
                     </>
                     : <>
                         <p>Já tem uma conta? </p>
-                        <span onClick={() => setType('login')} className={styles.setType}>Entrar</span>
+                        <span onClick={() => {
+                            setType('login')
+                            setEmail("");
+                            setName("")
+                            setPassword("");
+                        }}  className={styles.setType}>Entrar</span>
                     </>}
                 </div>  
             </div>

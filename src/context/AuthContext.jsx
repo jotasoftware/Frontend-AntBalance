@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         const storedName = localStorage.getItem('userName');
         if (token) {
+            console.log(token)
             setIsLoggedIn(true);
             setUserName(storedName);
         }
