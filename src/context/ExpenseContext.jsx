@@ -95,6 +95,7 @@ export const ExpenseProvider = ({ children }) => {
             const tokenLocal = localStorage.getItem('token');
             const novoGasto = await apiCreateGasto(payloadParaAPI, tokenLocal);
             setGastos(prevGastos => [...prevGastos, novoGasto]);
+            fetchValores()
             console.log(categorias)
             console.log(gastos)
         } catch (error) {
