@@ -8,6 +8,7 @@ export const API_CONFIG = {
     expenses: {
         getAll: `${URL}/gastos`,
         create: `${URL}/gastos`,
+        getValores: `${URL}/total-por-mes`,
         delete: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
         update: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
     },

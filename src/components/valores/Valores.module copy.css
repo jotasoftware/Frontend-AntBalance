@@ -9,7 +9,6 @@
   color: white;
   border-radius: 16px;
   align-items: stretch; 
-  transition: background-color 0.3s ease;
 }
 
 .valoresContainer h5{
@@ -42,22 +41,4 @@
   line-height: 1;
   padding-bottom: 3px;
   font-family: 'Bricolage Grotesque', sans-serif;
-}
-
-.expandableSection {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease-in-out;
-  width: 100%;
-}
-
-.expandableSection.expanded {
-  max-height: 300px; 
-}
-
-.detalheMensal {
-  display: flex;
-  justify-content: space-between;
-  /* padding: 5px 0; */
-  font-size: 0.9rem;
 }
