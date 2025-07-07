@@ -34,3 +34,8 @@ sifrão: import { FaDollarSign } from "react-icons/fa6";
 
 Notificação: import { IoNotificationsOutline } from "react-icons/io5";
 
+check: import { IoCheckmarkOutline } from "react-icons/io5";
+
+deny: import { IoCloseOutline } from "react-icons/io5";
+
+
