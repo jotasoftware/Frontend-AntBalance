@@ -1,19 +1,56 @@
 // ModalCategoria.jsx
 import React, { useState } from 'react';
 import styles from './CadastroGastoPage.module.css';
-import { FaTimes, FaPlus, FaUtensils, FaShoppingCart, FaFileInvoiceDollar, FaMoneyCheckAlt, FaEllipsisH } from "react-icons/fa";
+
+import {FaShoppingCart, FaUtensils, FaFileInvoiceDollar, FaMoneyCheckAlt, FaEllipsisH, FaPaw, FaTshirt, FaHome, FaDumbbell, FaGift, FaShieldAlt, FaPiggyBank, FaChartLine, FaPlus, FaTimes} from 'react-icons/fa';
+  
+  const obterIconeCategoria = (nome) => {
+      const entrada = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  
+      if (["mercado", "supermercado", "compras", "compra", "sacolao", "feira"].some(p => entrada.includes(p)))
+          return <FaShoppingCart size={20} />;
+      
+      if (["comida", "alimentacao", "bebida", "lanche", "lanchonete", "restaurante", "pizza", "bar"].some(p => entrada.includes(p)))
+          return <FaUtensils size={20} />;
+      
+      if (["conta", "contas", "boleto", "fatura", "energia", "agua", "internet", "telefone"].some(p => entrada.includes(p)))
+          return <FaFileInvoiceDollar size={20} />;
+      
+      if (["imposto", "iptu", "ipva", "taxa", "licenciamento", "darf"].some(p => entrada.includes(p)))
+          return <FaMoneyCheckAlt size={20} />;
+      
+      if (["pet", "cachorro", "gato", "racao", "veterinario", "animal", "petshop"].some(p => entrada.includes(p)))
+          return <FaPaw size={20} />;
+      
+      if (["roupa", "vestuario", "moda", "camisa", "calca", "sapato", "tenis"].some(p => entrada.includes(p)))
+          return <FaTshirt size={20} />;
+      
+      if (["casa", "aluguel", "moradia", "domestico", "condominio", "residencia"].some(p => entrada.includes(p)))
+          return <FaHome size={20} />;
+      
+      if (["academia", "fitness", "musculacao", "treino", "personal", "exercicio", "crossfit", "ioga", "pilates"].some(p => entrada.includes(p)))
+          return <FaDumbbell size={20} />;
+      
+      if (["presente", "aniversario", "casamento", "natal", "doacao", "lembranca"].some(p => entrada.includes(p)))
+          return <FaGift size={20} />;
+      
+      if (["seguro", "seguros", "vida", "auto", "carro", "residencial", "patrimonial", "renda"].some(p => entrada.includes(p)))
+          return <FaShieldAlt size={20} />;
+      
+      if (["investimento", "investir", "acoes", "bolsa", "previdencia", "carteira", "renda variavel"].some(p => entrada.includes(p)))
+          return <FaChartLine size={20} />;
+      
+      if (["poupanca", "poupar", "economia", "reserva", "fundo emergencia", "cofrinho", "guardar"].some(p => entrada.includes(p)))
+          return <FaPiggyBank size={20} />;
+  
+      return <FaEllipsisH size={20} />;
+};
+  
 
 const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddCategoria }) => {
     const [novaCategoria, setNovaCategoria] = useState('');
     const [mostrarInputNova, setMostrarInputNova] = useState(false);
 
-    const iconesCategorias = {
-        'Supermercado': <FaShoppingCart size={20} />,
-        'Alimentação': <FaUtensils size={20} />,
-        'Contas': <FaFileInvoiceDollar size={20} />,
-        'Taxas': <FaMoneyCheckAlt size={20} />,
-        'Outros': <FaEllipsisH size={20} />
-    };
 
     const handleAddNovaCategoria = () => {
         if (novaCategoria.trim()) {
@@ -52,7 +89,7 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                         }}
                     >
                         <span className={styles.categoriaIcon}>
-                            {iconesCategorias[categoria.nome] || <FaEllipsisH size={20} />}
+                            {obterIconeCategoria(categoria.nome)}
                         </span>
                         <span className={styles.categoriaNome}>
                             {categoria.nome}
