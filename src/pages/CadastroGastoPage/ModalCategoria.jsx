@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import styles from './CadastroGastoPage.module.css';
 import { toast } from 'react-toastify';
-import { IoRemoveOutline } from "react-icons/io5";
+import { IoRemoveOutline, IoCheckmarkOutline, IoCloseOutline } from "react-icons/io5";
+
 import {FaShoppingCart, FaUtensils, FaFileInvoiceDollar, FaMoneyCheckAlt, FaEllipsisH, FaPaw, FaTshirt, FaHome, FaDumbbell, FaGift, FaShieldAlt, FaPiggyBank, FaChartLine, FaPlus, FaTimes} from 'react-icons/fa';
   
   const obterIconeCategoria = (nome) => {
@@ -63,7 +64,6 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                 toast.warn(novaCategoria + ' já existe!');
                 return;
             }
-
 
             onAddCategoria(novaCategoria.trim());
             setNovaCategoria('');
@@ -147,13 +147,15 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                                 className={styles.confirmButton}
                                 onClick={handleAddNovaCategoria}
                             >
-                                ✓
+                                <IoCheckmarkOutline size={12} />
+
                             </button>
                             <button 
                                 className={styles.cancelButton}
                                 onClick={() => {
                                     setMostrarInputNova(false);
                                     setNovaCategoria('');
+                                <IoCloseOutline size={12} />
                                 }}
                             >
                                 ✕
