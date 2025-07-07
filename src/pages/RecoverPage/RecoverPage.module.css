@@ -1,0 +1,102 @@
+.editarCadastroPageContainer{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10vh;
+    gap: 8vh;
+
+}
+
+.logoContainer{
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    width: 30vw;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.573);
+    border-radius: 15px;
+    padding-top: 30px;
+}
+.container header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.container header span {
+    padding-top: 15px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+.container form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inputContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.inputContainer input{
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    border: #CFCFCF 1px solid;
+    outline: none;
+    border-radius: 8px;
+    width: 27vw;
+}
+.inputContainer label{
+    margin-bottom: 6px;
+}
+
+.buttonSubmit{
+    margin-top: 15px;
+    border: #CFCFCF 1px solid;
+    color: white;
+    background-color: #1a45b8;
+    cursor: pointer;
+    outline: none;
+    border-radius: 8px;
+    height: 46px;
+    width: 100%;
+    transition: .2s ease-in-out background;
+}
+.buttonSubmit:hover{
+    background-color: #191919;
+}
+.create{
+    margin: 30px 0;
+    display: flex;
+    justify-content: space-between;
+    width: 27vw;
+}
+
+
+.setType{
+    border: none;
+    background: transparent;
+    padding: 0;
+    outline: none;
+    cursor: pointer;
+}
+.setType:hover{
+    color: rgb(0, 12, 175);
+}
