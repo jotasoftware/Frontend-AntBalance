@@ -147,7 +147,7 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                                 className={styles.confirmButton}
                                 onClick={handleAddNovaCategoria}
                             >
-                                <IoCheckmarkOutline size={12} />
+                                <IoCheckmarkOutline size={20} />
 
                             </button>
                             <button 
@@ -155,10 +155,9 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                                 onClick={() => {
                                     setMostrarInputNova(false);
                                     setNovaCategoria('');
-                                <IoCloseOutline size={12} />
                                 }}
                             >
-                                ✕
+                                <IoCloseOutline size={20} />
                             </button>
                         </div>
                     )}
