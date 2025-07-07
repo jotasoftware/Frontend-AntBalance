@@ -1,0 +1,52 @@
+.gastoItem {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #ddd;
+    padding: 12px;
+    cursor: pointer;
+    /*transition: background 0.2s ease; */
+    transition: max-height 0.5s ease-in-out;
+}
+
+.gastoItem:hover {
+    background-color: #f9f9f9;
+}
+
+.gastoInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gastoInfo h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.gastoInfo p {
+    margin: 0;
+    color: #666;
+}
+
+.gastoValorData {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #444;
+}
+
+.gastoDetalhes {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    margin-top: 0;
+}
+
+.expandido .gastoDetalhes {
+    max-height: 200px; 
+    opacity: 1;
+    margin-top: 10px;
+}
+
