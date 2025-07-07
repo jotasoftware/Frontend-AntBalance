@@ -43,7 +43,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 10px;
+    gap: 3px;
 }
 
 .inputContainer{
@@ -88,6 +88,14 @@
     width: 27vw;
 }
 
+.recover{
+    font-size: 12px;
+    display:flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+}
+
 
 .setType{
     border: none;
@@ -98,4 +106,154 @@
 }
 .setType:hover{
     color: rgb(0, 12, 175);
+}
+
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    width: 30vw;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.573);
+    border-radius: 15px;
+    padding-top: 30px;
+}
+
+.popupHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.popupHeader header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popupHeader header span {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.closeButton {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    color: #000;
+}
+
+.popupContent {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.popupContent .inputContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.popupContent .inputContainer input {
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    border: #CFCFCF 1px solid;
+    outline: none;
+    border-radius: 8px;
+    width: calc(27vw - 20px);
+}
+
+.popupContent .inputContainer label {
+    margin-bottom: 6px;
+    align-self: center;
+}
+
+.popupFooter {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    width: 27vw;
+    margin-bottom: 10px;
+}
+
+.buttonCancel {
+    flex: 1;
+    height: 46px;
+    border: 1px solid #CFCFCF;
+    background: white;
+    color: #666;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: .2s ease-in-out background;
+}
+
+.buttonCancel:hover {
+    background: #f5f5f5;
+}
+
+.popupFooter .buttonSubmit {
+    flex: 1;
+    height: 46px;
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .container,
+    .popup {
+        width: 90vw;
+    }
+    
+    .inputContainer input,
+    .popupContent .inputContainer input {
+        width: 80vw;
+    }
+    
+    .create,
+    .popupFooter {
+        width: 80vw;
+    }
+    
+    .popupContent .inputContainer label {
+        margin-left: 0;
+    }
 }

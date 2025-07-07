@@ -14,6 +14,11 @@ function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [type, setType] = useState('login');
 
+    const [showEmailPopup, setShowEmailPopup] = useState ('false');
+    const [recoverEmail, setRecoverEmail] = useState ('');
+    
+
+
     const handleChangeEmail = (event) => {
         setEmail(event.target.value);
     }
@@ -26,6 +31,10 @@ function LoginPage() {
         setName(event.target.value);
     }
 
+    const handleChangeRecoverEmail = (event) => {
+        setRecoverEmail(event.target.value);
+    }
+
     const validateForm = () => {
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -36,6 +45,15 @@ function LoginPage() {
         }
         if(!regexPass.test(password) && (type === 'signup')){
             toast.warn("Senha deve ter 8+ caracteres, com maiúscula, minúscula, número e símbolo.");
+            return false;
+        }
+        return true;
+    };
+
+    const validateRecoverEmail = () => {
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!regexEmail.test(recoverEmail)){
+            toast.error(`Email inválido`);
             return false;
         }
         return true;
@@ -72,6 +90,17 @@ function LoginPage() {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleContinueRecover = () => {
+        if (!validateRecoverEmail()) {
+            return;
+        }
+    };
+
+    const handleClosePopup = () => {
+        setShowEmailPopup(false);
+        setRecoverEmail('');
     };
     
     const handleFormSubmit = (event) => {
@@ -132,6 +161,14 @@ function LoginPage() {
                             onChange={handleChangePass}
                         />
                     </div>
+                    <div className={styles.recover}>
+                        <span 
+                            onClick={() => setShowEmailPopup(true)} 
+                            className={styles.setType}
+                        >
+                            Esqueci minha senha
+                        </span>
+                    </div>
                     {type === 'login' ? 
                         <button type="submit" className={styles.buttonSubmit}>Entrar</button>
                         : <button type="submit" className={styles.buttonSubmit}>Criar conta</button>}
@@ -158,6 +195,49 @@ function LoginPage() {
                     </>}
                 </div>  
             </div>
+            {showEmailPopup && (
+                <div className={styles.popupOverlay}>
+                    <div className={styles.popup}>
+                        <div className={styles.popupHeader}>
+                        <header>
+                            <span>Esqueci minha senha</span>
+                        </header>
+                            <button 
+                                className={styles.closeButton}
+                                onClick={handleClosePopup}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className={styles.popupContent}>
+                            <div className={styles.inputContainer}>
+                                <label htmlFor="recoverEmail">E-mail para recuperação:</label>
+                                <input 
+                                    type="email"
+                                    id="recoverEmail"
+                                    placeholder="Digite seu email"
+                                    value={recoverEmail}
+                                    onChange={handleChangeRecoverEmail}
+                                />
+                            </div>
+                        </div>
+                        <div className={styles.popupFooter}>
+                            <button 
+                                className={styles.buttonCancel}
+                                onClick={handleClosePopup}
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                className={styles.buttonSubmit}
+                                onClick={handleContinueRecover}
+                            >
+                                Continuar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
