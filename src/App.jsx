@@ -15,6 +15,7 @@ import MainLayout from './layouts/MainLayout/MainLayout';
 import CadastroGastoPage from './pages/CadastroGastoPage/CadastroGastoPage'
 import EditarCadastroPage from './pages/ConfigPage/EditarCadastroPage'
 import Private from './components/private/Private';
+import RecoverPage from './pages/RecoverPage/RecoverPage';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <ExpenseProvider>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/reset-password" element={<RecoverPage />} />
             <Route
               path="/"
               element={
@@ -48,6 +50,7 @@ function App() {
               <Route path="gastos" element={<GastosPage />} />
               <Route path="cadastrogasto" element={<CadastroGastoPage />} />
               <Route path="editarcadastro" element={<EditarCadastroPage />} />
+              <Route path="reset-password" element={<RecoverPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
