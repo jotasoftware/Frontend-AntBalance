@@ -1,40 +1,40 @@
-import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import styles from './GastosPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
-import { IoPrintOutline } from "react-icons/io5"
-import { FaSquarePlus } from "react-icons/fa6"
+import { IoPrintOutline } from "react-icons/io5";
+import { FaSquarePlus } from "react-icons/fa6";
 import GridCard from '../../components/gridcard/GridCard';
+import GastoItem from '../../components/gastoitem/GastoItem';
+import { useExpenses } from '../../context/ExpenseContext';
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
-
-    // const gastosOrdenados = useMemo(() => {
-    //     const sorted = [...gastos]; 
-    
-    //     sorted.sort((a, b) => {
-    //       switch (sortOrder) {
-    //         case 'maior_valor':
-    //           return b.amount - a.amount;
-    //         case 'menor_valor':
-    //           return a.amount - b.amount;
-    //         case 'antigos':
-    //           return new Date(a.date) - new Date(b.date);
-    //         case 'recentes':
-    //         default:
-    //           return new Date(b.date) - new Date(a.date);
-    //       }
-    // })
-    
-    // return sorted;
-    // }, [gastos, sortOrder]);
+    const { token } = useAuth();
+    const {gastos} = useExpenses();
+    console.log(gastos);
+    const gastosOrdenados = useMemo(() => {
+        const sorted = [...gastos];
+        sorted.sort((a, b) => {
+            switch (sortOrder) {
+                case 'maior_valor':
+                    return b.valorTotal - a.valorTotal;
+                case 'menor_valor':
+                    return a.valorTotal - b.valorTotal;
+                case 'antigos':
+                    return new Date(a.data) - new Date(b.data);
+                case 'recentes':
+                default:
+                    return new Date(b.data) - new Date(a.data);
+            }
+        });
+        return sorted;
+    }, [gastos, sortOrder]);
 
     const handleSortChange = (event) => {
-        const novaOrdem = event.target.value;
-        setSortOrder(novaOrdem);
-    }
+        setSortOrder(event.target.value);
+    };
 
     return (
         <div className={styles.gastosContainer}>
@@ -44,8 +44,8 @@ function GastosPage() {
                         <h4>Gastos</h4>
                         <div className={styles.sortContainer}>
                             <label htmlFor="sort">Ordenar por </label>
-                            <select 
-                                id="sort" 
+                            <select
+                                id="sort"
                                 value={sortOrder}
                                 onChange={handleSortChange}
                                 className={styles.sortSelect}
@@ -58,9 +58,19 @@ function GastosPage() {
                         </div>
                     </div>
                     <div className={styles.gastosActions}>
-                        <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                        <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"}/>
+                        <Botao icon={<FaSquarePlus size={24} color={"white"} />} name={"Adicionar"} />
+                        <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
                     </div>
+                </div>
+
+                <div className={styles.gastosLista}>
+                    {gastosOrdenados.length === 0 ? (
+                        <p>Nenhum gasto encontrado.</p>
+                    ) : (
+                        gastosOrdenados.map((gasto) => (
+                            <GastoItem key={gasto.id} gasto={gasto} />
+                        ))
+                    )}
                 </div>
             </GridCard>
         </div>

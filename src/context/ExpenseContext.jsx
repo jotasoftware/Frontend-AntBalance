@@ -122,8 +122,7 @@ export const ExpenseProvider = ({ children }) => {
                 const tokenLocal = localStorage.getItem('token');
                 try {
                     const [gastosData, categoriasData, valoresData] = await Promise.all([
-                        // apiFetchGastos(tokenLocal),
-                        [],
+                        apiFetchGastos(tokenLocal),
                         apiFetchCategorias(tokenLocal),
                         apiFetchValores(tokenLocal)
                     ])
