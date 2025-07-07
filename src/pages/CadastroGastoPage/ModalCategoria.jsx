@@ -60,7 +60,7 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
             );
 
             if (categoriaExiste) {
-                toast.warn('Categoria já existe!');
+                toast.warn(novaCategoria + ' já existe!');
                 return;
             }
 
