@@ -13,6 +13,7 @@ import GastosPage from './pages/GastosPage/GastosPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
 import MainLayout from './layouts/MainLayout/MainLayout';
 import CadastroGastoPage from './pages/CadastroGastoPage/CadastroGastoPage'
+import EditarCadastroPage from './pages/ConfigPage/EditarCadastroPage'
 import Private from './components/private/Private';
 
 function App() {

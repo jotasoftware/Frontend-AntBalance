@@ -1,0 +1,130 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import styles from './EditarCadastroPage.module.css';
+import { toast } from 'react-toastify';
+import Botao from '../../components/botao/Botao';
+import { FaSquarePlus } from "react-icons/fa6";
+
+
+
+function EditarCadastroPage() {
+    const navigate = useNavigate();
+    const { userName } = useAuth();
+    const [nome, setNome] = useState(userName);
+    const [senhaAtual, setSenhaAtual] = useState('');
+    const [senhaNova, setSenhaNova] = useState('');
+    
+    const handleChangeNome = (event) => {
+        setNome(event.target.value);
+    }
+
+    const handleChangeSenhaAtual = (event) => {
+        setSenhaAtual(event.target.value);
+    }
+
+     const handleChangeSenhaNova = (event) => {
+        setSenhaNova(event.target.value);
+    }
+
+    const validateForm = () => {
+        const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        
+        if(!regexPass.test(senhaNova)){
+            toast.warn("Senha deve ter 8+ caracteres, com maiúscula, minúscula, número e símbolo.");
+            return false;
+        }
+        return true;
+    };
+
+
+    const handleFormSubmit = async(event) => {
+        event.preventDefault();
+        if(!nome){
+            toast.warn('Por favor, preencha todos os campos.');
+            return;
+        }
+        if(!senhaAtual == ""){
+            if(!validateForm()){
+                return;
+            }
+        }
+        
+        /*
+        setIsLoading(true);
+
+        try{
+            await createGasto({ nome, valor, categoriaId, fonte, parcelas });
+            toast.success('Gasto adicionado com sucesso.');
+            setNome("")
+            setValor("");
+            setCategoria("");
+            setFonte("");
+            setParcelas(1);
+            navigate('/gastos', { replace: true});
+        } catch (err){
+            toast.error('Dados inválidos, tente novamente.');
+            console.error("Falha no cadastro do gasto:", err);
+        } finally {
+            setIsLoading(false);
+        }*/
+    };
+
+    return (
+        <div className={styles.editarCadastroPageContainer}>
+            <form className={styles.formContainer} onSubmit={handleFormSubmit}>
+                <header>
+                    <span>Editar Cadastro</span>
+                </header>
+
+                <div className={styles.inputContainer}>
+                    <label htmlFor="nome">Nome: </label>
+                    <input 
+                        type="text"
+                        name='nome'
+                        id='nome'
+                        placeholder='Nome' 
+                        value={nome}
+                        onChange={handleChangeNome}
+                    />
+                </div>
+                <div className={styles.inputContainer}>
+                    <label htmlFor="senhaAtual">Senha Atual: </label>
+                    <input 
+                        type="password" 
+                        name='senhaAtual'
+                        id='senhaAtual'
+                        placeholder='Senha Atual' 
+                        value={senhaAtual}
+                        onChange={handleChangeSenhaAtual}
+                    />
+                </div>
+                
+                <div className={styles.inputContainer}>
+                    <label htmlFor="senhaNova">Nova Senha: </label>
+                    <input 
+                        type="password" 
+                        name='senhaNova'
+                        id='senhaNova'
+                        placeholder='Nova Senha' 
+                        value={senhaNova}
+                        onChange={handleChangeSenhaNova}
+                    />
+                </div>
+                <div className={styles.buttonContainer}>
+                    <button 
+                        type="submit" 
+                        className={styles.buttonSubmit}
+                    >
+                        <Botao 
+                            icon={<FaSquarePlus size={24} color={"white"}/>} 
+                            name={"Editar"}
+                        />
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+}
+
+export default EditarCadastroPage;
