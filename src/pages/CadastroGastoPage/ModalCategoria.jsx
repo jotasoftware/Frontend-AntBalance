@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import styles from './CadastroGastoPage.module.css';
 import { toast } from 'react-toastify';
-
+import { IoRemoveOutline } from "react-icons/io5";
 import {FaShoppingCart, FaUtensils, FaFileInvoiceDollar, FaMoneyCheckAlt, FaEllipsisH, FaPaw, FaTshirt, FaHome, FaDumbbell, FaGift, FaShieldAlt, FaPiggyBank, FaChartLine, FaPlus, FaTimes} from 'react-icons/fa';
   
   const obterIconeCategoria = (nome) => {
@@ -48,7 +48,7 @@ import {FaShoppingCart, FaUtensils, FaFileInvoiceDollar, FaMoneyCheckAlt, FaElli
 };
   
 
-const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddCategoria }) => {
+const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddCategoria, onDeleteCategoria }) => {
     const [novaCategoria, setNovaCategoria] = useState('');
     const [mostrarInputNova, setMostrarInputNova] = useState(false);
 
@@ -77,6 +77,18 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
         }
     };
 
+    const handleDeleteCategoria = (categoriaId, e) => {
+        e.stopPropagation();
+        if (window.confirm('Tem certeza que deseja excluir' + categoria.nome + '?')) {
+            onDeleteCategoria(categoriaId);
+        }
+    };
+
+    const handleCancelar = () =>{
+        setMostrarInputNova(false);
+        setNovaCategoria('');
+    }
+
     if (!isOpen) return null;
 
     return (
@@ -99,6 +111,14 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                             onClose(); 
                         }}
                     >
+                        <button
+                            className={styles.deleteButton}
+                            onClick={(e) => handleDeleteCategoria(categoria.id, categoria.nome, e)}
+                            title='Excluir categoria'
+                        >
+                            <IoRemoveOutline size={12} />
+                        </button>
+                        
                         <span className={styles.categoriaIcon}>
                             {obterIconeCategoria(categoria.nome)}
                         </span>

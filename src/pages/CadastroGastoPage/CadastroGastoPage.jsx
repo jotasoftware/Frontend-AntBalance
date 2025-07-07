@@ -80,6 +80,23 @@ function CadastroGastoPage() {
         }
     }
 
+    const handleDeleteCategoria = async (categoriaIdDelete) => {
+        try {
+            await deleteCategoria(categoriaIdDelete);
+            
+            if (categoriaIdDelete === categoriaId) {
+                setCategoria('');
+                setCategoriaId(null);
+            }
+            
+            toast.success('Categoria excluída com sucesso!');
+        } catch (error) {
+            toast.error('Não foi possível excluir a categoria.');
+            console.error("Erro ao excluir categoria:", error);
+        }
+    }
+
+
     const handleFormSubmit = async(event) => {
         event.preventDefault();
         if(!nome || !valor || !categoria || !fonte || !parcelas){
@@ -213,6 +230,7 @@ function CadastroGastoPage() {
                 onSelectCategoria={handleSelectCategoria}
                 categorias={categorias}
                 onAddCategoria={handleAddCategoria}
+                onDeleteCategoria={handleDeleteCategoria}
             />
         </div>
     );
