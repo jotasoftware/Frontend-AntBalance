@@ -26,30 +26,6 @@ function DashboardPage() {
                 <h4>Ultimos gastos</h4>
                 <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
                 <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
             </GridCard>
         </div>
     );

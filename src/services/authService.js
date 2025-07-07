@@ -14,11 +14,20 @@ export const login = async (credentials) => {
 
 export const register = async (userData) => {
     try{
-      console.log(userData)
         const response = await axios.post(API_CONFIG.auth.register, userData);
         return response.data;
     }catch(error){
         console.error("Erro no serviço de registro:", error.response?.data || error.message);
         throw error;
     }
+};
+
+export const recover = async (email) => {
+  try{
+      const response = await axios.post(API_CONFIG.auth.recover, email);
+      return response.data;
+  }catch(error){
+      console.error("Erro no serviço de registro:", error.response?.data || error.message);
+      throw error;
+  }
 };

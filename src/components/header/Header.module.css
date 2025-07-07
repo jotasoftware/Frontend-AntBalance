@@ -9,12 +9,49 @@
   align-items: center;
 }
 
-.headerContainer p{
-  text-align: start;
+.suaClasseDoIcone {
+  cursor: pointer;
+}
+
+.headerContainer .notificationDiv{
+  /* background-color: rgba(255, 255, 255, 0.477); */
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerContainer .quantNotification{
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ffd118;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a45b8;
+  outline: 2px solid #1a45b8;
 }
 
 .headerContainer .infoContainer{
   display: flex;
-  gap: 15px;
+  gap: 30px;
   align-items: center;
+}
+
+.headerContainer .infoContainer .notificationIcon{
+  transition: color .2s ease-in-out;
+}
+
+.headerContainer .infoContainer .notificationIcon:hover{
+  color: #d4d4d4;
 }

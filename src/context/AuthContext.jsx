@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { login as apiLogin, register as apiRegister } from '../services/authService';
+import { login as apiLogin, register as apiRegister, recover as apiRecover } from '../services/authService';
 
 export const AuthContext = createContext(null);
 
@@ -47,6 +47,15 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const recover = async (email) => {
+        try {
+            const response = await apiRecover(email);
+            console.log("foi")
+        } catch (error) {
+            throw error;
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userName');
@@ -54,7 +63,7 @@ export const AuthProvider = ({ children }) => {
         setUserName(null);
     };
 
-    const value = { isLoggedIn, loading, login, logout, register, userName };
+    const value = { isLoggedIn, loading, login, logout, register, userName, recover };
 
     return (
         <AuthContext.Provider value={value}>

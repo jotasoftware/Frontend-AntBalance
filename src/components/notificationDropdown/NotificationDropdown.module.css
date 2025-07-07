@@ -1,0 +1,48 @@
+.dropdownContainer {
+  position: absolute;
+  top: 80px;
+  right: 15px;
+  width: 350px;
+  background-color: tran;
+  color: black;
+  padding: 8px;
+  z-index: 100;
+  max-height: 80vh; 
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.userInfo {
+  padding: 8px 12px;
+  font-weight: 500;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  margin: 8px 0;
+}
+
+.dropdownItem {
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+  display: block; /* Para o Link se comportar como o botão */
+}
+
+.dropdownItem:hover {
+  background-color: #f4f7fa;
+}
+
+.logoutButton {
+  color: #dc3545;
+  font-weight: 500;
+}

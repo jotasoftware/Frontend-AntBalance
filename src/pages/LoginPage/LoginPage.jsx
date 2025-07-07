@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import Loading from '../../components/loading/Loading';
 
 function LoginPage() {
-    const {login, register} = useAuth();
+    const {login, register, recover} = useAuth();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -92,10 +92,11 @@ function LoginPage() {
         }
     };
 
-    const handleContinueRecover = () => {
+    const handleContinueRecover = async () => {
         if (!validateRecoverEmail()) {
             return;
         }
+        await recover({ recoverEmail});
     };
 
     const handleClosePopup = () => {

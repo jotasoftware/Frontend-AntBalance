@@ -1,0 +1,73 @@
+.expanseContainer{
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.299);
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 8px;
+  transition: box-shadow .3s linear;
+}
+
+.expanseContainer:hover{
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.47);
+}
+
+
+.expanseContainer h6{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dataContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.dataContainer p{
+  font-size: 14px;
+}
+
+.actions{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+}
+
+.actions .accept{
+  background-color: rgb(208, 208, 208);
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .3s ease-in-out;
+}
+
+.actions .accept:hover{
+  background-color: rgb(45, 255, 52);
+}
+
+.actions .refuse{
+  background-color: rgb(208, 208, 208);
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .3s ease-in-out;
+}
+
+.actions .refuse:hover{
+  background-color: rgb(255, 33, 33);
+}
