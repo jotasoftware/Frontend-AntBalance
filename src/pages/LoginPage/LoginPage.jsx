@@ -14,8 +14,8 @@ function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [type, setType] = useState('login');
 
-    const [showEmailPopup, setShowEmailPopup] = useState (false);
-    const [recoverEmail, setRecoverEmail] = useState ('');
+    const [showEmailPopup, setShowEmailPopup] = useState(false);
+    const [recoverEmail, setRecoverEmail] = useState('');
     
 
 
@@ -96,7 +96,15 @@ function LoginPage() {
         if (!validateRecoverEmail()) {
             return;
         }
-        await recover({ recoverEmail});
+
+        try{
+            const response = await recover({ recoverEmail});
+            toast.success(response);
+            setShowEmailPopup(false)
+        } catch (err){
+            toast.error('Email não enviado.');
+            console.error("Falha na recuperação:", err);
+        }
     };
 
     const handleClosePopup = () => {
@@ -162,14 +170,14 @@ function LoginPage() {
                             onChange={handleChangePass}
                         />
                     </div>
-                    <div className={styles.recover}>
+                    {type === 'login' && <div className={styles.recover}>
                         <span 
                             onClick={() => setShowEmailPopup(true)} 
                             className={styles.setType}
                         >
                             Esqueci minha senha
                         </span>
-                    </div>
+                    </div>}
                     {type === 'login' ? 
                         <button type="submit" className={styles.buttonSubmit}>Entrar</button>
                         : <button type="submit" className={styles.buttonSubmit}>Criar conta</button>}

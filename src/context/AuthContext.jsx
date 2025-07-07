@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { login as apiLogin, register as apiRegister, recover as apiRecover } from '../services/authService';
+import { login as apiLogin, register as apiRegister, recover as apiRecover, editPassword as apiEditPassword } from '../services/authService';
 
 export const AuthContext = createContext(null);
 
@@ -50,7 +50,16 @@ export const AuthProvider = ({ children }) => {
     const recover = async (email) => {
         try {
             const response = await apiRecover(email);
-            console.log("foi")
+            return response.message
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const editPassword = async (credentials) => {
+        try {
+            const response = await apiEditPassword(credentials);
+            return response
         } catch (error) {
             throw error;
         }
@@ -63,7 +72,7 @@ export const AuthProvider = ({ children }) => {
         setUserName(null);
     };
 
-    const value = { isLoggedIn, loading, login, logout, register, userName, recover };
+    const value = { isLoggedIn, loading, login, logout, register, userName, recover, editPassword };
 
     return (
         <AuthContext.Provider value={value}>

@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import styles from './RecoverPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6";
+import Loading from '../../components/loading/Loading';
 
 
 
 function RecoverPage() {
+    const {editPassword} = useAuth();
     const navigate = useNavigate();
     const [senhaNova, setSenhaNova] = useState('');
+    const [searchParams] = useSearchParams();
+    const [token, setToken] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     
     const handleChangeSenhaNova = (event) => {
         setSenhaNova(event.target.value);
@@ -30,36 +35,41 @@ function RecoverPage() {
     const handleFormSubmit = async(event) => {
         event.preventDefault();
         if(!senhaNova){
-            toast.warn('Por favor, preencha todos os campos.');
+            toast.warn('Por favor, preencha a nova senha.');
             return;
         }
         if(!validateForm()){
             return;
         }
-        /*
         setIsLoading(true);
 
         try{
-            await createGasto({ nome, valor, categoriaId, fonte, parcelas });
-            toast.success('Gasto adicionado com sucesso.');
-            setNome("")
-            setValor("");
-            setCategoria("");
-            setFonte("");
-            setParcelas(1);
-            navigate('/gastos', { replace: true});
+            await editPassword({senhaNova, token});
+            toast.success('Senha editada com sucesso');
+            setSenhaNova("");
+            navigate('/login', { replace: true});
         } catch (err){
             toast.error('Dados inválidos, tente novamente.');
             console.error("Falha no cadastro do gasto:", err);
         } finally {
             setIsLoading(false);
-        }*/
+        }
     };
+
+    useEffect(() => {
+        const tokenFromUrl = searchParams.get('token');
+        if (tokenFromUrl) {
+            setToken(tokenFromUrl);
+            toast.warn('Digite a nova senha');
+        } else {
+            console.error("Nenhum token encontrado na URL.");
+        }
+    }, [searchParams]);
 
     return (
         <div className={styles.editarCadastroPageContainer}>
             <div className={styles.logoContainer}>
-                <img src="logomini.svg" alt="" />
+                {isLoading ? <Loading /> : <img src="logomini.svg" alt="" />}
             </div>
             <div className={styles.container}>
                 <form onSubmit={handleFormSubmit}>
@@ -77,17 +87,7 @@ function RecoverPage() {
                         onChange={handleChangeSenhaNova}
                     />
                 </div>
-                <div className={styles.buttonContainer}>
-                    <button 
-                        type="submit" 
-                        className={styles.buttonSubmit}
-                    >
-                        <Botao 
-                            icon={<FaSquarePlus size={24} color={"white"}/>} 
-                            name={"Salvar"}
-                        />
-                    </button>
-                </div>
+                <button type="submit" className={styles.buttonSubmit}>Entrar</button>
             </form>
         </div>
         </div>

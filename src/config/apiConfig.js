@@ -5,6 +5,7 @@ export const API_CONFIG = {
         login: `${URL}/auth/login`,
         register: `${URL}/auth/register`,
         recover: `${URL}/password-recovery/request`,
+        editPassword: `${URL}/password-recovery/confirm`,
     },
     expenses: {
         getAll: `${URL}/gastos`,
