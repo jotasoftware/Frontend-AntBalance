@@ -24,6 +24,9 @@ export const register = async (userData) => {
 
 export const recover = async (email) => {
   try{
+      const payloadParaAPI = {
+        email: email.recoverEmail,
+      };
       const response = await axios.post(API_CONFIG.auth.recover, email);
       return response.data;
   }catch(error){

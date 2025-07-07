@@ -14,7 +14,7 @@ function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [type, setType] = useState('login');
 
-    const [showEmailPopup, setShowEmailPopup] = useState ('false');
+    const [showEmailPopup, setShowEmailPopup] = useState (false);
     const [recoverEmail, setRecoverEmail] = useState ('');
     
 
