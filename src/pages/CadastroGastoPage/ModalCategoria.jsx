@@ -1,6 +1,7 @@
 // ModalCategoria.jsx
 import React, { useState } from 'react';
 import styles from './CadastroGastoPage.module.css';
+import { toast } from 'react-toastify';
 
 import {FaShoppingCart, FaUtensils, FaFileInvoiceDollar, FaMoneyCheckAlt, FaEllipsisH, FaPaw, FaTshirt, FaHome, FaDumbbell, FaGift, FaShieldAlt, FaPiggyBank, FaChartLine, FaPlus, FaTimes} from 'react-icons/fa';
   
@@ -54,6 +55,16 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
 
     const handleAddNovaCategoria = () => {
         if (novaCategoria.trim()) {
+            const categoriaExiste = categorias.some(
+                categoria => categoria.nome.toLowerCase() === novaCategoria.trim().toLowerCase()
+            );
+
+            if (categoriaExiste) {
+                toast.warn('Categoria já existe!');
+                return;
+            }
+
+
             onAddCategoria(novaCategoria.trim());
             setNovaCategoria('');
             setMostrarInputNova(false);
@@ -85,7 +96,7 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                         className={styles.categoriaItem}
                         onClick={() => {
                             onSelectCategoria(categoria.nome, categoria.id);
-                            onClose();
+                            onClose(); 
                         }}
                     >
                         <span className={styles.categoriaIcon}>
