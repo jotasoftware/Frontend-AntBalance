@@ -77,7 +77,7 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
         }
     };
 
-    const handleDeleteCategoria = (categoriaId, e) => {
+    const handleDeleteCategoria = (categoria, e) => {
         e.stopPropagation();
         if (window.confirm('Tem certeza que deseja excluir' + categoria.nome + '?')) {
             onDeleteCategoria(categoriaId);
@@ -113,7 +113,7 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                     >
                         <button
                             className={styles.deleteButton}
-                            onClick={(e) => handleDeleteCategoria(categoria.id, categoria.nome, e)}
+                            onClick={(e) => handleDeleteCategoria(categoria, e)}
                             title='Excluir categoria'
                         >
                             <IoRemoveOutline size={12} />
