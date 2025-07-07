@@ -46,6 +46,7 @@ function App() {
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="gastos" element={<GastosPage />} />
               <Route path="cadastrogasto" element={<CadastroGastoPage />} />
+              <Route path="editarcadastro" element={<EditarCadastroPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

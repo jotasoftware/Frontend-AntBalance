@@ -17,7 +17,7 @@ import {FaShoppingCart, FaUtensils, FaFileInvoiceDollar, FaMoneyCheckAlt, FaElli
       if (["conta", "contas", "boleto", "fatura", "energia", "agua", "internet", "telefone"].some(p => entrada.includes(p)))
           return <FaFileInvoiceDollar size={20} />;
       
-      if (["imposto", "iptu", "ipva", "taxa", "licenciamento", "darf"].some(p => entrada.includes(p)))
+      if (["imposto", "iptu", "ipva", "taxa", "licenciamento", "darf", "bet", "apostas"].some(p => entrada.includes(p)))
           return <FaMoneyCheckAlt size={20} />;
       
       if (["pet", "cachorro", "gato", "racao", "veterinario", "animal", "petshop"].some(p => entrada.includes(p)))
@@ -79,15 +79,10 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
 
     const handleDeleteCategoria = (categoria, e) => {
         e.stopPropagation();
-        if (window.confirm('Tem certeza que deseja excluir' + categoria.nome + '?')) {
+        if (window.confirm('Tem certeza que deseja excluir ' + categoria.nome + '?')) {
             onDeleteCategoria(categoriaId);
         }
     };
-
-    const handleCancelar = () =>{
-        setMostrarInputNova(false);
-        setNovaCategoria('');
-    }
 
     if (!isOpen) return null;
 
