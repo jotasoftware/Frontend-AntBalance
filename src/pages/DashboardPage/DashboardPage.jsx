@@ -9,9 +9,11 @@ import GridCard from '../../components/gridcard/GridCard';
 import Valores from '../../components/valores/Valores';
 import { Link } from 'react-router-dom'
 import { useExpenses } from '../../context/ExpenseContext';
+import { Chart as ChartJS } from 'chart.js/auto';
+import { Doughnut, Line } from 'react-chartjs-2';
+import Charts from '../../components/charts/Charts';
 
 function DashboardPage() {
-    const valor = 1215254.50
 
     const { valorAtual, valoresFuturos } = useExpenses();
 
@@ -23,9 +25,7 @@ function DashboardPage() {
                 <Valores mes="Proximos meses" dadosMensais={valoresFuturos} bgColor={'transparent'} mesColor={'black'} valorColor={'#1a45b8'}></Valores>
             </GridCard>
             <GridCard flex={3}>
-                <h4>Ultimos gastos</h4>
-                <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
-                <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
+                <Charts></Charts>
             </GridCard>
         </div>
     );
