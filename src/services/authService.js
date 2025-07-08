@@ -39,6 +39,22 @@ export const recover = async (email) => {
   }
 };
 
+export const edit = async (credentials, token) => {
+  try{
+      const payloadParaAPI = {
+        name: credentials.nome,
+        oldPassword: credentials.senhaAtual,
+        newPassword: credentials.senhaNova
+      };
+      const config = getAuthConfig(token);
+      const response = await axios.patch(API_CONFIG.auth.edit, payloadParaAPI, config);
+      return response.data;
+  }catch(error){
+      console.error("Erro no serviço de registro:", error.response?.data || error.message);
+      throw error;
+  }
+};
+
 export const editPassword = async (credentials) => {
   try{
       const payloadParaAPI = {

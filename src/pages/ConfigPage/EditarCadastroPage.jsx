@@ -9,8 +9,7 @@ import { FaSquarePlus } from "react-icons/fa6";
 
 
 function EditarCadastroPage() {
-    const navigate = useNavigate();
-    const { userName } = useAuth();
+    const { userName, edit, setUserName } = useAuth();
     const [nome, setNome] = useState(userName);
     const [senhaAtual, setSenhaAtual] = useState('');
     const [senhaNova, setSenhaNova] = useState('');
@@ -49,25 +48,24 @@ function EditarCadastroPage() {
                 return;
             }
         }
-        
-        /*
-        setIsLoading(true);
-
         try{
-            await createGasto({ nome, valor, categoriaId, fonte, parcelas });
-            toast.success('Gasto adicionado com sucesso.');
-            setNome("")
-            setValor("");
-            setCategoria("");
-            setFonte("");
-            setParcelas(1);
-            navigate('/gastos', { replace: true});
-        } catch (err){
-            toast.error('Dados inválidos, tente novamente.');
+            await edit({ nome, senhaAtual, senhaNova });
+            toast.success('Usuário editado com sucesso.');
+            setSenhaAtual("")
+            setSenhaNova("")
+            setUserName(nome)
+        } catch (err) {
+            if (err.response && err.response.data) {
+                const mensagem =
+                    typeof err.response.data === 'string'
+                        ? err.response.data
+                        : err.response.data.message || 'Erro ao editar o usuário.';
+                toast.error(mensagem);
+            } else {
+                toast.error('Erro desconhecido ao editar o usuário.');
+            }
             console.error("Falha no cadastro do gasto:", err);
-        } finally {
-            setIsLoading(false);
-        }*/
+        }
     };
 
     return (

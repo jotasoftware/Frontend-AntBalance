@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { login as apiLogin, register as apiRegister, recover as apiRecover, editPassword as apiEditPassword } from '../services/authService';
+import { login as apiLogin, register as apiRegister, edit as apiEdit, recover as apiRecover, editPassword as apiEditPassword } from '../services/authService';
 
 export const AuthContext = createContext(null);
 
@@ -56,6 +56,16 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const edit = async (credentials) => {
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            const response = await apiEdit(credentials, tokenLocal);
+            return response
+        } catch (error) {
+            throw error;
+        }
+    };
+
     const editPassword = async (credentials) => {
         try {
             const response = await apiEditPassword(credentials);
@@ -72,7 +82,7 @@ export const AuthProvider = ({ children }) => {
         setUserName(null);
     };
 
-    const value = { isLoggedIn, loading, login, logout, register, userName, recover, editPassword };
+    const value = { isLoggedIn, loading, login, logout, register, edit, userName, recover, editPassword, setUserName};
 
     return (
         <AuthContext.Provider value={value}>
