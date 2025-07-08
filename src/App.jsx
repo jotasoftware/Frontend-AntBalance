@@ -16,6 +16,7 @@ import CadastroGastoPage from './pages/CadastroGastoPage/CadastroGastoPage'
 import EditarCadastroPage from './pages/ConfigPage/EditarCadastroPage'
 import Private from './components/private/Private';
 import RecoverPage from './pages/RecoverPage/RecoverPage';
+import ConfigPage from './pages/ConfigPage/ConfigPage';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
               <Route path="cadastrogasto" element={<CadastroGastoPage />} />
               <Route path="editarcadastro" element={<EditarCadastroPage />} />
               <Route path="reset-password" element={<RecoverPage />} />
+              <Route path="configpage" element={<ConfigPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

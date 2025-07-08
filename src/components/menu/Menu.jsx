@@ -31,7 +31,7 @@ const Menu = () => {
         </div>
 
         <div className='menuItens2'>
-            <div className='menuLink'><Link to="/editarcadastro"><IoSettingsSharp />Configurações</Link></div>
+            <div className='menuLink'><Link to="/configpage"><IoSettingsSharp />Configurações</Link></div>
             <div className='menuLink'><Link to="/login" onClick={handleLogout}><IoLogOutOutline />Sair</Link></div>
         </div>
     </div>
