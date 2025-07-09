@@ -133,6 +133,7 @@ function GastosPage() {
                         isGastoSelected={isGastoSelected}
                         selectAll={selectAll}
                         onSelectAll={handleSelectAll}
+                        type={'active'}
                     />
                 )}
                 

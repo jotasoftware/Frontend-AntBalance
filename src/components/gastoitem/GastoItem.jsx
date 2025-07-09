@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import styles from './GastoItem.module.css';
-import { TbUserShare, TbEdit, TbTrash } from "react-icons/tb";
+import { TbUserShare, TbEdit, TbTrash, TbCheck } from "react-icons/tb";
 
-function GastoItem({ 
-    gasto, 
-    expandido, 
-    onToggle, 
-    isSelected, 
-    onSelect 
-}) {
+const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type }) => {
+    console.log(type)
     const formatDate = (dataOriginal) => {
         const dateObj = new Date(dataOriginal);
         const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -26,6 +21,14 @@ function GastoItem({
     };
 
     const handleDelete = (e) => {
+        e.stopPropagation();
+    };
+    
+    const handleActive = (e) => {
+        e.stopPropagation();
+    };
+
+    const handleDeleteForever = (e) => {
         e.stopPropagation();
     };
 
@@ -66,18 +69,31 @@ function GastoItem({
             {expandido && (
                 <div className={`${styles.gastoDetalhes} ${expandido ? styles.expandido : ''}`}>
                     <div className={styles.actionIconsDiv}>
+                    {type === 'active' ? (
+                        <>
                         <div className={styles.actionIcon} onClick={handleShare}>
-                            <TbUserShare/>
+                            <TbUserShare />
                         </div>
                         <div className={styles.actionIcon} onClick={handleEdit}>
                             <TbEdit />
                         </div>
                         <div className={styles.actionIcon} onClick={handleDelete}>
-                            <TbTrash/>
+                            <TbTrash />
                         </div>
+                        </>
+                    ) : (
+                        <>
+                        <div className={styles.actionIcon} onClick={handleActive}>
+                            <TbCheck />
+                        </div>
+                        <div className={styles.actionIcon} onClick={handleDeleteForever}>
+                            <TbTrash />
+                        </div>
+                        </>
+                    )}
                     </div>
                 </div>
-            )}
+                )}
         </div>
     );
 }

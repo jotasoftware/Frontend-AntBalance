@@ -115,9 +115,6 @@ function GastosInativosPage() {
                         </div>
                     </div>
                     <div className={styles.gastosActions}>
-                        <Link to="/cadastrogasto">
-                            <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                        </Link>
                         <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
                     </div>
                 </div>
@@ -132,6 +129,7 @@ function GastosInativosPage() {
                         isGastoSelected={isGastoSelected}
                         selectAll={selectAll}
                         onSelectAll={handleSelectAll}
+                        type={'inative'}
                     />
                 )}
                 

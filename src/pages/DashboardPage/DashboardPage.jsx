@@ -15,7 +15,7 @@ import Charts from '../../components/charts/Charts';
 
 function DashboardPage() {
 
-    const { valorAtual, valoresFuturos } = useExpenses();
+    const { valorAtual, valoresFuturos, gastos, valores } = useExpenses();
 
     return (
         <div className={styles.dashboardContainer}>
@@ -25,7 +25,7 @@ function DashboardPage() {
                 <Valores mes="Proximos meses" dadosMensais={valoresFuturos} bgColor={'transparent'} mesColor={'black'} valorColor={'#1a45b8'}></Valores>
             </GridCard>
             <GridCard flex={3}>
-                <Charts></Charts>
+                <Charts gastos={gastos} valores={valores}></Charts>
             </GridCard>
         </div>
     );

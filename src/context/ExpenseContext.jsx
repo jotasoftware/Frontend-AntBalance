@@ -20,6 +20,7 @@ export const ExpenseProvider = ({ children }) => {
     const [categorias, setCategorias] = useState([]);
     const [valorAtual, setValorAtual] = useState(0);
     const [valoresFuturos, setValoresFuturos] = useState([]);
+    const [valores, setValores] = useState([]);
 
     function converterStringParaNumero(valorString) {
         if(typeof valorString !== 'string' || !valorString) {
@@ -86,7 +87,7 @@ export const ExpenseProvider = ({ children }) => {
             const valoresFormatados = transformarDadosDeValores(response);
             const valorAtual = valoresFormatados[0];
             const valoresFuturos = valoresFormatados.slice(1);
-
+            setValores(response);
             setValorAtual(valorAtual.valor)
             setValoresFuturos(valoresFuturos);
         } catch (error) {
@@ -150,6 +151,7 @@ export const ExpenseProvider = ({ children }) => {
 
                     setGastos(gastosData);
                     setCategorias(categoriasData);
+                    setValores(valoresFormatados)
                     setValorAtual(valorAtual.valor)
                     setValoresFuturos(valoresFuturos);
                     setGastosInativos(gastosInativosData);
@@ -169,7 +171,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos };
+    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores };
 
     return (
         <ExpenseContext.Provider value={value}>
