@@ -18,7 +18,6 @@ export const createGasto = async (credentials, token) => {
 
 export const createCategoria = async (credentials, token) => {
   try{
-    console.log(credentials)
     const config = getAuthConfig(token);
     const response = await axios.post(API_CONFIG.categories.create, credentials, config);
     return response.data;
@@ -68,6 +67,33 @@ export const fetchValores = async (token) => {
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar os valores:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const deleteGastos = async (ids, token) => {
+  try {
+    const config = {
+      ...getAuthConfig(token),
+      data: ids
+    };
+
+    const response = await axios.delete(API_CONFIG.gastos.deleteBatch, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao deletar gastos:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const deleteCategoria = async (id, token) => {
+  try {
+    const config = getAuthConfig(token);
+
+    const response = await axios.delete(API_CONFIG.categories.delete(id), config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao deletar categoria:", error.response?.data || error.message);
     throw error;
   }
 };

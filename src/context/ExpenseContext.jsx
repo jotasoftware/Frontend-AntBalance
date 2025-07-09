@@ -6,7 +6,9 @@ import {
     fetchCategorias as apiFetchCategorias, 
     fetchGastos as apiFetchGastos,
     fetchGastosInativos as apiFetchGastosInativos,
-    fetchValores as apiFetchValores
+    fetchValores as apiFetchValores,
+    deleteGastos as apiDeleteGastos,
+    deleteCategoria as apiDeleteCategoria
 } from '../services/expenseService';
 
 export const ExpenseContext = createContext(null);
@@ -49,6 +51,7 @@ export const ExpenseProvider = ({ children }) => {
             setGastos(response);
         } catch (error) {
             console.error("Erro ao buscar gastos:", error);
+            throw error;
         } finally {
             setLoading(false);
         }
@@ -59,10 +62,10 @@ export const ExpenseProvider = ({ children }) => {
         try {
             const tokenLocal = localStorage.getItem('token');
             const response = await apiFetchGastosInativos(tokenLocal);
-            console.log(response)
             setGastosInativos(response);
         } catch (error) {
             console.error("Erro ao buscar gastos:", error);
+            throw error;
         } finally {
             setLoading(false);
         }
@@ -75,6 +78,7 @@ export const ExpenseProvider = ({ children }) => {
             setCategorias(response);
         } catch (error) {
             console.error("Erro ao buscar categorias:", error);
+            throw error;
         }
     };
 
@@ -92,6 +96,7 @@ export const ExpenseProvider = ({ children }) => {
             setValoresFuturos(valoresFuturos);
         } catch (error) {
             console.error("Erro ao buscar valores:", error);
+            throw error;
         } finally {
             setLoading(false);
         }
@@ -113,10 +118,19 @@ export const ExpenseProvider = ({ children }) => {
             const novoGasto = await apiCreateGasto(payloadParaAPI, tokenLocal);
             setGastos(prevGastos => [...prevGastos, novoGasto]);
             fetchValores()
-            console.log(categorias)
-            console.log(gastos)
         } catch (error) {
             console.error("Erro ao criar gasto:", error);
+            throw error;
+        }
+    };
+
+    const deleteGastos = async (data) => {
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            await apiDeleteGastos(data, tokenLocal);
+            fetchGastos()
+        } catch (error) {
+            console.error("Erro ao apagar lista de gastos:", error);
             throw error;
         }
     };
@@ -128,6 +142,17 @@ export const ExpenseProvider = ({ children }) => {
             setCategorias(prevCategorias => [...prevCategorias, novaCategoria]);
         } catch (error) {
             console.error("Erro ao criar categoria:", error);
+            throw error;
+        }
+    };
+
+    const deleteCategoria = async (data) => {
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            await apiDeleteCategoria(data, tokenLocal);
+            fetchCategorias()
+        } catch (error) {
+            console.error("Erro ao apagar lista de Categoria:", error);
             throw error;
         }
     };
@@ -163,15 +188,17 @@ export const ExpenseProvider = ({ children }) => {
             } else {
                 setGastos([]);
                 setCategorias([]);
+                setValores([])
                 setValorAtual(0)
                 setValoresFuturos([])
+                setGastosInativos([])
             }
         }
 
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores };
+    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria };
 
     return (
         <ExpenseContext.Provider value={value}>

@@ -8,7 +8,6 @@ import NotificationDropdown from "../notificationDropdown/NotificantionDropdown"
 const Header = () => {
   const { userName } = useAuth();
   const [greetings, setGreetings] = useState("Olá");
-  const number = 1;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -53,7 +52,7 @@ const Header = () => {
         <div className={styles.notificationWrapper} ref={dropdownRef}>
             <div className={styles.notificationDiv} onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <IoNotificationsSharp size={24} className={styles.notificationIcon}/>
-              {number > 0 && <span className={styles.quantNotification}>{number}</span>}
+              {expensesSplit.length > 0 && <span className={styles.quantNotification}>{expensesSplit.length}</span>}
             </div>
             {isMenuOpen && <NotificationDropdown expensesSplit={expensesSplit}/>}
           </div>

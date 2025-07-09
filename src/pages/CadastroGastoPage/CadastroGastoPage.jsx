@@ -10,7 +10,7 @@ import ModalCategoria from './ModalCategoria';
 
 function CadastroGastoPage() {
     const navigate = useNavigate();
-    const { createGasto, createCategoria, fetchCategorias, categorias} = useExpenses();
+    const { createGasto, createCategoria, fetchCategorias, categorias, deleteCategoria} = useExpenses();
 
     const [isLoading, setIsLoading] = useState(false);
     
@@ -74,7 +74,6 @@ function CadastroGastoPage() {
         if (!categorias.includes(novaCategoria)) {
             try {
                 await createCategoria({ nome: novaCategoria }); 
-                setCategoria(novaCategoria);
                 toast.success(`Categoria "${novaCategoria}" criada com sucesso!`);
             } catch (error) {
                 toast.error("Não foi possível criar a categoria.");
@@ -82,17 +81,18 @@ function CadastroGastoPage() {
         }
     }
 
-    const handleDeleteCategoria = async (categoriaIdDelete) => {
+    const handleDeleteCategoria = async (categoria) => {
         try {
-            await deleteCategoria(categoriaIdDelete);
+            await deleteCategoria(categoria.id); 
             
-            if (categoriaIdDelete === categoriaId) {
+            if (categoria.id === categoriaId) {
                 setCategoria('');
                 setCategoriaId(null);
             }
             
-            toast.success('Categoria excluída com sucesso!');
+            toast.success(`Categoria ${categoria.nome} excluída com sucesso!`);
         } catch (error) {
+            console.log(error)
             toast.error('Não foi possível excluir a categoria.');
             console.error("Erro ao excluir categoria:", error);
         }
