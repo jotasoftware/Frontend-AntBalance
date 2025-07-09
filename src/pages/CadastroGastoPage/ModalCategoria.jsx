@@ -139,7 +139,7 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                                 type="text"
                                 placeholder="Nome da categoria"
                                 value={novaCategoria}
-                                onChange={(e) => setNovaCategoria(e.target.value)}
+                                onChange={(e) => {if(e.target.value.length <=15)setNovaCategoria(e.target.value)}}
                                 onKeyPress={handleKeyPress}
                                 autoFocus
                             />

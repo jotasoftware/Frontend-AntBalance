@@ -29,7 +29,9 @@ function GastosPage() {
                     return new Date(a.data) - new Date(b.data);
                 case 'recentes':
                 default:
-                    return new Date(b.data) - new Date(a.data);
+                    // const dateDiff = new Date(b.data) - new Date(a.data);
+                    // if (dateDiff !== 0) return dateDiff;
+                    return b.id.localeCompare(a.id);
             }
         });
         return sorted;

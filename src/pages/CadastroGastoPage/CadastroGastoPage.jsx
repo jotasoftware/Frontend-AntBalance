@@ -21,10 +21,6 @@ function CadastroGastoPage() {
     const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
     const [categoria, setCategoria] = useState('');
     const [categoriaId, setCategoriaId] = useState(null);
-    
-    const handleChangeNome = (event) => {
-        setNome(event.target.value);
-    }
 
     useEffect(() => {
         if (categorias.length === 0) {
@@ -43,6 +39,10 @@ function CadastroGastoPage() {
         
         return partes.join(',');
     }
+
+    const handleChangeNome = (event) => {
+        if(event.target.value.length <=25) setNome(event.target.value);
+    }
     
     const handleChangeValor = (event) => {
         const inputValue = event.target.value;
@@ -50,12 +50,14 @@ function CadastroGastoPage() {
             setValor('');
             return;
         }
-        const valorFormatado = formatarValorMonetario(inputValue);
-        setValor(valorFormatado);
+        if(inputValue.length <=12){
+            const valorFormatado = formatarValorMonetario(inputValue);
+            setValor(valorFormatado);
+        }
     }
 
     const handleChangeFonte = (event) => {
-        setFonte(event.target.value);
+        if(event.target.value.length <=25) setFonte(event.target.value);
     }
 
     const handleChangeParcelas = (event) => {
