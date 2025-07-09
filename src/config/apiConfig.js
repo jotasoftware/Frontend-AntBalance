@@ -19,6 +19,5 @@ export const API_CONFIG = {
         getAll: `${URL}/categorias/usuario`,
         create: `${URL}/categorias`,
         delete: (id) => `${URL}/categorias/${id}`,
-        update: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
     },
 }
