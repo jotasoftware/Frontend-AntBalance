@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import styles from './GastosPage.module.css';
+import styles from './GastosInativosPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
 import { IoPrintOutline } from "react-icons/io5";
@@ -12,15 +12,14 @@ import Table from '../../components/table/Table';
 import { FaTrash } from "react-icons/fa";
 import Loading from '../../components/loading/Loading';
 
-function GastosPage() {
+function GastosInativosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const { token } = useAuth();
-    const { gastos, loading } = useExpenses();
+    const { gastosInativos, loading } = useExpenses();
 
     const gastosOrdenados = useMemo(() => {
-        const sorted = [...gastos];
+        const sorted = [...gastosInativos];
         sorted.sort((a, b) => {
             switch (sortOrder) {
                 case 'maior_valor':
@@ -35,7 +34,7 @@ function GastosPage() {
             }
         });
         return sorted;
-    }, [gastos, sortOrder]);
+    }, [gastosInativos, sortOrder]);
 
     const handleSortChange = (event) => {
         setSortOrder(event.target.value);
@@ -99,7 +98,7 @@ function GastosPage() {
             <GridCard flex={1}>
                 <div className={styles.gastosHeaderContainer}>
                     <div className={styles.gastosTitle}>
-                        <h4>Gastos</h4>
+                        <h4>Gastos Inativos</h4>
                         <div className={styles.sortContainer}>
                             <label htmlFor="sort">Ordenar por </label>
                             <select
@@ -145,7 +144,7 @@ function GastosPage() {
                 <div className={styles.botaoApagar}>
                     <Botao 
                         icon={<FaTrash size={20} color={"white"} />} 
-                        name={`Apagar (${selectedGastos.length})`}
+                        name={`Apagar Permanente(${selectedGastos.length})`}
                         onClick={handleDeleteSelected}
                         disabled={selectedGastos.length === 0}
                     />
@@ -155,4 +154,4 @@ function GastosPage() {
     );
 }
 
-export default GastosPage;
+export default GastosInativosPage;

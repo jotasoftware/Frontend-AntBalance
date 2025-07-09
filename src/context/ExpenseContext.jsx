@@ -5,6 +5,7 @@ import {
     createGasto as apiCreateGasto, 
     fetchCategorias as apiFetchCategorias, 
     fetchGastos as apiFetchGastos,
+    fetchGastosInativos as apiFetchGastosInativos,
     fetchValores as apiFetchValores
 } from '../services/expenseService';
 
@@ -15,6 +16,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const [loading, setLoading] = useState(false);
     const [gastos, setGastos] = useState([]);
+    const [gastosInativos, setGastosInativos] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [valorAtual, setValorAtual] = useState(0);
     const [valoresFuturos, setValoresFuturos] = useState([]);
@@ -32,9 +34,9 @@ export const ExpenseProvider = ({ children }) => {
     const transformarDadosDeValores = (dadosDaApi) => {
         const nomesDosMeses = { '01': 'Janeiro', '02': 'Fevereiro', '03': 'Março', '04': 'Abril', '05': 'Maio', '06': 'Junho', '07': 'Julho', '08': 'Agosto', '09': 'Setembro', '10': 'Outubro', '11': 'Novembro', '12': 'Dezembro' };
         return Object.entries(dadosDaApi).map(([chave, valor]) => {
-            const numeroDoMes = chave.split('-')[1];
-            const nomeDoMes = nomesDosMeses[numeroDoMes] || 'Mês Inválido';
-            return { mes: nomeDoMes, valor: valor };
+            const [ano, numeroMes] = chave.split('-');
+            const nomeDoMes = nomesDosMeses[numeroMes] || 'Mês Inválido';
+            return { mes: `${nomeDoMes} - ${ano}`, valor: valor };
         })
     }
 
@@ -44,6 +46,20 @@ export const ExpenseProvider = ({ children }) => {
             const tokenLocal = localStorage.getItem('token');
             const response = await apiFetchGastos(tokenLocal);
             setGastos(response);
+        } catch (error) {
+            console.error("Erro ao buscar gastos:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchGastosInativos = async () => {
+        setLoading(true);
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            const response = await apiFetchGastosInativos(tokenLocal);
+            console.log(response)
+            setGastosInativos(response);
         } catch (error) {
             console.error("Erro ao buscar gastos:", error);
         } finally {
@@ -121,10 +137,11 @@ export const ExpenseProvider = ({ children }) => {
                 setLoading(true);
                 const tokenLocal = localStorage.getItem('token');
                 try {
-                    const [gastosData, categoriasData, valoresData] = await Promise.all([
+                    const [gastosData, categoriasData, valoresData, gastosInativosData] = await Promise.all([
                         apiFetchGastos(tokenLocal),
                         apiFetchCategorias(tokenLocal),
-                        apiFetchValores(tokenLocal)
+                        apiFetchValores(tokenLocal),
+                        apiFetchGastosInativos(tokenLocal)
                     ])
 
                     const valoresFormatados = transformarDadosDeValores(valoresData);
@@ -135,6 +152,7 @@ export const ExpenseProvider = ({ children }) => {
                     setCategorias(categoriasData);
                     setValorAtual(valorAtual.valor)
                     setValoresFuturos(valoresFuturos);
+                    setGastosInativos(gastosInativosData);
                 } catch (error) {
                     console.error("Erro ao buscar dados iniciais:", error);
                 } finally {
@@ -151,7 +169,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores };
+    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos };
 
     return (
         <ExpenseContext.Provider value={value}>

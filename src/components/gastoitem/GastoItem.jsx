@@ -10,9 +10,12 @@ function GastoItem({
     onSelect 
 }) {
     const formatDate = (dataOriginal) => {
-        const [ano, mes, dia] = dataOriginal.split("-");
+        const dateObj = new Date(dataOriginal);
+        const dia = String(dateObj.getDate()).padStart(2, '0');
+        const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const ano = dateObj.getFullYear();
         return `${dia}/${mes}/${ano}`;
-    };
+      };
 
     const handleShare = (e) => {
         e.stopPropagation();

@@ -1,0 +1,55 @@
+.gastosContainer{
+    padding: 35px;
+}
+
+.gastosContainer .gastosHeaderContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.gastosContainer .gastosHeaderContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.gastosContainer .sortContainer{
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.gastosContainer .sortSelect {
+    margin-left: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: fit-content;
+    font-family: 'Poppins', sans-serif;
+    color: #1a45b8;
+}
+
+.gastosContainer .sortSelect:focus {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    outline: none;
+}
+  
+
+.gastosContainer .gastosHeaderContainer .gastosActions{
+    display: flex;
+    gap: 20px;
+}
+.gastosContainer .botaoApagar{
+    display: flex;
+    justify-content: flex-end;
+}
+

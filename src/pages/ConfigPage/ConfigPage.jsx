@@ -11,8 +11,8 @@ function ConfigPage() {
 
     return (
         <div className={styles.configContainer}>
-            <GridCard>
-                <h3>Configurações</h3>
+            <GridCard flex={1}>
+                <h4>Configurações</h4>
                 <Link to="/editarcadastro"><Botao icon={<FaEdit size={24} color={"white"}/>} name={"Editar Cadastro"}/></Link>
                 
             </GridCard>

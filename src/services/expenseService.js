@@ -39,6 +39,17 @@ export const fetchGastos = async (token) => {
   }
 };
 
+export const fetchGastosInativos = async (token) => {
+  try {
+    const config = getAuthConfig(token);
+    const response = await axios.get(API_CONFIG.expenses.getAll, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar gastos:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const fetchCategorias = async (token) => {
   try {
     const config = getAuthConfig(token);
