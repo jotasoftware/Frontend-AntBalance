@@ -15,8 +15,11 @@ import Loading from '../../components/loading/Loading';
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
+    const [selectedGastos, setSelectedGastos] = useState([]); 
+    const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const {gastos, loading} = useExpenses();
+    const { gastos, loading } = useExpenses();
+
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastos];
         sorted.sort((a, b) => {
@@ -38,6 +41,59 @@ function GastosPage() {
     const handleSortChange = (event) => {
         setSortOrder(event.target.value);
     };
+
+    const handleSelectAll = (event) => {
+        const isChecked = event.target.checked;
+        setSelectAll(isChecked);
+        
+        if (isChecked) {
+            const allIds = gastosOrdenados.map(gasto => gasto.id);
+            setSelectedGastos(allIds);
+        } else {
+            setSelectedGastos([]);
+        }
+    };
+
+    const handleSelectGasto = (gastoId) => {
+        setSelectedGastos(prev => {
+            if (prev.includes(gastoId)) {
+                const newSelected = prev.filter(id => id !== gastoId);
+                
+                setSelectAll(newSelected.length === gastosOrdenados.length);
+                
+                return newSelected;
+            } else {
+                const newSelected = [...prev, gastoId];
+                
+                setSelectAll(newSelected.length === gastosOrdenados.length);
+                
+                return newSelected;
+            }
+        });
+    };
+
+    const isGastoSelected = (gastoId) => {
+        return selectedGastos.includes(gastoId);
+    };
+
+    const handleDeleteSelected = () => {
+        if (selectedGastos.length === 0) {
+            toast.warning('Nenhum gasto selecionado para apagar.');
+            return;
+        }
+        
+        console.log('Gastos selecionados para apagar:', selectedGastos);
+        toast.info(`${selectedGastos.length} gasto(s) selecionado(s) para apagar.`);
+        
+        setSelectedGastos([]);
+        setSelectAll(false);
+    };
+
+    useEffect(() => {
+        if (gastosOrdenados.length > 0) {
+            setSelectAll(selectedGastos.length === gastosOrdenados.length);
+        }
+    }, [gastosOrdenados.length, selectedGastos.length]);
 
     return (
         <div className={styles.gastosContainer}>
@@ -61,13 +117,40 @@ function GastosPage() {
                         </div>
                     </div>
                     <div className={styles.gastosActions}>
-                        <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
+                        <Link to="/cadastrogasto">
+                            <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
+                        </Link>
                         <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
                     </div>
                 </div>
-                {loading ? <Loading></Loading> : <Table gastos={gastosOrdenados}></Table>}
+
+                {loading ? (
+                    <Loading></Loading>
+                ) : (
+                    <Table 
+                        gastos={gastosOrdenados}
+                        selectedGastos={selectedGastos}
+                        onSelectGasto={handleSelectGasto}
+                        isGastoSelected={isGastoSelected}
+                        selectAll={selectAll}
+                        onSelectAll={handleSelectAll}
+                    />
+                )}
+                
+                {/* Informação sobre seleção */}
+                {selectedGastos.length > 0 && (
+                    <div className={styles.selectionInfo}>
+                        {selectedGastos.length} gasto(s) selecionado(s)
+                    </div>
+                )}
+
                 <div className={styles.botaoApagar}>
-                    <Botao icon={<FaTrash size={20} color={"white"} />} name={"Apagar"} />
+                    <Botao 
+                        icon={<FaTrash size={20} color={"white"} />} 
+                        name={`Apagar (${selectedGastos.length})`}
+                        onClick={handleDeleteSelected}
+                        disabled={selectedGastos.length === 0}
+                    />
                 </div>
             </GridCard>
         </div>
