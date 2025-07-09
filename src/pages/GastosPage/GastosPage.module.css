@@ -6,7 +6,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 15px;
 }
+
+.gastosContainer .gastosHeaderContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
 .gastosContainer .sortContainer{
     font-size: 14px;
     display: flex;
@@ -38,5 +47,9 @@
 .gastosContainer .gastosHeaderContainer .gastosActions{
     display: flex;
     gap: 20px;
+}
+.gastosContainer .botaoApagar{
+    display: flex;
+    justify-content: flex-end;
 }
 

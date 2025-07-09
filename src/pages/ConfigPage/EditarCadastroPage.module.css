@@ -111,33 +111,11 @@
     box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
 }
 
-.buttonContainer {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 20px;
-    cursor: pointer;
-    transition: .2s ease-in-out background;
-}
-
-.buttonContainer button {
-    height: 46px;
-    background-color: #1a45b8;
-    color: white;
+button {
     border: none;
     border-radius: 8px;
     font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: .2s ease-in-out background;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.buttonContainer button:hover {
-    background-color: #191919;
+    padding: 0;
 }
 
 .infoContainer {

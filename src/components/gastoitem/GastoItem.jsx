@@ -8,25 +8,34 @@ function GastoItem({ gasto }) {
         setExpandido(!expandido);
     };
 
+    const formatDate = (dataOriginal) =>{
+        const [ano, mes, dia] = dataOriginal.split("-");
+
+        return `${dia}/${mes}/${ano}`;
+    }
+
     const parcelasRestantes = gasto.parcelas?.filter(p => new Date(p.dataVencimento) > new Date()).length || 0;
 
     return (
         <div 
-            className={`${styles.gastoItem} ${expandido ? styles.expandido : ''}`} 
+            className={`${styles.gastoLine} ${expandido ? styles.expandido : ''}`} 
             onClick={toggleExpandido}
         >
-            <div className={styles.gastoInfo}>
-                <h4>{gasto.descricao}</h4>
-                <p>Fonte: {gasto.fonte}</p>
-            </div>
-            <div className={styles.gastoValorData}>
-                <p>R$ {gasto.valorTotal.toFixed(2)}</p>
-                <p>{new Date(gasto.data).toLocaleDateString()}</p>
+            <div className={styles.gastoItem}>
+                <input type="checkbox" name="" id="" />
+                <div className={styles.gastoInfo}>
+                    <div style={{width: '150px'}}>{gasto.descricao}</div>
+                    <div style={{width: '100px'}}>{formatDate(gasto.data)}</div>
+                    <div style={{width: '100px'}}>{gasto.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
+                    <div style={{width: '140px'}}>{gasto.categoria.nome}</div>
+                    <div style={{width: '140px'}}>{gasto.fonte}</div>
+                    <div style={{width: '90px'}}>{(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'A Vista' }</div>
+                </div>
             </div>
 
             {expandido && (
                 <div className={`${styles.gastoDetalhes} ${expandido ? styles.expandido : ''}`} >
-                    <p>Total de Parcelas: <strong>{gasto.numeroParcelas}</strong></p>
+                    <p>Apagar: <strong>{gasto.numeroParcelas}</strong></p>
                     <p>Parcelas Restantes: <strong>{parcelasRestantes}</strong></p>
                 </div>
             )}

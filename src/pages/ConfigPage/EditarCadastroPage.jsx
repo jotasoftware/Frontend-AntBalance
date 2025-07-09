@@ -109,17 +109,15 @@ function EditarCadastroPage() {
                         onChange={handleChangeSenhaNova}
                     />
                 </div>
-                <div className={styles.buttonContainer}>
-                    <button 
-                        type="submit" 
-                        className={styles.buttonSubmit}
-                    >
-                        <Botao 
-                            icon={<FaSquarePlus size={24} color={"white"}/>} 
-                            name={"Editar"}
-                        />
-                    </button>
-                </div>
+                <button 
+                    type="submit" 
+                    className={styles.buttonSubmit}
+                >
+                    <Botao 
+                        icon={<FaSquarePlus size={24} color={"white"}/>} 
+                        name={"Editar"}
+                    />
+                </button>
             </form>
         </div>
     );

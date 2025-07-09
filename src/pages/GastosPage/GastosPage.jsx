@@ -8,12 +8,14 @@ import { FaSquarePlus } from "react-icons/fa6";
 import GridCard from '../../components/gridcard/GridCard';
 import GastoItem from '../../components/gastoitem/GastoItem';
 import { useExpenses } from '../../context/ExpenseContext';
+import { Link } from 'react-router-dom';
+import Table from '../../components/table/Table';
+import { FaTrash } from "react-icons/fa";
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const { token } = useAuth();
     const {gastos} = useExpenses();
-    console.log(gastos);
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastos];
         sorted.sort((a, b) => {
@@ -58,19 +60,14 @@ function GastosPage() {
                         </div>
                     </div>
                     <div className={styles.gastosActions}>
-                        <Botao icon={<FaSquarePlus size={24} color={"white"} />} name={"Adicionar"} />
+                        <Link to="/cadastrogasto"><Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/></Link>
                         <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
                     </div>
                 </div>
 
-                <div className={styles.gastosLista}>
-                    {gastosOrdenados.length === 0 ? (
-                        <p>Nenhum gasto encontrado.</p>
-                    ) : (
-                        gastosOrdenados.map((gasto) => (
-                            <GastoItem key={gasto.id} gasto={gasto} />
-                        ))
-                    )}
+                <Table gastos={gastosOrdenados}></Table>
+                <div className={styles.botaoApagar}>
+                    <Botao icon={<FaTrash size={20} color={"white"} />} name={"Apagar"} />
                 </div>
             </GridCard>
         </div>
