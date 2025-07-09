@@ -42,5 +42,6 @@ share: import { TbUserShare } from "react-icons/tb";
 
 edit: import { TbEdit } from "react-icons/tb";
 
+trash: import { TbTrash } from "react-icons/tb";
 
 
