@@ -20,6 +20,7 @@
 .gastoItem .gastoInfo{
     display: flex;
     width: 97%;
+    height: 42px;
     flex-direction: row;
     justify-content: space-between;
     cursor: pointer;
@@ -64,7 +65,7 @@
     opacity: 0;
     transition: max-height 0.4s ease, opacity 0.4s ease;
     margin-top: 0;
-    padding-right: 30px;
+    padding-right: 9px;
 }
 
 .expandido .gastoDetalhes {

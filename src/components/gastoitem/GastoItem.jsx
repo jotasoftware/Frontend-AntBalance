@@ -25,11 +25,11 @@ function GastoItem({ gasto }) {
                 <input type="checkbox" name="" id="" />
                 <div className={styles.gastoInfo}>
                     <div style={{width: '150px'}}>{gasto.descricao}</div>
-                    <div style={{width: '100px'}}>{formatDate(gasto.data)}</div>
                     <div style={{width: '100px'}}>{gasto.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
+                    <div style={{width: '90px'}}>{(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'A Vista' }</div>
                     <div style={{width: '140px'}}>{gasto.categoria.nome}</div>
                     <div style={{width: '140px'}}>{gasto.fonte}</div>
-                    <div style={{width: '90px'}}>{(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'A Vista' }</div>
+                    <div style={{width: '100px'}}>{formatDate(gasto.data)}</div>
                 </div>
             </div>
 
