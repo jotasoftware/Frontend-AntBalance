@@ -40,5 +40,6 @@ deny: import { IoCloseOutline } from "react-icons/io5";
 
 share: import { TbUserShare } from "react-icons/tb";
 
+edit: import { FaEdit } from "react-icons/fa";
 
 
