@@ -7,6 +7,7 @@
     transition: background 0.2s ease;
     transition: max-height 0.5s ease-in-out;
     justify-content: space-between;
+    font-size: 14px;
 }
 .gastoItem {
     display: flex;
@@ -47,6 +48,7 @@
 .gastoInfo p {
     margin: 0;
     color: #666;
+
 }
 
 .gastoValorData {
@@ -67,8 +69,43 @@
     margin-top: 0;
     padding-right: 9px;
 }
+.gastoDetalhes {
+    display: flex;
+    justify-content: flex-end;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    margin-top: 0;
+    padding: 0 9px 0 252px;
+    align-items: center;
+    gap: 30px;
+}
 
-.expandido .gastoDetalhes {
+.gastoDetalhes .actionIconsDiv{
+    display: flex;
+    justify-content: row;
+    gap: 10px;
+}
+
+.gastoDetalhes .actionIconsDiv .actionIcon{
+    background-color: rgb(228, 228, 228);
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color .3s linear, color .3s linear;
+    position: relative;
+    cursor: pointer;
+}
+.gastoDetalhes .actionIconsDiv .actionIcon:hover{
+    background-color: #1a45b8;
+    color: white;
+}
+
+.gastoDetalhes.expandido {
     max-height: 200px; 
     opacity: 1;
     margin-top: 10px;

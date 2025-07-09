@@ -3,6 +3,12 @@ import styles from './Table.module.css';
 import GastoItem from '../gastoitem/GastoItem';
 
 const Table = ({gastos}) => {
+
+  const [gastoExpandidoId, setGastoExpandidoId] = useState(null);
+
+  const handleToggle = (id) => {
+    setGastoExpandidoId(prevId => (prevId === id ? null : id));
+  };
   
   return (
     <div className={styles.gastosLista}>
@@ -19,24 +25,10 @@ const Table = ({gastos}) => {
         </div>
         <div className={styles.tableBodyGasto}>
           {gastos.length === 0 ? (
-              <p>Nenhum gasto encontrado.</p>
+              <p>Nenhum gasto cadastrado.</p>
           ) : (
               (gastos.map((gasto) => (
-                  <GastoItem key={gasto.id} gasto={gasto} />
-              )))
-          )}
-          {gastos.length === 0 ? (
-              <p>Nenhum gasto encontrado.</p>
-          ) : (
-              (gastos.map((gasto) => (
-                  <GastoItem key={gasto.id} gasto={gasto} />
-              )))
-          )}
-          {gastos.length === 0 ? (
-              <p>Nenhum gasto encontrado.</p>
-          ) : (
-              (gastos.map((gasto) => (
-                  <GastoItem key={gasto.id} gasto={gasto} />
+                  <GastoItem key={gasto.id} gasto={gasto} expandido={gastoExpandidoId === gasto.id}onToggle={() => handleToggle(gasto.id)}/>
               )))
           )}
         </div>

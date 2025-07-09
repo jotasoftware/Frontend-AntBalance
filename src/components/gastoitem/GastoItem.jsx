@@ -1,28 +1,31 @@
 import React, { useState } from 'react';
 import styles from './GastoItem.module.css';
+import { TbUserShare, TbEdit, TbTrash } from "react-icons/tb";
 
-function GastoItem({ gasto }) {
-    const [expandido, setExpandido] = useState(false);
-
-    const toggleExpandido = () => {
-        setExpandido(!expandido);
-    };
-
+function GastoItem({ gasto, expandido, onToggle }) {
     const formatDate = (dataOriginal) =>{
         const [ano, mes, dia] = dataOriginal.split("-");
 
-        return `${dia}/${mes}/${ano}`;
+        return `${dia}/${mes}/${ano}`
     }
 
-    const parcelasRestantes = gasto.parcelas?.filter(p => new Date(p.dataVencimento) > new Date()).length || 0;
+    const handleShare = (e)=>{
+        e.stopPropagation()
+    }
+    const handleEdit = (e)=>{
+        e.stopPropagation()
+    }
+    const handleDelete = (e)=>{
+        e.stopPropagation()
+    }
 
     return (
         <div 
             className={`${styles.gastoLine} ${expandido ? styles.expandido : ''}`} 
-            onClick={toggleExpandido}
+            onClick={onToggle}
         >
             <div className={styles.gastoItem}>
-                <input type="checkbox" name="" id="" />
+                <input type="checkbox" name="" id="" onClick={(e) => e.stopPropagation()}/>
                 <div className={styles.gastoInfo}>
                     <div style={{width: '150px'}}>{gasto.descricao}</div>
                     <div style={{width: '100px'}}>{gasto.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
@@ -35,8 +38,17 @@ function GastoItem({ gasto }) {
 
             {expandido && (
                 <div className={`${styles.gastoDetalhes} ${expandido ? styles.expandido : ''}`} >
-                    <p>Apagar: <strong>{gasto.numeroParcelas}</strong></p>
-                    <p>Parcelas Restantes: <strong>{parcelasRestantes}</strong></p>
+                    <div className={styles.actionIconsDiv}>
+                        <div className={styles.actionIcon} onClick={handleShare}>
+                            <TbUserShare/>  
+                        </div>
+                        <div className={styles.actionIcon} onClick={handleEdit}>
+                            <TbEdit />
+                        </div>
+                        <div className={styles.actionIcon} onClick={handleDelete}>
+                            <TbTrash/>  
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

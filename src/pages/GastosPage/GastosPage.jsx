@@ -11,11 +11,12 @@ import { useExpenses } from '../../context/ExpenseContext';
 import { Link } from 'react-router-dom';
 import Table from '../../components/table/Table';
 import { FaTrash } from "react-icons/fa";
+import Loading from '../../components/loading/Loading';
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const { token } = useAuth();
-    const {gastos} = useExpenses();
+    const {gastos, loading} = useExpenses();
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastos];
         sorted.sort((a, b) => {
@@ -64,8 +65,7 @@ function GastosPage() {
                         <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
                     </div>
                 </div>
-
-                <Table gastos={gastosOrdenados}></Table>
+                {loading ? <Loading></Loading> : <Table gastos={gastosOrdenados}></Table>}
                 <div className={styles.botaoApagar}>
                     <Botao icon={<FaTrash size={20} color={"white"} />} name={"Apagar"} />
                 </div>

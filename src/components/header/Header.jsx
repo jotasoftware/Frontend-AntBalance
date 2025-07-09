@@ -35,7 +35,6 @@ const Header = () => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsMenuOpen(false);
-        console.log('teste')
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
