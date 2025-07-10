@@ -4,7 +4,6 @@ import { Chart as ChartJS } from 'chart.js/auto';
 import { Doughnut, Bar, Line, Radar } from 'react-chartjs-2';
 
 const Charts = ({gastos, valores}) => {
-  console.log(valores)
 
   const coresPaleta = [
     '#1a45b8', // Azul principal
@@ -36,7 +35,7 @@ const Charts = ({gastos, valores}) => {
 
   const dadosPorData = useMemo(() => {
     const retorno = {};
-    console.log(valores)
+
     valores.forEach((valor) => {
       console.log(valor)
       const mesAno = valor.mes;
@@ -68,9 +67,13 @@ const Charts = ({gastos, valores}) => {
       retorno[fonte] = (retorno[fonte] || 0) + gasto.valorTotal;
     });
 
+    const ordenarDados = Object.entries(retorno)
+    .map(([label, valor]) => ({ label, valor }))
+    .sort((a, b) => b.valor - a.valor);
+
     return {
-      labels: Object.keys(retorno),
-      dados: Object.values(retorno),
+      labels: ordenarDados.map(item => item.label),
+    dados: ordenarDados.map(item => item.valor),
     };
 
   }, [gastos]);
@@ -91,8 +94,8 @@ const Charts = ({gastos, valores}) => {
               backgroundColor: coresPaleta,
               borderColor: '#ffffff',
               borderWidth: 5,
-              borderRadius: 10,
-              hoverOffset: 10,
+              borderRadius: 8,
+              hoverOffset: 15,
 
             },
 
@@ -107,6 +110,7 @@ const Charts = ({gastos, valores}) => {
               labels: {
                 font: {
                   size: 14,
+                  family: 'Poppins',
                 },
                 color: '#000000',
               },
@@ -128,7 +132,7 @@ const Charts = ({gastos, valores}) => {
                     const value = context.parsed || 0;
                     const total = context.dataset.data.reduce((a, b) => a + b, 0);
                     const percentage = ((value / total) * 100).toFixed(1);
-                    return `${label}: R$ ${value.toFixed(2)} (${percentage}%)`;
+                    return ` ${label}: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (${percentage}%)`;
                     },
                 },
             },
@@ -170,7 +174,7 @@ const Charts = ({gastos, valores}) => {
               cornerRadius: 10,
               callbacks: {
                 label: function(context) {
-                  return `Total: R$ ${context.parsed.y}`;
+                  return ` Total: ${context.parsed.y.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
                   },
               },
             },
@@ -184,7 +188,7 @@ const Charts = ({gastos, valores}) => {
         <div className={styles.graficoCard}>
           <h3 className={styles.graficoTitulo}>Gastos por Fonte</h3>
     <div className={styles.graficoInput}>
-      <Radar
+      <Bar //Horizontal
           data={{
             labels: dadosPorFonte.labels,
             datasets: [
@@ -192,16 +196,15 @@ const Charts = ({gastos, valores}) => {
                 label: "Gasto por Fonte",
                 data: dadosPorFonte.dados,
                 backgroundColor: coresPaleta,
-                borderColor: '#1a45b8',
-                borderWidth: 2,
-                pointBackgroundColor: '#1a45b8',
-                pointBorderColor: '#ffffff',
-                pointHoverBackgroundColor: '#191919',
-                pointHoverBorderColor: '#1a45b8',
+                borderColor: '#ffffff',
+                borderWidth: 0,
+                borderRadius: 6,
+                hoverBackgroundColor: '#191919',
               },
             ]
           }}
           options={{
+            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
           plugins: {
@@ -214,7 +217,7 @@ const Charts = ({gastos, valores}) => {
               cornerRadius: 10,
               callbacks: {
                 label: function(context) {
-                  return `R$ ${context.parsed.r}`;
+                  return ` Total: ${context.parsed.x.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
                   },
               },
             },
