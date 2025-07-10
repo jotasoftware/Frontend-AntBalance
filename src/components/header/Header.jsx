@@ -2,15 +2,18 @@ import React, { useEffect, useState, useRef } from 'react'
 import styles from './Header.module.css';
 import Avatar from '../avatar/Avatar';
 import { useAuth } from '../../context/AuthContext';
+import { useSplit } from '../../context/SplitExpanseContext';
 import { IoNotificationsSharp } from "react-icons/io5";
 import NotificationDropdown from "../notificationDropdown/NotificantionDropdown"
 
 const Header = () => {
   const { userName } = useAuth();
+  const { splitGastos } = useSplit();
   const [greetings, setGreetings] = useState("Olá");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  console.log(splitGastos)
   const expensesSplit = [
     { nome: "joao", valor: 300 },
     { nome: "ricardo", valor: 400 }

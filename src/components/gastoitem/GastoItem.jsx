@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './GastoItem.module.css';
 import { TbUserShare, TbEdit, TbTrash, TbCheck } from "react-icons/tb";
 
-const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type }) => {
+const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever }) => {
     const formatDate = (dataOriginal) => {
         const dateObj = new Date(dataOriginal);
         const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -13,22 +13,29 @@ const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type }) =
 
     const handleShare = (e) => {
         e.stopPropagation();
+        let email = 'carlos@gmail.com'
+        let valor = 100
+        onShare(gasto);
     };
 
     const handleEdit = (e) => {
         e.stopPropagation();
+        onEdit(gasto);
     };
 
     const handleDelete = (e) => {
         e.stopPropagation();
+        onDelete(gasto);
     };
     
     const handleActive = (e) => {
         e.stopPropagation();
+        onActive(gasto);
     };
 
     const handleDeleteForever = (e) => {
         e.stopPropagation();
+        onDeleteForever(gasto);
     };
 
     const handleCheckboxChange = (e) => {
