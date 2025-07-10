@@ -24,6 +24,6 @@ export const API_CONFIG = {
     split: {
         getAll: `${URL}/divisao`,
         create: `${URL}/divisao`,
-        delete: (id) => `${URL}/categorias/${id}`,
+        accept: `${URL}/divisao/aceitar`,
     },
 }

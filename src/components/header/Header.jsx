@@ -13,13 +13,6 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  console.log(splitGastos)
-  const expensesSplit = [
-    { nome: "joao", valor: 300 },
-    { nome: "ricardo", valor: 400 }
-  ];
-  
-
   useEffect(() => {
     const now = new Date();
     const hour = now.getHours();
@@ -55,9 +48,9 @@ const Header = () => {
         <div className={styles.notificationWrapper} ref={dropdownRef}>
             <div className={styles.notificationDiv} onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <IoNotificationsSharp size={24} className={styles.notificationIcon}/>
-              {expensesSplit.length > 0 && <span className={styles.quantNotification}>{expensesSplit.length}</span>}
+              {splitGastos.length > 0 && <span className={styles.quantNotification}>{splitGastos.length}</span>}
             </div>
-            {isMenuOpen && <NotificationDropdown expensesSplit={expensesSplit}/>}
+            {isMenuOpen && <NotificationDropdown expensesSplit={splitGastos}/>}
           </div>
           <Avatar name={userName}></Avatar>
         </div>

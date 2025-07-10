@@ -3,6 +3,7 @@ import styles from './GastoItem.module.css';
 import { TbUserShare, TbEdit, TbTrash, TbCheck } from "react-icons/tb";
 
 const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever }) => {
+    console.log(gasto)
     const formatDate = (dataOriginal) => {
         const dateObj = new Date(dataOriginal);
         const dia = String(dateObj.getDate()).padStart(2, '0');

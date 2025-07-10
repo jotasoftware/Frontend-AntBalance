@@ -19,7 +19,9 @@ export const createGasto = async (credentials, token) => {
 export const createSplit = async (credentials, token) => {
   try{
     const config = getAuthConfig(token);
-    const response = await axios.post(API_CONFIG.categories.create, credentials, config);
+    console.log(credentials)
+    const response = await axios.post(API_CONFIG.split.create, credentials, config);
+    console.log(response.data)
     return response.data;
   }catch(error){
     console.error("Erro no serviço de criar categoria: ", error.response?.data || error.message);
@@ -31,9 +33,21 @@ export const fetchSplitGastos = async (token) => {
   try {
     const config = getAuthConfig(token);
     const response = await axios.get(API_CONFIG.split.getAll, config);
+    console.log(response)
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar gastos divididos:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const acceptSplit = async (credentials, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const response = await axios.post(API_CONFIG.split.accept, credentials, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao aceitar gasto dividido:", error.response?.data || error.message);
     throw error;
   }
 };

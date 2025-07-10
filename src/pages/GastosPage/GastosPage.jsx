@@ -17,6 +17,7 @@ function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [valorDivisao, setValorDivisao] = useState(0); 
+    const [gastoAtual, setGastoAtual] = useState(null)
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
     const { gastos, loading, inactiveGastos } = useExpenses();
@@ -47,9 +48,9 @@ function GastosPage() {
     const validateForm = (email) => {
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         
-        if(!regexEmail.test()){
+        if(!regexEmail.test(email)){
             console.log(email)
-            toast.error(`Email invalido`);
+            toast.warn(`Email invalido`);
             return false;
         }
         return true;
@@ -142,17 +143,10 @@ function GastosPage() {
     }; 
 
     const handleShareGasto = async (gasto) => {
+        setGastoAtual(gasto)
         setShowSharePopup(true);
-        
-        try {
-            console.log(gasto)
-            await createSplit(gasto.id, shareEmail, valorDivisao); 
-            toast.success(`${gasto.descricao} enviado para a divisão!`);
-        } catch (error) {
-            toast.error("Não foi possível dividir o gasto.");
-            console.error(error)
-        }
     };
+
     const submitShareGasto = async (gasto) => {
         setShowSharePopup(true);
         if(!validateForm(shareEmail)) {
@@ -160,9 +154,9 @@ function GastosPage() {
         }
         
         try {
-            console.log(gasto)
-            await createSplit(gasto.id, shareEmail, valorDivisao); 
-            toast.success(`${gasto.descricao} enviado para a divisão!`);
+            await createSplit(gastoAtual.id, shareEmail, valorDivisao); 
+            toast.success(`${gastoAtual.descricao} enviado para a divisão!`);
+            setShowSharePopup(false);
         } catch (error) {
             toast.error("Não foi possível dividir o gasto.");
             console.error(error)
