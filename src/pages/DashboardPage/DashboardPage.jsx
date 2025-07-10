@@ -16,7 +16,7 @@ import Charts from '../../components/charts/Charts';
 function DashboardPage() {
 
     const { valorAtual, valoresFuturos, gastos, valores } = useExpenses();
-
+    console.log(gastos)
     return (
         <div className={styles.dashboardContainer}>
             <GridCard flex={2}>
