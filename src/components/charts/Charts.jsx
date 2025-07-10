@@ -132,7 +132,7 @@ const Charts = ({gastos, valores}) => {
                     const value = context.parsed || 0;
                     const total = context.dataset.data.reduce((a, b) => a + b, 0);
                     const percentage = ((value / total) * 100).toFixed(1);
-                    return `${label}: R$ ${value.toFixed(2)} (${percentage}%)`;
+                    return ` ${label}: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (${percentage}%)`;
                     },
                 },
             },
@@ -174,7 +174,7 @@ const Charts = ({gastos, valores}) => {
               cornerRadius: 10,
               callbacks: {
                 label: function(context) {
-                  return `Total: R$ ${context.parsed.y}`;
+                  return ` Total: ${context.parsed.y.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
                   },
               },
             },
@@ -217,7 +217,7 @@ const Charts = ({gastos, valores}) => {
               cornerRadius: 10,
               callbacks: {
                 label: function(context) {
-                  return `Total: R$ ${context.parsed.x}`;
+                  return ` Total: ${context.parsed.x.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
                   },
               },
             },
