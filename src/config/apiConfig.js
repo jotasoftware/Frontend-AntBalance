@@ -9,11 +9,12 @@ export const API_CONFIG = {
         editPassword: `${URL}/password-recovery/confirm`,
     },
     expenses: {
-        getAll: `${URL}/gastos`,
+        getAll: `${URL}/gastos/ativos`,
+        getAllInactives: `${URL}/gastos/inativos`,
         create: `${URL}/gastos`,
         getValores: `${URL}/gastos/total-por-mes`,
-        delete: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
-        update: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
+        inactive: `${URL}/gastos/desativar-lote`,
+        delete: `${URL}/gastos`,
     },
     categories: {
         getAll: `${URL}/categorias/usuario`,

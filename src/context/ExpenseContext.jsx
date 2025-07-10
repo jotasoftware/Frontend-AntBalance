@@ -7,6 +7,7 @@ import {
     fetchGastos as apiFetchGastos,
     fetchGastosInativos as apiFetchGastosInativos,
     fetchValores as apiFetchValores,
+    inactiveGastos as apiInactiveGastos,
     deleteGastos as apiDeleteGastos,
     deleteCategoria as apiDeleteCategoria
 } from '../services/expenseService';
@@ -124,16 +125,28 @@ export const ExpenseProvider = ({ children }) => {
         }
     };
 
-    const deleteGastos = async (data) => {
+    const inactiveGastos = async (data) => {
         try {
             const tokenLocal = localStorage.getItem('token');
-            await apiDeleteGastos(data, tokenLocal);
+            await apiInactiveGastos(data, tokenLocal);
             fetchGastos()
         } catch (error) {
             console.error("Erro ao apagar lista de gastos:", error);
             throw error;
         }
     };
+
+    const deleteGastos = async (data) => {
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            await apiDeleteGastos(data, tokenLocal);
+            fetchGastosInativos()
+        } catch (error) {
+            console.error("Erro ao apagar lista de gastos:", error);
+            throw error;
+        }
+    };
+    
 
     const createCategoria = async (data) => {
         try {
@@ -177,7 +190,7 @@ export const ExpenseProvider = ({ children }) => {
                     setGastos(gastosData);
                     setCategorias(categoriasData);
                     setValores(valoresFormatados)
-                    setValorAtual(valorAtual.valor)
+                    setValorAtual(valorAtual?.valor)
                     setValoresFuturos(valoresFuturos);
                     setGastosInativos(gastosInativosData);
                 } catch (error) {
@@ -198,7 +211,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria };
+    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos };
 
     return (
         <ExpenseContext.Provider value={value}>

@@ -16,7 +16,7 @@ function GastosInativosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const { gastosInativos, loading } = useExpenses();
+    const { gastosInativos, loading, deleteGastos } = useExpenses();
 
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastosInativos];
@@ -74,14 +74,17 @@ function GastosInativosPage() {
         return selectedGastos.includes(gastoId);
     };
 
-    const handleDeleteSelected = () => {
+    const handleDeleteSelected = async () => {
         if (selectedGastos.length === 0) {
             toast.warning('Nenhum gasto selecionado para apagar.');
             return;
         }
-        
-        console.log('Gastos selecionados para apagar:', selectedGastos);
-        toast.info(`${selectedGastos.length} gasto(s) selecionado(s) para apagar.`);
+        try {
+            await deleteGastos(selectedGastos); 
+            toast.success(`${selectedGastos.length} gastos deletado com sucesso!`);
+        } catch (error) {
+            toast.error("Não foi possível apagar os gastos.");
+        }
         
         setSelectedGastos([]);
         setSelectAll(false);

@@ -17,7 +17,7 @@ function GastosPage() {
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const { gastos, loading, deleteGastos } = useExpenses();
+    const { gastos, loading, inactiveGastos } = useExpenses();
 
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastos];
@@ -82,7 +82,7 @@ function GastosPage() {
             return;
         }
         try {
-            await deleteGastos(selectedGastos); 
+            await inactiveGastos(selectedGastos); 
             toast.success(`${selectedGastos.length} gastos deletado com sucesso!`);
         } catch (error) {
             toast.error("Não foi possível apagar os gastos.");

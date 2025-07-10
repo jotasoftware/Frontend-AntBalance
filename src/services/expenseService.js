@@ -41,10 +41,10 @@ export const fetchGastos = async (token) => {
 export const fetchGastosInativos = async (token) => {
   try {
     const config = getAuthConfig(token);
-    const response = await axios.get(API_CONFIG.expenses.getAll, config);
+    const response = await axios.get(API_CONFIG.expenses.getAllInactives, config);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar gastos:", error.response?.data || error.message);
+    console.error("Erro ao buscar gastos inativos:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -78,7 +78,18 @@ export const deleteGastos = async (ids, token) => {
       data: ids
     };
 
-    const response = await axios.delete(API_CONFIG.gastos.deleteBatch, config);
+    const response = await axios.delete(API_CONFIG.expenses.delete, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao deletar gastos:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const inactiveGastos = async (ids, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const response = await axios.patch(API_CONFIG.expenses.inactive, ids, config);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar gastos:", error.response?.data || error.message);
