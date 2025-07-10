@@ -10,10 +10,10 @@ import ModalCategoria from './ModalCategoria';
 
 function CadastroGastoPage() {
     const navigate = useNavigate();
-    const { createGasto, createCategoria, fetchCategorias, categorias, deleteCategoria} = useExpenses();
+    const { createGasto, createCategoria, fetchCategorias, categorias, deleteCategoria } = useExpenses();
 
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const [nome, setNome] = useState('');
     const [valor, setValor] = useState('');
     const [fonte, setFonte] = useState('');
@@ -30,39 +30,39 @@ function CadastroGastoPage() {
 
     const formatarValorMonetario = (valor) => {
         const apenasNumeros = valor.replace(/\D/g, '');
-        
+
         if (apenasNumeros === '') return '';
-        
+
         const numeroFormatado = (parseInt(apenasNumeros) / 100).toFixed(2);
         const partes = numeroFormatado.split('.');
         partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        
+
         return partes.join(',');
     }
 
     const handleChangeNome = (event) => {
-        if(event.target.value.length <=25) setNome(event.target.value);
+        if (event.target.value.length <= 25) setNome(event.target.value);
     }
-    
+
     const handleChangeValor = (event) => {
         const inputValue = event.target.value;
         if (inputValue === '') {
             setValor('');
             return;
         }
-        if(inputValue.length <=12){
+        if (inputValue.length <= 12) {
             const valorFormatado = formatarValorMonetario(inputValue);
             setValor(valorFormatado);
         }
     }
 
     const handleChangeFonte = (event) => {
-        if(event.target.value.length <=25) setFonte(event.target.value);
+        if (event.target.value.length <= 25) setFonte(event.target.value);
     }
 
     const handleChangeParcelas = (event) => {
         const numParcelas = parseInt(event.target.value);
-        setParcelas(numParcelas); 
+        setParcelas(numParcelas);
     }
 
     const handleSelectCategoria = (categoriaSelecionada, id) => {
@@ -73,7 +73,7 @@ function CadastroGastoPage() {
     const handleAddCategoria = async (novaCategoria) => {
         if (!categorias.includes(novaCategoria)) {
             try {
-                await createCategoria({ nome: novaCategoria }); 
+                await createCategoria({ nome: novaCategoria });
                 toast.success(`Categoria "${novaCategoria}" criada com sucesso!`);
             } catch (error) {
                 toast.error("Não foi possível criar a categoria.");
@@ -83,32 +83,31 @@ function CadastroGastoPage() {
 
     const handleDeleteCategoria = async (categoria) => {
         try {
-            await deleteCategoria(categoria.id); 
-            
+            await deleteCategoria(categoria.id);
+
             if (categoria.id === categoriaId) {
                 setCategoria('');
                 setCategoriaId(null);
             }
-            
+
             toast.success(`Categoria ${categoria.nome} excluída com sucesso!`);
         } catch (error) {
-            console.log(error)
-            toast.error('Não foi possível excluir a categoria.');
+            toast.error(error.response.data.mensagem);
             console.error("Erro ao excluir categoria:", error);
         }
     }
 
 
-    const handleFormSubmit = async(event) => {
+    const handleFormSubmit = async (event) => {
         event.preventDefault();
-        if(!nome || !valor || !categoria || !fonte || !parcelas){
+        if (!nome || !valor || !categoria || !fonte || !parcelas) {
             toast.warn('Por favor, preencha todos os campos.');
             return;
         }
 
         setIsLoading(true);
 
-        try{
+        try {
             await createGasto({ nome, valor, categoriaId, fonte, parcelas });
             toast.success('Gasto adicionado com sucesso.');
             setNome("")
@@ -116,8 +115,8 @@ function CadastroGastoPage() {
             setCategoria("");
             setFonte("");
             setParcelas(1);
-            navigate('/gastos', { replace: true});
-        } catch (err){
+            navigate('/gastos', { replace: true });
+        } catch (err) {
             toast.error('Dados inválidos, tente novamente.');
             console.error("Falha no cadastro do gasto:", err);
         } finally {
@@ -134,11 +133,11 @@ function CadastroGastoPage() {
 
                 <div className={styles.inputContainer}>
                     <label htmlFor="nome">Nome: </label>
-                    <input 
+                    <input
                         type="text"
                         name='nome'
                         id='nome'
-                        placeholder='Nome do Gasto' 
+                        placeholder='Nome do Gasto'
                         value={nome}
                         onChange={handleChangeNome}
                     />
@@ -146,11 +145,11 @@ function CadastroGastoPage() {
                 <div className={styles.inputContainer}>
                     <label htmlFor="valor">Valor: </label>
                     <div className={styles.valorInputContainer}>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             name='valor'
                             id='valor'
-                            placeholder='0,00' 
+                            placeholder='0,00'
                             value={valor}
                             onChange={handleChangeValor}
                         />
@@ -168,18 +167,18 @@ function CadastroGastoPage() {
                 </div>
                 <div className={styles.inputContainer}>
                     <label htmlFor="fonte">Fonte: </label>
-                    <input 
+                    <input
                         type="text"
                         name='fonte'
                         id='fonte'
-                        placeholder='Fonte do Gasto' 
+                        placeholder='Fonte do Gasto'
                         value={fonte}
                         onChange={handleChangeFonte}
                     />
                 </div>
                 <div className={styles.inputContainer}>
                     <label htmlFor="parcelas">Quantidade de Parcelas: </label>
-                    <select 
+                    <select
                         name='parcelas'
                         id='parcelas'
                         value={parcelas}
@@ -213,13 +212,13 @@ function CadastroGastoPage() {
                     </select>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         className={styles.buttonSubmit}
                         disabled={isLoading}
                     >
-                        <Botao 
-                            icon={<FaSquarePlus size={24} color={"white"}/>} 
+                        <Botao
+                            icon={<FaSquarePlus size={24} color={"white"} />}
                             name={isLoading ? "Cadastrando..." : "Cadastrar"}
                         />
                     </button>
