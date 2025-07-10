@@ -102,8 +102,13 @@ const ModalCategoria = ({ isOpen, onClose, onSelectCategoria, categorias, onAddC
                         key={categoria.id}
                         className={styles.categoriaItem}
                         onClick={() => {
-                            onSelectCategoria(categoria.nome, categoria.id);
-                            onClose(); 
+                            if (categorias == null) {
+                                setMostrarInputNova(true)
+                            } else {
+                                onSelectCategoria(categoria.nome, categoria.id);
+                                onClose(); 
+                            }
+                            
                         }}
                     >
                         <span
