@@ -4,6 +4,7 @@ import { Chart as ChartJS } from 'chart.js/auto';
 import { Doughnut, Bar, Line, Radar } from 'react-chartjs-2';
 
 const Charts = ({gastos, valores}) => {
+  console.log(valores)
 
   const coresPaleta = [
     '#1a45b8', // Azul principal
@@ -35,7 +36,7 @@ const Charts = ({gastos, valores}) => {
 
   const dadosPorData = useMemo(() => {
     const retorno = {};
-
+    console.log(valores)
     valores.forEach((valor) => {
       console.log(valor)
       const mesAno = valor.mes;

@@ -92,7 +92,7 @@ export const ExpenseProvider = ({ children }) => {
             const valoresFormatados = transformarDadosDeValores(response);
             const valorAtual = valoresFormatados[0];
             const valoresFuturos = valoresFormatados.slice(1);
-            setValores(response);
+            setValores(valoresFormatados);
             setValorAtual(valorAtual.valor)
             setValoresFuturos(valoresFuturos);
         } catch (error) {
