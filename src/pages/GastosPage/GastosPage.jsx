@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import Table from '../../components/table/Table';
 import { FaTrash } from "react-icons/fa";
 import Loading from '../../components/loading/Loading';
+import { useSplit } from '../../context/SplitExpanseContext';
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
@@ -18,6 +19,7 @@ function GastosPage() {
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
     const { gastos, loading, inactiveGastos } = useExpenses();
+    const { createSplit } = useSplit();
 
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastos];
@@ -54,7 +56,6 @@ function GastosPage() {
     };
 
     const handleSelectGasto = (gastoId) => {
-        console.log('oi')
         setSelectedGastos(prev => {
             if (prev.includes(gastoId)) {
                 const newSelected = prev.filter(id => id !== gastoId);
@@ -90,6 +91,19 @@ function GastosPage() {
         
         setSelectedGastos([]);
         setSelectAll(false);
+    };
+
+    const handleShareGasto = async (gasto) => {
+        try {
+            let email = "carlos@gmail.com"
+            let valorDivisao = 150
+            console.log(gasto)
+            await createSplit(gasto.id, email, valorDivisao); 
+            toast.success(`${gasto.descricao} enviado para a divisão!`);
+        } catch (error) {
+            toast.error("Não foi possível dividir o gasto.");
+            console.error(error)
+        }
     };
 
     useEffect(() => {
@@ -138,6 +152,18 @@ function GastosPage() {
                         selectAll={selectAll}
                         onSelectAll={handleSelectAll}
                         type={'active'}
+                        onShareGasto={(gasto) => {
+                            handleShareGasto(gasto);
+                        }}
+                        onEditGasto={(gasto) => {
+                            
+                        }}
+                        onDeleteGasto={(gasto) => {
+                        handleDeleteGastoUnico(gasto.id);
+                        }}
+                        onDeleteForeverGasto={(gasto) => {
+                        handleDeletePermanente(gasto.id);
+                        }}
                     />
                 )}
                 
