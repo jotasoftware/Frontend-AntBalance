@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import styles from './GastoItem.module.css';
 import { TbUserShare, TbEdit, TbTrash, TbCheck } from "react-icons/tb";
 
-const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever }) => {
-    console.log(gasto)
+const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever, onActive}) => {
     const formatDate = (dataOriginal) => {
         const dateObj = new Date(dataOriginal);
         const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -63,7 +62,7 @@ const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onS
                         })}
                     </div>
                     <div style={{width: '90px'}}>
-                        {(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'A Vista'}
+                        {(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'À Vista'}
                     </div>
                     <div style={{width: '140px'}}>{gasto.categoria.nome}</div>
                     <div style={{width: '140px'}}>{gasto.fonte}</div>

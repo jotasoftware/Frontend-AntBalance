@@ -77,6 +77,7 @@ export const deleteGastos = async (ids, token) => {
       ...getAuthConfig(token),
       data: ids
     };
+    console.log(config)
 
     const response = await axios.delete(API_CONFIG.expenses.delete, config);
     return response.data;
@@ -89,10 +90,32 @@ export const deleteGastos = async (ids, token) => {
 export const inactiveGastos = async (ids, token) => {
   try {
     const config = getAuthConfig(token);
-    const response = await axios.patch(API_CONFIG.expenses.inactive, ids, config);
+    const response = await axios.patch(API_CONFIG.expenses.inactiveAll, ids, config);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar gastos:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const inactiveGasto = async (id, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const response = await axios.patch(API_CONFIG.expenses.inactive(id), null, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao deletar gasto:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const activeGasto = async (id, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const response = await axios.patch(API_CONFIG.expenses.active(id), null, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao ativar gasto:", error.response?.data || error.message);
     throw error;
   }
 };

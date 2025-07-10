@@ -4,10 +4,8 @@ import styles from './GastosInativosPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
 import { IoPrintOutline } from "react-icons/io5";
-import { FaSquarePlus } from "react-icons/fa6";
 import GridCard from '../../components/gridcard/GridCard';
 import { useExpenses } from '../../context/ExpenseContext';
-import { Link } from 'react-router-dom';
 import Table from '../../components/table/Table';
 import { FaTrash } from "react-icons/fa";
 import Loading from '../../components/loading/Loading';
@@ -16,7 +14,7 @@ function GastosInativosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const { gastosInativos, loading, deleteGastos } = useExpenses();
+    const { gastosInativos, loading, deleteGastos, activeGasto } = useExpenses();
 
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastosInativos];
@@ -90,6 +88,27 @@ function GastosInativosPage() {
         setSelectAll(false);
     };
 
+    const handleActiveGasto = async (gasto)=>{
+        try {
+            await activeGasto(gasto.id); 
+            toast.success(`${gasto.descricao} foi inserido de volta a sua lista de gastos!`);
+        } catch (error) {
+            toast.error("Não foi possível ativar seu gasto.");
+            console.error(error)
+        }
+    }
+
+    const handleDeleteGasto = async (gasto)=>{
+        try {
+            await deleteGastos([gasto.id]); 
+            toast.success(`${gasto.descricao} deletado com sucesso!`);
+        } catch (error) {
+            toast.error("Não foi possível apagar os gastos.");
+        }
+        
+        setSelectedGastos([]);
+    }
+
     useEffect(() => {
         if (gastosOrdenados.length > 0) {
             setSelectAll(selectedGastos.length === gastosOrdenados.length);
@@ -133,6 +152,12 @@ function GastosInativosPage() {
                         selectAll={selectAll}
                         onSelectAll={handleSelectAll}
                         type={'inative'}
+                        onActiveGasto={(gasto) => {
+                            handleActiveGasto(gasto);
+                        }}
+                        onDeleteGasto={(gasto) => {
+                            handleDeleteGasto(gasto);
+                        }}
                     />
                 )}
                 

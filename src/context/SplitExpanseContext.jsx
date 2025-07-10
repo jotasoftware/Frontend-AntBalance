@@ -3,8 +3,10 @@ import { useAuth } from './AuthContext';
 import { 
     fetchSplitGastos as apiFetchSplitGastos,
     createSplit as apiCreateSplit,
-    acceptSplit as apiAcceptSplit
+    acceptSplit as apiAcceptSplit,
+    refuseSplit as apiRefuseSplit
 } from '../services/splitExpanseService';
+import { converterStringParaNumero } from "../utils/converterStringNumero";
 
 export const SplitExpanseContext = createContext(null);
 
@@ -13,16 +15,6 @@ export const SplitExpenseProvider = ({ children }) => {
 
     const [loadingSplit, setLoadingSplit] = useState(false);
     const [splitGastos, setSplitGastos] = useState([]);
-
-    function converterStringParaNumero(valorString) {
-        if(typeof valorString !== 'string' || !valorString) {
-            return 0;
-        }
-        const stringSemPontos = valorString.replaceAll('.', '');
-        const stringFormatoNumerico = stringSemPontos.replace(',', '.');
-        const numero = parseFloat(stringFormatoNumerico);
-        return isNaN(numero) ? 0 : numero;
-    }
 
     const fetchSplitGastos = async () => {
         try {
@@ -61,7 +53,20 @@ export const SplitExpenseProvider = ({ children }) => {
             const tokenLocal = localStorage.getItem('token');
             await apiAcceptSplit(payloadParaAPI, tokenLocal);
         } catch (error) {
-            console.error("Erro ao criar gasto:", error);
+            console.error("Erro ao aceitar gasto:", error);
+            throw error;
+        }
+    };
+
+    const refuseSplit = async (id) => {
+        try {
+            const payloadParaAPI = {
+                id: id,
+            };
+            const tokenLocal = localStorage.getItem('token');
+            await apiRefuseSplit(payloadParaAPI, tokenLocal);
+        } catch (error) {
+            console.error("Erro ao recusar gasto:", error);
             throw error;
         }
     };
@@ -89,7 +94,7 @@ export const SplitExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loadingSplit, splitGastos, createSplit, fetchSplitGastos, acceptSplit };
+    const value = { loadingSplit, splitGastos, createSplit, fetchSplitGastos, acceptSplit, refuseSplit };
 
     return (
         <SplitExpanseContext.Provider value={value}>

@@ -8,9 +8,12 @@ import {
     fetchGastosInativos as apiFetchGastosInativos,
     fetchValores as apiFetchValores,
     inactiveGastos as apiInactiveGastos,
+    inactiveGasto as apiInactiveGasto,
+    activeGasto as apiActiveGasto,
     deleteGastos as apiDeleteGastos,
     deleteCategoria as apiDeleteCategoria
 } from '../services/expenseService';
+import { converterStringParaNumero } from "../utils/converterStringNumero";
 
 export const ExpenseContext = createContext(null);
 
@@ -24,16 +27,6 @@ export const ExpenseProvider = ({ children }) => {
     const [valorAtual, setValorAtual] = useState(0);
     const [valoresFuturos, setValoresFuturos] = useState([]);
     const [valores, setValores] = useState([]);
-
-    function converterStringParaNumero(valorString) {
-        if(typeof valorString !== 'string' || !valorString) {
-            return 0;
-        }
-        const stringSemPontos = valorString.replaceAll('.', '');
-        const stringFormatoNumerico = stringSemPontos.replace(',', '.');
-        const numero = parseFloat(stringFormatoNumerico);
-        return isNaN(numero) ? 0 : numero;
-    }
 
     const transformarDadosDeValores = (dadosDaApi) => {
         const nomesDosMeses = { '01': 'Janeiro', '02': 'Fevereiro', '03': 'Março', '04': 'Abril', '05': 'Maio', '06': 'Junho', '07': 'Julho', '08': 'Agosto', '09': 'Setembro', '10': 'Outubro', '11': 'Novembro', '12': 'Dezembro' };
@@ -88,8 +81,15 @@ export const ExpenseProvider = ({ children }) => {
         try {
             const tokenLocal = localStorage.getItem('token');
             const response = await apiFetchValores(tokenLocal);
-
             const valoresFormatados = transformarDadosDeValores(response);
+
+            if (valoresFormatados.length === 0) {
+                setValores([]);
+                setValorAtual(null);
+                setValoresFuturos([]);
+                return;
+            }
+
             const valorAtual = valoresFormatados[0];
             const valoresFuturos = valoresFormatados.slice(1);
             setValores(valoresFormatados);
@@ -130,14 +130,41 @@ export const ExpenseProvider = ({ children }) => {
             const tokenLocal = localStorage.getItem('token');
             await apiInactiveGastos(data, tokenLocal);
             fetchGastos()
+            fetchValores()
         } catch (error) {
             console.error("Erro ao apagar lista de gastos:", error);
             throw error;
         }
     };
 
+    const inactiveGasto = async (data) => {
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            await apiInactiveGasto(data, tokenLocal);
+            fetchGastos()
+            fetchValores()
+        } catch (error) {
+            console.error("Erro ao remover o gasto:", error);
+            throw error;
+        }
+    };
+
+    const activeGasto = async (data) => {
+        try {
+            const tokenLocal = localStorage.getItem('token');
+            await apiActiveGasto(data, tokenLocal);
+            fetchGastosInativos();
+            fetchGastos()
+            fetchValores()
+        } catch (error) {
+            console.error("Erro ao ativar o gastos:", error);
+            throw error;
+        }
+    };
+
     const deleteGastos = async (data) => {
         try {
+            console.log(data)
             const tokenLocal = localStorage.getItem('token');
             await apiDeleteGastos(data, tokenLocal);
             fetchGastosInativos()
@@ -211,7 +238,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos };
+    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto };
 
     return (
         <ExpenseContext.Provider value={value}>

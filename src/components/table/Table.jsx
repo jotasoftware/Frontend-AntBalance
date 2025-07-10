@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import GastoItem from '../gastoitem/GastoItem';
 import styles from './Table.module.css';
 
-function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectAll, onSelectAll, type, onShareGasto, onEditGasto, onDeleteGasto, onDeleteForeverGasto }) {
+function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectAll, onSelectAll, type, onShareGasto, onEditGasto, onDeleteGasto, onActiveGasto }) {
     const [gastoExpandidoId, setGastoExpandidoId] = useState(null);
 
     const handleToggle = (id) => {
@@ -43,7 +43,8 @@ function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectA
                             onShare={onShareGasto}
                             onEdit={onEditGasto}
                             onDelete={onDeleteGasto}
-                            onDeleteForever={onDeleteForeverGasto}
+                            onDeleteForever={onDeleteGasto}
+                            onActive={onActiveGasto}
                         />
                     ))
                 )}

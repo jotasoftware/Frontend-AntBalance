@@ -12,15 +12,17 @@ import Table from '../../components/table/Table';
 import { FaTrash } from "react-icons/fa";
 import Loading from '../../components/loading/Loading';
 import { useSplit } from '../../context/SplitExpanseContext';
+import { converterStringParaNumero } from '../../utils/converterStringNumero';
+import { formatarValorMonetario } from '../../utils/formatarValorMonetario';
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
-    const [valorDivisao, setValorDivisao] = useState(0); 
+    const [valorDivisao, setValorDivisao] = useState(""); 
     const [gastoAtual, setGastoAtual] = useState(null)
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const { gastos, loading, inactiveGastos } = useExpenses();
+    const { gastos, loading, inactiveGastos, inactiveGasto } = useExpenses();
     const { createSplit } = useSplit();
     
     const [showSharePopup, setShowSharePopup] = useState(false);
@@ -49,24 +51,11 @@ function GastosPage() {
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         
         if(!regexEmail.test(email)){
-            console.log(email)
             toast.warn(`Email invalido`);
             return false;
         }
         return true;
     };
-
-    const formatarValorMonetario = (valor) => {
-        const apenasNumeros = valor.replace(/\D/g, '');
-
-        if (apenasNumeros === '') return '';
-
-        const numeroFormatado = (parseInt(apenasNumeros) / 100).toFixed(2);
-        const partes = numeroFormatado.split('.');
-        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-        return partes.join(',');
-    }
 
     const handleShareValor = (event) => {
         const valorNumerico = event.target.value;
@@ -142,20 +131,30 @@ function GastosPage() {
         setShareEmail(event.target.value);
     }; 
 
-    const handleShareGasto = async (gasto) => {
-        setGastoAtual(gasto)
-        setShowSharePopup(true);
+    const handleShareGasto = async (gasto) => { 
+        if(gasto.numeroParcelas!=1){
+            toast.warn("Somente gastos à vista podem ser compartilhados.")
+        }else{
+            setGastoAtual(gasto)
+            setShowSharePopup(true);
+        }
     };
 
     const submitShareGasto = async (gasto) => {
-        setShowSharePopup(true);
         if(!validateForm(shareEmail)) {
             return;
         }
+        if(converterStringParaNumero(valorDivisao) > gastoAtual.valorTotal){
+            toast.warn("Você não pode enviar valores maiores que do gasto")
+            return
+        }
         
         try {
+
             await createSplit(gastoAtual.id, shareEmail, valorDivisao); 
-            toast.success(`${gastoAtual.descricao} enviado para a divisão!`);
+            toast.success(`${gastoAtual.descricao} enviado para a para ${shareEmail}!`);
+            setValorDivisao("");
+            setShareEmail("")
             setShowSharePopup(false);
         } catch (error) {
             toast.error("Não foi possível dividir o gasto.");
@@ -163,9 +162,21 @@ function GastosPage() {
         }
     };
 
+    
+
+    const handleDeleteGastoUnico = async(gasto) => {
+        try {
+            await inactiveGasto(gasto.id); 
+            toast.success(`${gasto.descricao} gasto removido com sucesso!`);
+        } catch (error) {
+            toast.error("Não foi possível apagar o gasto.");
+        }
+    };
+
     const handleCloseSharePopup = () => {
         setShowSharePopup(false);
         setShareEmail('');
+        setValorDivisao('')
     };
 
     useEffect(() => {
@@ -221,7 +232,7 @@ function GastosPage() {
                             
                         }}
                         onDeleteGasto={(gasto) => {
-                        handleDeleteGastoUnico(gasto.id);
+                            handleDeleteGastoUnico(gasto);
                         }}
                         onDeleteForeverGasto={(gasto) => {
                         handleDeletePermanente(gasto.id);

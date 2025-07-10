@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6";
 import ModalCategoria from './ModalCategoria';
+import { formatarValorMonetario } from '../../utils/formatarValorMonetario';
 
 
 function CadastroGastoPage() {
@@ -27,18 +28,6 @@ function CadastroGastoPage() {
             fetchCategorias();
         }
     }, []);
-
-    const formatarValorMonetario = (valor) => {
-        const apenasNumeros = valor.replace(/\D/g, '');
-
-        if (apenasNumeros === '') return '';
-
-        const numeroFormatado = (parseInt(apenasNumeros) / 100).toFixed(2);
-        const partes = numeroFormatado.split('.');
-        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-        return partes.join(',');
-    }
 
     const handleChangeNome = (event) => {
         if (event.target.value.length <= 25) setNome(event.target.value);

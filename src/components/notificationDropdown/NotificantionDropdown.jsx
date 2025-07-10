@@ -2,13 +2,13 @@ import React from 'react';
 import ExpanseSplit from '../expanseSplit/ExpanseSplit';
 import styles from './NotificationDropdown.module.css';
 
-const NotificantionDropdown = ({expensesSplit}) => {
+const NotificantionDropdown = ({expensesSplit, onActionFetch}) => {
 
   return (
     <div className={styles.dropdownContainer}>
       {expensesSplit.map((item, index) => (
         <div key={index} className={styles.itemDeGasto}>
-          <ExpanseSplit expenseSplit={item}></ExpanseSplit>
+          <ExpanseSplit expenseSplit={item} onAction={onActionFetch}></ExpanseSplit>
         </div>
       ))}
     </div>

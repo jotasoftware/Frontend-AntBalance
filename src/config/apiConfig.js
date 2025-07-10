@@ -13,7 +13,9 @@ export const API_CONFIG = {
         getAllInactives: `${URL}/gastos/inativos`,
         create: `${URL}/gastos`,
         getValores: `${URL}/gastos/total-por-mes`,
-        inactive: `${URL}/gastos/desativar-lote`,
+        inactiveAll: `${URL}/gastos/desativar-lote`,
+        active: (id) => `${URL}/gastos/${id}/ativar`,
+        inactive: (id) => `${URL}/gastos/${id}/desativar`,
         delete: `${URL}/gastos`,
     },
     categories: {
@@ -25,5 +27,6 @@ export const API_CONFIG = {
         getAll: `${URL}/divisao`,
         create: `${URL}/divisao`,
         accept: `${URL}/divisao/aceitar`,
+        refuse: `${URL}/divisao/negar`,
     },
 }
