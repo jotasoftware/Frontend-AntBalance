@@ -16,10 +16,15 @@ import { useSplit } from '../../context/SplitExpanseContext';
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
+    const [valorDivisao, setValorDivisao] = useState(0); 
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
     const { gastos, loading, inactiveGastos } = useExpenses();
     const { createSplit } = useSplit();
+    
+    const [showSharePopup, setShowSharePopup] = useState(false);
+    //const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [shareEmail, setShareEmail] = useState('');
 
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastos];
@@ -38,6 +43,41 @@ function GastosPage() {
         });
         return sorted;
     }, [gastos, sortOrder]);
+
+    const validateForm = (email) => {
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if(!regexEmail.test()){
+            console.log(email)
+            toast.error(`Email invalido`);
+            return false;
+        }
+        return true;
+    };
+
+    const formatarValorMonetario = (valor) => {
+        const apenasNumeros = valor.replace(/\D/g, '');
+
+        if (apenasNumeros === '') return '';
+
+        const numeroFormatado = (parseInt(apenasNumeros) / 100).toFixed(2);
+        const partes = numeroFormatado.split('.');
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        return partes.join(',');
+    }
+
+    const handleShareValor = (event) => {
+        const valorNumerico = event.target.value;
+        if (valorNumerico === '') {
+            setValor('');
+            return;
+        }
+        if (valorNumerico.length <= 12) {
+            const valorFormatado = formatarValorMonetario(valorNumerico);
+            setValorDivisao(valorFormatado);
+        }
+    }
 
     const handleSortChange = (event) => {
         setSortOrder(event.target.value);
@@ -93,17 +133,45 @@ function GastosPage() {
         setSelectAll(false);
     };
 
+    const handleShare = (e) => {
+        e.stopPropagation();
+    };
+
+    const handleChangeShareEmail = (event) => {
+        setShareEmail(event.target.value);
+    }; 
+
     const handleShareGasto = async (gasto) => {
+        setShowSharePopup(true);
+        
         try {
-            let email = "carlos@gmail.com"
-            let valorDivisao = 150
             console.log(gasto)
-            await createSplit(gasto.id, email, valorDivisao); 
+            await createSplit(gasto.id, shareEmail, valorDivisao); 
             toast.success(`${gasto.descricao} enviado para a divisão!`);
         } catch (error) {
             toast.error("Não foi possível dividir o gasto.");
             console.error(error)
         }
+    };
+    const submitShareGasto = async (gasto) => {
+        setShowSharePopup(true);
+        if(!validateForm(shareEmail)) {
+            return;
+        }
+        
+        try {
+            console.log(gasto)
+            await createSplit(gasto.id, shareEmail, valorDivisao); 
+            toast.success(`${gasto.descricao} enviado para a divisão!`);
+        } catch (error) {
+            toast.error("Não foi possível dividir o gasto.");
+            console.error(error)
+        }
+    };
+
+    const handleCloseSharePopup = () => {
+        setShowSharePopup(false);
+        setShareEmail('');
     };
 
     useEffect(() => {
@@ -166,6 +234,61 @@ function GastosPage() {
                         }}
                     />
                 )}
+
+                {showSharePopup && (
+                        <div className={styles.popupOverlay}>
+                            <div className={styles.popup}>
+                                <div className={styles.popupHeader}>
+                                    <header>
+                                        <span>Compartilhar Gasto</span>
+                                    </header>
+                                    <button 
+                                        className={styles.closeButton}
+                                        onClick={handleCloseSharePopup}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                <div className={styles.popupContent}>
+                                    <div className={styles.gastoDetails}>
+                                        
+                                    </div>
+                                    <div className={styles.inputContainer}>
+                                        <label htmlFor="shareEmail">E-mail do destinatário:</label>
+                                        <input 
+                                            type="email"
+                                            id="shareEmail"
+                                            placeholder="Digite o email para compartilhar"
+                                            value={shareEmail}
+                                            onChange={handleChangeShareEmail}
+                                        />
+                                        <label htmlFor="valorDivisao">Valor para dividir:</label>
+                                        <input
+                                            type='text'
+                                            id='valorDivisao'
+                                            placeholder='Digite o valor a dividir'
+                                            value={valorDivisao}
+                                            onChange={handleShareValor}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={styles.popupFooter}>
+                                    <button 
+                                        className={styles.buttonCancel}
+                                        onClick={handleCloseSharePopup}
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button 
+                                        className={styles.buttonSubmit}
+                                        onClick={submitShareGasto}
+                                    >
+                                        Compartilhar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 
                 {selectedGastos.length > 0 && (
                     <div className={styles.selectionInfo}>

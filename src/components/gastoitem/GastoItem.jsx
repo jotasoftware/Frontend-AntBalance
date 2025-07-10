@@ -13,8 +13,6 @@ const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onS
 
     const handleShare = (e) => {
         e.stopPropagation();
-        let email = 'carlos@gmail.com'
-        let valor = 100
         onShare(gasto);
     };
 
