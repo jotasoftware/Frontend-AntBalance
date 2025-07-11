@@ -11,7 +11,7 @@ export const createSplit = async (credentials, token) => {
     const response = await axios.post(API_CONFIG.split.create, credentials, config);
     return response.data;
   }catch(error){
-    console.error("Erro no serviço de criar categoria: ", error.response?.data || error.message);
+    console.error("Erro no serviço de criar divisão: ", error.response?.data || error.message);
     throw error;
   }
 }
@@ -40,7 +40,10 @@ export const acceptSplit = async (credentials, token) => {
 
 export const refuseSplit = async (credentials, token) => {
   try {
-    const config = getAuthConfig(token);
+    const config = {
+      ...getAuthConfig(token),
+      data: credentials,
+    };
     const response = await axios.delete(API_CONFIG.split.refuse, config);
     return response.data;
   } catch (error) {

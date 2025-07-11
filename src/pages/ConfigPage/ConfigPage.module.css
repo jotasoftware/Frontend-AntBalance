@@ -12,3 +12,26 @@
     padding: 15px 20px;
 }
 
+.optionsContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.optionsContainer a{
+    width: 200px;
+    border: #80808047 1px solid;
+    background-color: transparent;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding: 20px 0;
+    transition: background-color .3s ease-in-out, color .3s ease-in-out;
+}
+
+.optionsContainer a:hover{
+    background-color: #1a45b8;
+    color: white;
+}
