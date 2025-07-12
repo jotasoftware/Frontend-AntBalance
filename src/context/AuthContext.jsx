@@ -5,7 +5,7 @@ export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loadingAuth, setLoadingAuth] = useState(true);
     const [userName, setUserName] = useState(null);
 
     useEffect(() => {
@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
             setIsLoggedIn(true);
             setUserName(storedName);
         }
-        setLoading(false);
+        setLoadingAuth(false);
     }, []);
 
     const login = async (credentials) => {
@@ -48,10 +48,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     const recover = async (email) => {
-        setLoading(true)
+        setLoadingAuth(true)
         try {
             const response = await apiRecover(email);
-            setLoading(false)
+            setLoadingAuth(false)
             return response.message
         } catch (error) {
             throw error;
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
         setUserName(null);
     };
 
-    const value = { isLoggedIn, loading, login, logout, register, edit, userName, recover, editPassword, setUserName};
+    const value = { isLoggedIn, loadingAuth, login, logout, register, edit, userName, recover, editPassword, setUserName};
 
     return (
         <AuthContext.Provider value={value}>
