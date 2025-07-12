@@ -4,9 +4,11 @@ import { useAuth } from '../../context/AuthContext';
 import styles from './LoginPage.module.css';
 import { toast } from 'react-toastify';
 import Loading from '../../components/loading/Loading';
+import { useExpenses } from '../../context/ExpenseContext';
 
 function LoginPage() {
     const {login, register, recover} = useAuth();
+    const {fetchValores, fetchCategorias, fetchGastosInativos, fetchGastos} = useExpenses();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -63,13 +65,18 @@ function LoginPage() {
         setIsLoading(true);
         try{
             await login({ email, password });
+            await fetchValores();
+            await fetchGastos();
+            await fetchCategorias();
+            await fetchGastosInativos();
             toast.success('Login bem sucedido.');
             setEmail("");
-            setName("")
             setPassword("");
+            setName("")
             navigate('/dashboard', { replace: true});
         } catch (err){
             toast.error('Email ou senha invalida, tente novamente.');
+            setPassword("");
             console.error("Falha no login:", err);
         } finally {
             setIsLoading(false);
@@ -96,7 +103,7 @@ function LoginPage() {
         if (!validateRecoverEmail()) {
             return;
         }
-
+        setIsLoading(true)
         try{
             const response = await recover({ recoverEmail});
             toast.success(response);
@@ -104,6 +111,8 @@ function LoginPage() {
         } catch (err){
             toast.error('Email não enviado.');
             console.error("Falha na recuperação:", err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -240,8 +249,9 @@ function LoginPage() {
                             <button 
                                 className={styles.buttonSubmit}
                                 onClick={handleContinueRecover}
+                                disabled={isLoading} 
                             >
-                                Continuar
+                                {isLoading ? 'Carregando...' : 'Continuar'}
                             </button>
                         </div>
                     </div>

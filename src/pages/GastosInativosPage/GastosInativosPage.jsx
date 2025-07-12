@@ -14,7 +14,7 @@ function GastosInativosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const { gastosInativos, loading, deleteGastos, activeGasto } = useExpenses();
+    const { gastosInativos, loadingInativo, deleteGastos, activeGasto } = useExpenses();
 
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastosInativos];
@@ -140,26 +140,22 @@ function GastosInativosPage() {
                         <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
                     </div>
                 </div>
-
-                {loading ? (
-                    <Loading></Loading>
-                ) : (
-                    <Table 
-                        gastos={gastosOrdenados}
-                        selectedGastos={selectedGastos}
-                        onSelectGasto={handleSelectGasto}
-                        isGastoSelected={isGastoSelected}
-                        selectAll={selectAll}
-                        onSelectAll={handleSelectAll}
-                        type={'inative'}
-                        onActiveGasto={(gasto) => {
-                            handleActiveGasto(gasto);
-                        }}
-                        onDeleteGasto={(gasto) => {
-                            handleDeleteGasto(gasto);
-                        }}
-                    />
-                )}
+                <Table 
+                    gastos={gastosOrdenados}
+                    selectedGastos={selectedGastos}
+                    onSelectGasto={handleSelectGasto}
+                    isGastoSelected={isGastoSelected}
+                    selectAll={selectAll}
+                    onSelectAll={handleSelectAll}
+                    type={'inative'}
+                    onActiveGasto={(gasto) => {
+                        handleActiveGasto(gasto);
+                    }}
+                    onDeleteGasto={(gasto) => {
+                        handleDeleteGasto(gasto);
+                    }}
+                    loading={loadingInativo}
+                />
                 
                 {selectedGastos.length > 0 && (
                     <div className={styles.selectionInfo}>

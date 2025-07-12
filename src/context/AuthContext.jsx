@@ -48,8 +48,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     const recover = async (email) => {
+        setLoading(true)
         try {
             const response = await apiRecover(email);
+            setLoading(false)
             return response.message
         } catch (error) {
             throw error;

@@ -25,7 +25,7 @@ function App() {
     <BrowserRouter>
     <ToastContainer
         position="top-right"
-        autoClose={2800}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -55,7 +55,7 @@ function App() {
                 <Route path="cadastrogasto" element={<CadastroGastoPage />} />
                 <Route path="editarcadastro" element={<EditarCadastroPage />} />
                 <Route path="reset-password" element={<RecoverPage />} />
-                <Route path="configpage" element={<ConfigPage />} />
+                <Route path="config" element={<ConfigPage />} />
                 <Route path="gastosinativos" element={<GastosInativosPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />

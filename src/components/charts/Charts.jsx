@@ -2,8 +2,23 @@ import React, { useState, useMemo } from 'react';
 import styles from './Charts.module.css';
 import { Chart as ChartJS } from 'chart.js/auto';
 import { Doughnut, Bar, Line, Radar } from 'react-chartjs-2';
+import { TbChartDonutFilled } from "react-icons/tb";
+import { IoBarChart } from "react-icons/io5";
+import { PiChartBarHorizontalFill } from "react-icons/pi";
 
 const Charts = ({gastos, valores}) => {
+
+  const [selected, setSelected] = useState(0);
+
+  const types = [
+    "Gastos por categorias",
+    "Gastos por mês",
+    "Gastos por fonte"
+  ]
+
+  const itemWidth = 30;
+  const gap = 5;
+  const left = selected * (itemWidth + gap);
 
   const coresPaleta = [
     '#1a45b8', // Azul principal
@@ -15,9 +30,9 @@ const Charts = ({gastos, valores}) => {
     '#06b6d4', // Ciano
     '#6366f1', // Índigo
     '#f43f5e', // Vermelho rosa
-    '#84cc16', // Lima
+    '#84cc16',
   ];
-  
+
   const dadosPorCategoria = useMemo(() => {
     const retorno = {};
 
@@ -37,16 +52,13 @@ const Charts = ({gastos, valores}) => {
     const retorno = {};
 
     valores.forEach((valor) => {
-      console.log(valor)
       const mesAno = valor.mes;
-      console.log(mesAno)
       retorno[mesAno] = (retorno[mesAno] || 0) + valor.valor;
     });
 
     const ordenarMeses = Object.keys(retorno).sort((a, b) => {
       const toDate = (string) => {
         const [mes, ano] = string.split(' - ');
-        console.log(mes)
         return new Date(`${mes} 1, ${ano}`);
       };
       return toDate(a) - toDate(b);
@@ -81,9 +93,24 @@ const Charts = ({gastos, valores}) => {
 
   return (
    <div className={styles.graficosContainer}>
-      <div className={styles.graficoCard}>
-        <h3 className={styles.graficoTitulo}>Gastos por Categoria</h3>
-    <div className={styles.graficoInput} >
+      <div className={styles.graficoName}>
+        <h4 className={styles.graficoTitulo}>{types[selected]}</h4>
+        <div className={styles.graficosType}>
+          <div className={styles.indicator} style={{ left: `${left}px` }}></div>
+          <div className={styles.typeIconDiv} onClick={() => setSelected(0)}>
+            <TbChartDonutFilled style={{ color: (selected === 0) ? "white" : "black" }} className={styles.typeIcon}/>
+          </div>
+          <div className={styles.typeIconDiv} onClick={() => setSelected(1)}>
+            <IoBarChart style={{ color: (selected === 1) ? "white" : "black" }} className={styles.typeIcon}/>
+          </div>
+          <div className={styles.typeIconDiv} onClick={() => setSelected(2)}>
+            <PiChartBarHorizontalFill style={{ color: (selected === 2) ? "white" : "black" }} className={styles.typeIcon}/>
+          </div>
+        </div>
+      </div>
+      {selected === 0 && (
+  <div className={styles.graficoCard}>
+    <div className={styles.graficoInput}>
       <Doughnut
         data={{
           labels: dadosPorCategoria.labels,
@@ -96,9 +123,7 @@ const Charts = ({gastos, valores}) => {
               borderWidth: 5,
               borderRadius: 8,
               hoverOffset: 15,
-
             },
-
           ],
         }}
         options={{
@@ -116,54 +141,55 @@ const Charts = ({gastos, valores}) => {
               },
             },
             tooltip: {
-                backgroundColor: '#000000',
-                padding: 12,
-                cornerRadius: 10,
-                titleFont: {
-                  size: 14,
-                  weight: 'bold',
+              backgroundColor: '#000000',
+              padding: 12,
+              cornerRadius: 10,
+              titleFont: {
+                size: 14,
+                weight: 'bold',
+              },
+              bodyFont: {
+                size: 13,
+              },
+              callbacks: {
+                label: function(context) {
+                  const label = context.label || '';
+                  const value = context.parsed || 0;
+                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                  const percentage = ((value / total) * 100).toFixed(1);
+                  return ` ${label}: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (${percentage}%)`;
                 },
-                bodyFont: {
-                  size: 13,
-                },
-                callbacks: {
-                  label: function(context) {
-                    const label = context.label || '';
-                    const value = context.parsed || 0;
-                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                    const percentage = ((value / total) * 100).toFixed(1);
-                    return ` ${label}: ${value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (${percentage}%)`;
-                    },
-                },
+              },
             },
           },
           cutout: '50%',
-          }}
+        }}
       />
-      </div>
     </div>
-    <div className={styles.graficosContainer}>
-    <div className={styles.graficoCard}>
-          <h3 className={styles.graficoTitulo}>Gastos por Mês</h3>
+  </div>
+)}
+
+{selected === 1 && (
+  <div className={styles.graficoCard}>
     <div className={styles.graficoInput}>
       <Bar
-          data={{
-            labels: dadosPorData.labels,
-            datasets: [
-              {
-                label: "Gastos por Mês",
-                data: dadosPorData.dados,
-                backgroundColor: '#1a45b8',
-                borderColor: '#ffffff',
-                borderWidth: 0,
-                borderRadius: 6,
-                hoverBackgroundColor: '#191919',
-              },
-            ]
-          }}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
+        data={{
+          labels: dadosPorData.labels,
+          datasets: [
+            {
+              label: "Gastos por Mês",
+              data: dadosPorData.dados,
+              backgroundColor: '#1a45b8',
+              borderColor: '#ffffff',
+              borderWidth: 0,
+              borderRadius: 6,
+              hoverBackgroundColor: '#191919',
+            },
+          ]
+        }}
+        options={{
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: {
               display: false,
@@ -175,38 +201,38 @@ const Charts = ({gastos, valores}) => {
               callbacks: {
                 label: function(context) {
                   return ` Total: ${context.parsed.y.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
-                  },
+                },
               },
             },
           },
-          
-          }}
-        />
-        </div>
-      </div>
+        }}
+      />
+    </div>
+  </div>
+)}
 
-        <div className={styles.graficoCard}>
-          <h3 className={styles.graficoTitulo}>Gastos por Fonte</h3>
+{selected === 2 && (
+  <div className={styles.graficoCard}>
     <div className={styles.graficoInput}>
-      <Bar //Horizontal
-          data={{
-            labels: dadosPorFonte.labels,
-            datasets: [
-              {
-                label: "Gasto por Fonte",
-                data: dadosPorFonte.dados,
-                backgroundColor: coresPaleta,
-                borderColor: '#ffffff',
-                borderWidth: 0,
-                borderRadius: 6,
-                hoverBackgroundColor: '#191919',
-              },
-            ]
-          }}
-          options={{
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
+      <Bar
+        data={{
+          labels: dadosPorFonte.labels,
+          datasets: [
+            {
+              label: "Gasto por Fonte",
+              data: dadosPorFonte.dados,
+              backgroundColor: coresPaleta,
+              borderColor: '#ffffff',
+              borderWidth: 0,
+              borderRadius: 6,
+              hoverBackgroundColor: '#191919',
+            },
+          ]
+        }}
+        options={{
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: {
               display: false,
@@ -218,17 +244,16 @@ const Charts = ({gastos, valores}) => {
               callbacks: {
                 label: function(context) {
                   return ` Total: ${context.parsed.x.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
-                  },
+                },
               },
             },
           },
-          
-          }}
-        />
-        </div>
-
-        </div>
+        }}
+      />
     </div>
+  </div>
+)}
+
       
   </div>
   );

@@ -81,6 +81,11 @@
 .buttonSubmit:hover{
     background-color: #191919;
 }
+.buttonSubmit:disabled {
+    background-color: #cccccc; 
+    color: #666666;
+    cursor: not-allowed; 
+}
 .create{
     margin: 30px 0;
     display: flex;

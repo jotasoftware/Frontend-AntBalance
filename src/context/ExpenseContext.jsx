@@ -21,12 +21,16 @@ export const ExpenseProvider = ({ children }) => {
     const { isLoggedIn } = useAuth(); 
 
     const [loading, setLoading] = useState(false);
+    const [loadingValores, setLoadingValores] = useState(true);
+    const [loadingGasto, setLoadingGasto] = useState(true);
+    const [loadingInativo, setLoadingInativo] = useState(true);
     const [gastos, setGastos] = useState([]);
     const [gastosInativos, setGastosInativos] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [valorAtual, setValorAtual] = useState(0);
     const [valoresFuturos, setValoresFuturos] = useState([]);
     const [valores, setValores] = useState([]);
+    const [initialDataLoaded, setInitialDataLoaded] = useState(false);
 
     const transformarDadosDeValores = (dadosDaApi) => {
         const nomesDosMeses = { '01': 'Janeiro', '02': 'Fevereiro', '03': 'Março', '04': 'Abril', '05': 'Maio', '06': 'Junho', '07': 'Julho', '08': 'Agosto', '09': 'Setembro', '10': 'Outubro', '11': 'Novembro', '12': 'Dezembro' };
@@ -77,8 +81,9 @@ export const ExpenseProvider = ({ children }) => {
     };
 
     const fetchValores = async () => {
-        setLoading(true);
+        setLoadingValores(true);
         try {
+            console.log(loadingValores)
             const tokenLocal = localStorage.getItem('token');
             const response = await apiFetchValores(tokenLocal);
             const valoresFormatados = transformarDadosDeValores(response);
@@ -93,13 +98,13 @@ export const ExpenseProvider = ({ children }) => {
             const valorAtual = valoresFormatados[0];
             const valoresFuturos = valoresFormatados.slice(1);
             setValores(valoresFormatados);
-            setValorAtual(valorAtual.valor)
+            setValorAtual(valorAtual?.valor)
             setValoresFuturos(valoresFuturos);
         } catch (error) {
             console.error("Erro ao buscar valores:", error);
             throw error;
         } finally {
-            setLoading(false);
+            setLoadingValores(false);
         }
     };
 
@@ -143,6 +148,7 @@ export const ExpenseProvider = ({ children }) => {
             await apiInactiveGasto(data, tokenLocal);
             fetchGastos()
             fetchValores()
+            fetchGastosInativos()
         } catch (error) {
             console.error("Erro ao remover o gasto:", error);
             throw error;
@@ -164,7 +170,6 @@ export const ExpenseProvider = ({ children }) => {
 
     const deleteGastos = async (data) => {
         try {
-            console.log(data)
             const tokenLocal = localStorage.getItem('token');
             await apiDeleteGastos(data, tokenLocal);
             fetchGastosInativos()
@@ -200,30 +205,44 @@ export const ExpenseProvider = ({ children }) => {
     useEffect(() => {
         const loadInitialData = async () => {
             if (isLoggedIn) {
-                setLoading(true);
-                const tokenLocal = localStorage.getItem('token');
+                if (initialDataLoaded) {
+                    console.log("Dados iniciais já carregados. Pulando fetch.");
+                    return;
+                }
                 try {
-                    const [gastosData, categoriasData, valoresData, gastosInativosData] = await Promise.all([
+                    const tokenLocal = localStorage.getItem('token');
+                    const [gastosData, categoriasData, gastosInativosData, valoresData] = await Promise.all([
                         apiFetchGastos(tokenLocal),
                         apiFetchCategorias(tokenLocal),
-                        apiFetchValores(tokenLocal),
-                        apiFetchGastosInativos(tokenLocal)
-                    ])
-
-                    const valoresFormatados = transformarDadosDeValores(valoresData);
-                    const valorAtual = valoresFormatados[0];
-                    const valoresFuturos = valoresFormatados.slice(1);
+                        apiFetchGastosInativos(tokenLocal),
+                        apiFetchValores(tokenLocal)
+                    ]);
 
                     setGastos(gastosData);
                     setCategorias(categoriasData);
-                    setValores(valoresFormatados)
-                    setValorAtual(valorAtual?.valor)
-                    setValoresFuturos(valoresFuturos);
                     setGastosInativos(gastosInativosData);
+
+                    const valoresFormatados = transformarDadosDeValores(valoresData);
+                    if (valoresFormatados.length === 0) {
+                        setValores([]);
+                        setValorAtual(null);
+                        setValoresFuturos([]);
+                    } else {
+                        const valorAtual = valoresFormatados[0];
+                        const valoresFuturos = valoresFormatados.slice(1);
+                        setValores(valoresFormatados);
+                        setValorAtual(valorAtual?.valor);
+                        setValoresFuturos(valoresFuturos);
+                    }
+
+                    setInitialDataLoaded(true);
                 } catch (error) {
                     console.error("Erro ao buscar dados iniciais:", error);
                 } finally {
                     setLoading(false);
+                    setLoadingValores(false);
+                    setLoadingGasto(false);
+                    setLoadingInativo(false)
                 }
             } else {
                 setGastos([]);
@@ -238,7 +257,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto };
+    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto };
 
     return (
         <ExpenseContext.Provider value={value}>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import GastoItem from '../gastoitem/GastoItem';
+import Loading from '../loading/Loading';
 import styles from './Table.module.css';
 
-function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectAll, onSelectAll, type, onShareGasto, onEditGasto, onDeleteGasto, onActiveGasto }) {
+function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectAll, onSelectAll, type, onShareGasto, onEditGasto, onDeleteGasto, onActiveGasto, loading }) {
     const [gastoExpandidoId, setGastoExpandidoId] = useState(null);
 
     const handleToggle = (id) => {
@@ -28,7 +29,12 @@ function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectA
                 </div>
             </div>
             <div className={styles.tableBodyGasto}>
-                {gastos.length === 0 ? (
+              {loading ? (
+                    <div className={styles.gastosLoading}>
+                        <Loading></Loading>
+                    </div>
+                ) : 
+                (gastos.length === 0 ? (
                     <p>Nenhum gasto cadastrado.</p>
                 ) : (
                     gastos.map((gasto) => (
@@ -47,7 +53,7 @@ function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectA
                             onActive={onActiveGasto}
                         />
                     ))
-                )}
+                ))}
             </div>
         </div>
     );

@@ -22,7 +22,7 @@ function GastosPage() {
     const [gastoAtual, setGastoAtual] = useState(null)
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const { gastos, loading, inactiveGastos, inactiveGasto } = useExpenses();
+    const { gastos, inactiveGastos, inactiveGasto, loadingGasto } = useExpenses();
     const { createSplit } = useSplit();
     
     const [showSharePopup, setShowSharePopup] = useState(false);
@@ -213,10 +213,6 @@ function GastosPage() {
                         <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
                     </div>
                 </div>
-
-                {loading ? (
-                    <Loading></Loading>
-                ) : (
                     <Table 
                         gastos={gastosOrdenados}
                         selectedGastos={selectedGastos}
@@ -235,10 +231,10 @@ function GastosPage() {
                             handleDeleteGastoUnico(gasto);
                         }}
                         onDeleteForeverGasto={(gasto) => {
-                        handleDeletePermanente(gasto.id);
+                            handleDeletePermanente(gasto.id);
                         }}
+                        loading={loadingGasto}
                     />
-                )}
 
                 {showSharePopup && (
                         <div className={styles.popupOverlay}>

@@ -9,6 +9,7 @@ import { FaSquarePlus } from "react-icons/fa6";
 
 
 function EditarCadastroPage() {
+    const navigate = useNavigate();
     const { userName, edit, setUserName } = useAuth();
     const [nome, setNome] = useState(userName);
     const [senhaAtual, setSenhaAtual] = useState('');
@@ -54,12 +55,13 @@ function EditarCadastroPage() {
             setSenhaAtual("")
             setSenhaNova("")
             setUserName(nome)
+            navigate('/config', { replace: true});
         } catch (err) {
             if (err.response && err.response.data) {
                 const mensagem =
                     typeof err.response.data === 'string'
                         ? err.response.data
-                        : err.response.data.message || 'Erro ao editar o usuário.';
+                        : err.response.data.mensagem || 'Erro ao editar o usuário.';
                 toast.error(mensagem);
             } else {
                 toast.error('Erro desconhecido ao editar o usuário.');
