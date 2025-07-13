@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './GastoItem.module.css';
 import { TbUserShare, TbEdit, TbTrash, TbCheck } from "react-icons/tb";
 
-const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever, onActive}) => {
+const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever, onActive, isMobile}) => {
     const formatDate = (dataOriginal) => {
         const dateObj = new Date(dataOriginal);
         const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -61,17 +61,32 @@ const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onS
                             currency: 'BRL' 
                         })}
                     </div>
-                    <div style={{width: '90px'}}>
-                        {(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'À Vista'}
-                    </div>
-                    <div style={{width: '140px'}}>{gasto.categoria.nome}</div>
-                    <div style={{width: '140px'}}>{gasto.fonte}</div>
-                    <div style={{width: '100px'}}>{formatDate(gasto.data)}</div>
+                    {!isMobile &&
+                        <>
+                            <div style={{width: '90px'}}>
+                                {(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'À Vista'}
+                            </div>
+                            <div style={{width: '140px'}}>{gasto.categoria.nome}</div>
+                            <div style={{width: '140px'}}>{gasto.fonte}</div>
+                            <div style={{width: '100px'}}>{formatDate(gasto.data)}</div>
+                        </>
+                    }
+                    
                 </div>
             </div>
 
             {expandido && (
                 <div className={`${styles.gastoDetalhes} ${expandido ? styles.expandido : ''}`}>
+                    {isMobile &&
+                        <div className={styles.gastoMobileInfo}>
+                            <div>
+                                {(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'À Vista'}
+                            </div>
+                            <div>{gasto.categoria.nome}</div>
+                            <div>{gasto.fonte}</div>
+                            <div>{formatDate(gasto.data)}</div>
+                        </div>
+                    }
                     <div className={styles.actionIconsDiv}>
                     {type === 'active' ? (
                         <>

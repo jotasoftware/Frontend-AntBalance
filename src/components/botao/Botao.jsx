@@ -3,9 +3,9 @@ import styles from './Botao.module.css'
 
 const Botao = ({icon, name, onClick}) => {
   return (
-    <div className={styles.botaoContainer} onClick={onClick}>
+    <div className={name ? styles.botaoContainer : styles.botaoIcone} onClick={onClick}>
         {icon}
-        <p>{name}</p>
+        {name && <p>{name}</p>}
     </div>
   )
 }

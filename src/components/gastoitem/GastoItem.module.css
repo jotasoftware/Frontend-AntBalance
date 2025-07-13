@@ -111,3 +111,51 @@
     margin-top: 10px;
 }
 
+.gastoMobileInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-right: 10px;
+    width: 100%;
+    gap: 7px;
+}
+
+
+@media (max-width: 768px) {
+
+    .gastoItem .gastoInfo{
+      width: 89%;
+    }
+
+    .gastoDetalhes {
+        align-self: flex-end;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        width: 89%;
+        padding: 0;
+    }
+    
+    .gastoDetalhes .actionIconsDiv{
+        align-self: flex-end;
+        margin-right: 10px;
+    }
+    
+    .gastoDetalhes .actionIconsDiv .actionIcon{
+        background-color: rgb(228, 228, 228);
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color .3s linear, color .3s linear;
+        position: relative;
+        cursor: pointer;
+    }
+    .gastoDetalhes .actionIconsDiv .actionIcon:hover{
+        background-color: #1a45b8;
+        color: white;
+    }
+  }

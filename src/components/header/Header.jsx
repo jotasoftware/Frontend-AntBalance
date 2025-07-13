@@ -5,8 +5,9 @@ import { useAuth } from '../../context/AuthContext';
 import { useSplit } from '../../context/SplitExpanseContext';
 import { IoNotificationsSharp } from "react-icons/io5";
 import NotificationDropdown from "../notificationDropdown/NotificantionDropdown"
+import { TiThMenu } from "react-icons/ti";
 
-const Header = () => {
+const Header = ({onToggleSidebar}) => {
   const { userName } = useAuth();
   const { splitGastos, fetchSplitGastos } = useSplit();
   const [greetings, setGreetings] = useState("Olá");
@@ -41,6 +42,9 @@ const Header = () => {
   return (
     <header className={styles.headerContainer}>
         <div className={styles.welcomeContainer}>
+            <button onClick={onToggleSidebar} className={styles.hamburgerButton} data-sidebar-toggle>
+                <TiThMenu size={24} />
+            </button>
             <h2>{greetings}, {userName}</h2>
             <p>Olhe seus gastos</p>
         </div>

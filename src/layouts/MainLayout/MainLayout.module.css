@@ -1,19 +1,33 @@
-.layoutContainer{
+.layoutContainer {
     display: flex;
     height: 100vh;
+    position: relative;
 }
 
-
-
-.sidebarContainer{
+.sidebarContainer {
     background-color: #191919;
     flex: 1;
     display: flex;
     flex-direction: column;
     color: white;
+    min-width: 250px;
+    transition: margin-left 0.3s ease;
 }
 
-.sidebarContainer .logoContainer{
+.hamburgerButton {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001; /* Z-index maior para ficar acima da sidebar */
+}
+
+.sidebarClosed {
+    margin-left: -100%;
+}
+
+.sidebarContainer .logoContainer {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -22,21 +36,31 @@
     padding: 0;
 }
 
-.sidebarContainer .logoContainer img{
+.sidebarContainer .logoContainer img {
     width: 58%;
 }
 
-
-
-.mainContext{
+.mainContext {
     flex: 5;
     display: flex;
     flex-direction: column;
-
+    position: relative;
 }
 
-.mainContext .contentContainer{
+.mainContext .contentContainer {
     flex: 6;
     overflow-y: auto;
     height: 100%;
+}
+
+@media (max-width: 768px) {
+    .hamburgerButton {
+        display: block;
+    }
+
+    .sidebarContainer {
+        position: absolute;
+        height: 100vh;
+        z-index: 1000;
+    }
 }

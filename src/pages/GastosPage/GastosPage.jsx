@@ -7,13 +7,14 @@ import { IoPrintOutline } from "react-icons/io5";
 import { FaSquarePlus } from "react-icons/fa6";
 import GridCard from '../../components/gridcard/GridCard';
 import { useExpenses } from '../../context/ExpenseContext';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import Table from '../../components/table/Table';
 import { FaTrash } from "react-icons/fa";
 import Loading from '../../components/loading/Loading';
 import { useSplit } from '../../context/SplitExpanseContext';
 import { converterStringParaNumero } from '../../utils/converterStringNumero';
 import { formatarValorMonetario } from '../../utils/formatarValorMonetario';
+import { FaPlus } from "react-icons/fa6";
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
@@ -22,12 +23,14 @@ function GastosPage() {
     const [gastoAtual, setGastoAtual] = useState(null)
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const { gastos, inactiveGastos, inactiveGasto, loadingGasto } = useExpenses();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto } = useExpenses();
     const { createSplit } = useSplit();
     
     const [showSharePopup, setShowSharePopup] = useState(false);
     //const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [shareEmail, setShareEmail] = useState('');
+
+    const { isMobile } = useOutletContext();
 
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastos];
@@ -208,9 +211,9 @@ function GastosPage() {
                     </div>
                     <div className={styles.gastosActions}>
                         <Link to="/cadastrogasto">
-                            <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
+                            {isMobile ? <Botao icon={<FaPlus size={24} color={"white"}/>} /> : <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>}
                         </Link>
-                        <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
+                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />}
                     </div>
                 </div>
                     <Table 
@@ -230,10 +233,8 @@ function GastosPage() {
                         onDeleteGasto={(gasto) => {
                             handleDeleteGastoUnico(gasto);
                         }}
-                        onDeleteForeverGasto={(gasto) => {
-                            handleDeletePermanente(gasto.id);
-                        }}
-                        loading={loadingGasto}
+                        isMobile={isMobile}
+                        loading={false}
                     />
 
                 {showSharePopup && (

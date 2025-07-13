@@ -55,3 +55,20 @@
 .headerContainer .infoContainer .notificationIcon:hover{
   color: #d4d4d4;
 }
+
+.hamburgerButton {
+  display: none;
+  background-color: transparent;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .welcomeContainer h2,
+  .welcomeContainer p {
+    display: none;
+  }
+
+  .hamburgerButton {
+    display: block;
+  }
+}

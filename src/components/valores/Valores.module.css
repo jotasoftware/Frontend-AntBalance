@@ -10,6 +10,7 @@
   border-radius: 16px;
   align-items: stretch; 
   transition: background-color 0.3s ease;
+  min-width: 300px;
 }
 
 .valoresContainer h5{

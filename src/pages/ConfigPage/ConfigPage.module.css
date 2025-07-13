@@ -16,6 +16,8 @@
     display: flex;
     flex-direction: row;
     gap: 20px;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .optionsContainer a{
@@ -34,4 +36,14 @@
 .optionsContainer a:hover{
     background-color: #1a45b8;
     color: white;
+}
+
+@media (max-width: 768px) {
+    .configContainer{
+        padding: 15px;
+    }
+
+    .optionsContainer{
+        align-items: stretch;
+    }
 }

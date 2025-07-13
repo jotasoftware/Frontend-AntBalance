@@ -3,7 +3,7 @@ import GastoItem from '../gastoitem/GastoItem';
 import Loading from '../loading/Loading';
 import styles from './Table.module.css';
 
-function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectAll, onSelectAll, type, onShareGasto, onEditGasto, onDeleteGasto, onActiveGasto, loading }) {
+function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectAll, onSelectAll, type, onShareGasto, onEditGasto, onDeleteGasto, onActiveGasto, loading, isMobile }) {
     const [gastoExpandidoId, setGastoExpandidoId] = useState(null);
 
     const handleToggle = (id) => {
@@ -22,10 +22,14 @@ function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectA
                 <div>
                     <div style={{width: '150px'}}>Gastos</div>
                     <div style={{width: '100px'}}>Valor</div>
-                    <div style={{width: '90px'}}>Parcelas</div>
-                    <div style={{width: '140px'}}>Categoria</div>
-                    <div style={{width: '140px'}}>Fonte</div>
-                    <div style={{width: '100px'}}>Data</div>
+                    {!isMobile &&
+                        <>
+                            <div style={{width: '90px'}}>Parcelas</div>
+                            <div style={{width: '140px'}}>Categoria</div>
+                            <div style={{width: '140px'}}>Fonte</div>
+                            <div style={{width: '100px'}}>Data</div>
+                        </>
+                    }
                 </div>
             </div>
             <div className={styles.tableBodyGasto}>
@@ -51,6 +55,7 @@ function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectA
                             onDelete={onDeleteGasto}
                             onDeleteForever={onDeleteGasto}
                             onActive={onActiveGasto}
+                            isMobile={isMobile}
                         />
                     ))
                 ))}

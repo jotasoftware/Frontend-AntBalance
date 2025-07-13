@@ -48,3 +48,16 @@
     flex: 3;
 }
 
+@media (max-width: 1300px) {
+    .dashboardContainer {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+        align-items: stretch;
+    }
+
+    .dashboardContainer > div {
+        flex: none !important; 
+        min-width: 0;
+    }
+}

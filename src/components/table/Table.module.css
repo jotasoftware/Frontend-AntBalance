@@ -50,3 +50,13 @@
   align-items: center;
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  .tableHeaderGasto > div{
+    width: 89%;
+  }
+
+  .tableBodyGasto {
+    height: 100%;
+  }
+}

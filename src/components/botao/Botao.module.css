@@ -13,6 +13,24 @@
   cursor: pointer;
 }
 
+.botaoIcone{
+  background-color: #1a45b8;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 10px;
+  color: white;
+  border-radius: 50%;
+  font-weight: 500;
+  transition: .2s ease-in-out background;
+  cursor: pointer;
+}
+
 .botaoContainer:hover{
+  background-color: #191919;;
+}
+
+.botaoIcone:hover{
   background-color: #191919;;
 }

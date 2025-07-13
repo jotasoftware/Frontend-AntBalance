@@ -9,12 +9,15 @@ import { useExpenses } from '../../context/ExpenseContext';
 import Table from '../../components/table/Table';
 import { FaTrash } from "react-icons/fa";
 import Loading from '../../components/loading/Loading';
+import { useOutletContext } from 'react-router-dom';
 
 function GastosInativosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
     const { gastosInativos, loadingInativo, deleteGastos, activeGasto } = useExpenses();
+
+    const { isMobile } = useOutletContext();
 
     const gastosOrdenados = useMemo(() => {
         const sorted = [...gastosInativos];
@@ -137,7 +140,7 @@ function GastosInativosPage() {
                         </div>
                     </div>
                     <div className={styles.gastosActions}>
-                        <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />
+                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} />} /> : <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />}
                     </div>
                 </div>
                 <Table 
@@ -154,6 +157,7 @@ function GastosInativosPage() {
                     onDeleteGasto={(gasto) => {
                         handleDeleteGasto(gasto);
                     }}
+                    isMobile={isMobile}
                     loading={loadingInativo}
                 />
                 

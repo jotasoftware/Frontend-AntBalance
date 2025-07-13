@@ -17,6 +17,17 @@ import Loading from '../../components/loading/Loading';
 function DashboardPage() {
 
     const { valorAtual, valoresFuturos, gastos, valores, loadingValores } = useExpenses();
+
+    useEffect(() => {
+        const shouldBlockScroll = loadingValores || valores.length === 0;
+
+        if (shouldBlockScroll) {
+            document.body.style.overflow = 'hidden';
+        }
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [loadingValores, valores]);
     return (
         <div className={styles.container}>
             <div className={styles.dashboardContainer}>
@@ -26,7 +37,7 @@ function DashboardPage() {
                 </div>
                 :
                     valores.length ==0 &&
-                    <div className={styles.emptyContainer}>
+                    <div className={styles.emptyContainer} data-scroll-block>
                         <h4>Adicione seu primeiro gasto para visualização da dashboard</h4>
                         <Link to="/cadastrogasto">
                                 <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
