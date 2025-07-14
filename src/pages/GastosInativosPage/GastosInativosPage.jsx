@@ -16,6 +16,9 @@ function GastosInativosPage() {
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
     const { gastosInativos, loadingInativo, deleteGastos, activeGasto } = useExpenses();
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [gastoToDelete, setGastoToDelete] = useState(null);
+    const [showDeleteMultiplePopup, setShowDeleteMultiplePopup] = useState(false);
 
     const { isMobile } = useOutletContext();
 
@@ -75,21 +78,32 @@ function GastosInativosPage() {
         return selectedGastos.includes(gastoId);
     };
 
-    const handleDeleteSelected = async () => {
-        if (selectedGastos.length === 0) {
-            toast.warning('Nenhum gasto selecionado para apagar.');
-            return;
-        }
-        try {
-            await deleteGastos(selectedGastos); 
-            toast.success(`${selectedGastos.length} gastos deletado com sucesso!`);
-        } catch (error) {
-            toast.error("Não foi possível apagar os gastos.");
-        }
-        
-        setSelectedGastos([]);
-        setSelectAll(false);
-    };
+     const handleDeleteSelected = async () => {
+            if (selectedGastos.length === 0) {
+                toast.warning('Nenhum gasto selecionado para apagar.');
+                return;
+            }
+            
+            setShowDeleteMultiplePopup(true);
+        };
+    
+        const handleDeleteMultipleConfirmado = async () => {
+            try {
+                await deleteGastos(selectedGastos); 
+                toast.success(`${selectedGastos.length} gasto${selectedGastos.length > 1 ? 's' : ''} deletado${selectedGastos.length > 1 ? 's' : ''} com sucesso!`);
+                
+                //para limpar
+                setSelectedGastos([]);
+                setSelectAll(false);
+                setShowDeleteMultiplePopup(false);
+            } catch (error) {
+                toast.error("Não foi possível apagar os gastos.");
+            }
+        };
+    
+        const handleCloseDeleteMultiplePopup = () => {
+            setShowDeleteMultiplePopup(false);
+        };
 
     const handleActiveGasto = async (gasto)=>{
         try {
@@ -111,6 +125,40 @@ function GastosInativosPage() {
         
         setSelectedGastos([]);
     }
+
+    const handleDeleteGastoUnico = async(gasto) => {
+            setGastoToDelete(gasto);
+            setShowDeletePopup(true);
+            // try {
+            //     await inactiveGasto(gasto.id); 
+            //     toast.success(`${gasto.descricao} gasto removido com sucesso!`);
+            // } catch (error) {
+            //     toast.error("Não foi possível apagar o gasto.");
+            // }
+        };
+    
+        const handleDeleteGastoTrue = async() => {
+            if (!gastoToDelete) return;
+                try {
+                    await deleteGastos([gastoToDelete.id]);
+                    toast.success(`${gastoToDelete.descricao} gasto removido com sucesso!`);
+                    setShowDeletePopup(false);
+                    setGastoToDelete(null);
+                } catch (error) {
+                    toast.error("Não foi possível apagar o gasto.");
+                }
+            }
+    
+        const handleCloseDeletePopup = () => {
+            setShowDeletePopup(false);
+            setGastoToDelete(null);
+        };
+    
+        const handleCloseSharePopup = () => {
+            setShowSharePopup(false);
+            setShareEmail('');
+            setValorDivisao('')
+        };
 
     useEffect(() => {
         if (gastosOrdenados.length > 0) {
@@ -155,7 +203,7 @@ function GastosInativosPage() {
                         handleActiveGasto(gasto);
                     }}
                     onDeleteGasto={(gasto) => {
-                        handleDeleteGasto(gasto);
+                        handleDeleteGastoUnico(gasto);
                     }}
                     isMobile={isMobile}
                     loading={loadingInativo}
@@ -166,6 +214,119 @@ function GastosInativosPage() {
                         {selectedGastos.length} gasto{selectedGastos.length > 1? 's' : ''} selecionado{selectedGastos.length > 1? 's' : ''} 
                     </div>
                 )}
+
+{showDeletePopup && (
+                <div className={styles.popupOverlay}>
+                    <div className={styles.popup}>
+                        <div className={styles.popupHeader}>
+                            <header>
+                                <span>Confirmar Exclusão</span>
+                            </header>
+                            <button 
+                                className={styles.closeButton}
+                                onClick={handleCloseDeletePopup}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className={styles.popupContent}>
+                            <div className={styles.confirmMessage}>
+                                <span>Tem certeza que deseja excluir o gasto?</span>
+                                {gastoToDelete && (
+                                    <div className={styles.gastoInfo}>
+                                        <strong>{gastoToDelete.descricao}</strong>
+                                        <span className={styles.gastoValor}>
+                                            Valor: {gastoToDelete.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className={styles.popupFooter}>
+                            <button 
+                                className={styles.buttonCancel}
+                                onClick={handleCloseDeletePopup}
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                className={styles.buttonDelete}
+                                onClick={handleDeleteGastoTrue}
+                            >
+                                Excluir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showDeleteMultiplePopup && (
+                <div className={styles.popupOverlay}>
+                    <div className={styles.popup}>
+                        <div className={styles.popupHeader}>
+                            <header>
+                                <span>Confirmar Exclusão</span>
+                            </header>
+                            <button 
+                                className={styles.closeButton}
+                                onClick={handleCloseDeleteMultiplePopup}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className={styles.popupContent}>
+                            <div className={styles.confirmMessage}>
+                                <span>
+                                    Tem certeza que deseja excluir {selectedGastos.length} gasto{selectedGastos.length > 1 ? 's' : ''}?
+                                </span>
+                                <div className={styles.selectedGastosList}>
+                                    <h4>Gastos selecionados:</h4>
+                                    <div className={styles.gastosList}>
+                                        {gastosOrdenados
+                                            .filter(gasto => selectedGastos.includes(gasto.id))
+                                            .map(gasto => (
+                                                <div key={gasto.id} className={styles.gastoItem}>
+                                                    <div className={styles.gastoInfo}>
+                                                        <strong>{gasto.descricao}</strong>
+                                                        <span className={styles.gastoValor}>
+                                                            {gasto.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                    
+                                    <div className={styles.totalValue}>
+                                        <strong>
+                                            Total: {gastosOrdenados
+                                                .filter(gasto => selectedGastos.includes(gasto.id))
+                                                .reduce((total, gasto) => total + gasto.valorTotal, 0)
+                                                .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                            }
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.popupFooter}>
+                            <button 
+                                className={styles.buttonCancel}
+                                onClick={handleCloseDeleteMultiplePopup}
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                className={styles.buttonDelete}
+                                onClick={handleDeleteMultipleConfirmado}
+                            >
+                                Excluir {selectedGastos.length} gasto{selectedGastos.length > 1 ? 's' : ''}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+             )}
 
                 <div className={styles.botaoApagar}>
                     <Botao 
