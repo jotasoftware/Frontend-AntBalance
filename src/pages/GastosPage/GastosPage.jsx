@@ -37,11 +37,9 @@ function GastosPage() {
     const [gastoToEdit, setGastoToEdit] = useState(null);
     const [editFormData, setEditFormData] = useState({
         descricao: '',
-        valor: '',
         categoriaId: '',
         categoriaNome: '',
         fonte: '',
-        numeroParcelas: 1
     });
 
     const { isMobile } = useOutletContext();
@@ -192,11 +190,9 @@ function GastosPage() {
         setGastoToEdit(gasto);
         setEditFormData({
             descricao: gasto.descricao || '',
-            valor: formatarValorMonetario(converterValorBruto(gasto.valorTotal)),
             categoriaId: gasto.categoriaId || '',
             categoriaNome: gasto.categoria?.nome || '',
             fonte: gasto.fonte || '',
-            numeroParcelas: gasto.numeroParcelas || 1
         });
         
     };
@@ -206,11 +202,9 @@ function GastosPage() {
         setGastoToEdit(null);
         setEditFormData({
             descricao: '',
-            valor: '',
             categoriaId: '',
             categoriaNome: '',
-            fonte: '',
-            numeroParcelas: 1
+            fonte: ''
         });
     };
 
@@ -231,14 +225,21 @@ function GastosPage() {
     };
 
     const submitEditGasto = async () => {
-        if (!editFormData.descricao.trim() || !editFormData.valor.trim() || !editFormData.categoriaId || !editFormData.fonte.trim()) {
-            toast.warn("Por favor, preencha todos os campos para a edição.");
+        if (!editFormData.descricao.trim()) {
+            toast.warn("Por favor, preencha o nome.");
             return;
         }
-
+        
+        if (!editFormData.categoriaId) {
+            toast.warn("Por favor, selecione uma categoria.");
+            return;
+        }
+        
+        if (!editFormData.fonte.trim()) {
+            toast.warn("Por favor, preencha a fonte.");
+            return;
+        }
         try {
-            // const valorNumerico = converterStringParaNumero(editFormData.valor);
-
             const updateData = {
                 descricao: editFormData.descricao,
                 ativo: gastoToEdit.ativo,
@@ -256,14 +257,10 @@ function GastosPage() {
                 toast.success(`${gastoToEdit.descricao} gasto editado com sucesso!`);
                 setShowDeletePopup(false);
                 setGastoToDelete(null);
+                handleCloseEditPopup();
             } catch (error) {
                 toast.error("Não foi possível editar o gasto.");
             }
-
-            
-            
-            toast.success(`${editFormData.descricao} atualizado com sucesso!`);
-            handleCloseEditPopup();
         } catch (error) {
             toast.error("Erro ao atualizar o gasto. Tente novamente.");
             console.error("Erro ao atualizar gasto:", error);
@@ -370,9 +367,6 @@ function GastosPage() {
                                 </button>
                             </div>
                             <div className={styles.popupContent}>
-                                <div className={styles.gastoDetails}>
-                                    
-                                </div>
                                 <div className={styles.inputContainer}>
                                     <label htmlFor="shareEmail">E-mail do destinatário:</label>
                                     <input 
@@ -382,6 +376,8 @@ function GastosPage() {
                                         value={shareEmail}
                                         onChange={handleChangeShareEmail}
                                     />
+                                </div>
+                                <div className={styles.inputContainer}>
                                     <label htmlFor="valorDivisao">Valor para dividir:</label>
                                     <input
                                         type='text'

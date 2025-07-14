@@ -123,11 +123,19 @@ function LoginPage() {
     
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        if(!email || !password || (type === 'signup' && !name)){
-            toast.warn('Por favor, preencha todos os campos.');
+        if (!email) {
+            toast.warn("Por favor, preencha o e-mail.");
             return;
         }
-
+        if (!password) {
+            toast.warn("Por favor, preencha a senha.");
+            return;
+        }
+        if (type === 'signup' && !name) {
+            toast.warn("Por favor, preencha o nome.");
+            return;
+        }
+        
         if(!validateForm()){
             return;
         }

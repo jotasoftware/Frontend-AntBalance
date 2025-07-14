@@ -89,8 +89,24 @@ function CadastroGastoPage() {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        if (!nome || !valor || !categoria || !fonte || !parcelas) {
-            toast.warn('Por favor, preencha todos os campos.');
+        if (!nome) {
+            toast.warn("Por favor, preencha o nome.");
+            return;
+        }
+        if (!valor) {
+            toast.warn("Por favor, preencha o valor.");
+            return;
+        }
+        if (!categoria) {
+            toast.warn("Por favor, selecione uma categoria.");
+            return;
+        }
+        if (!fonte) {
+            toast.warn("Por favor, preencha a fonte.");
+            return;
+        }
+        if (!parcelas) {
+            toast.warn("Por favor, preencha o número de parcelas.");
             return;
         }
 

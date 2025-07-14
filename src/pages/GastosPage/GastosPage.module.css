@@ -102,8 +102,8 @@
 
 .closeButton {
     position: absolute;
-    top: -10px;
-    right: 20px;
+    top: -3px;
+    right: -2px;
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -127,6 +127,7 @@
     flex-direction: column;
     width: 100%;
     padding: 0 20px;
+    gap: 15px;
 }
 
 .popupContent .inputContainer {
@@ -134,30 +135,42 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .popupContent .inputContainer input {
-    margin-bottom: 6px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px;
+    padding: 10px 16px;
     border: #CFCFCF 1px solid;
     outline: none;
     border-radius: 8px;
-    width: calc(27vw - 20px);
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Poppins";
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+
+}
+
+.popupContent .inputContainer input:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
 }
 
 .popupContent .inputContainer label {
-    margin-bottom: 6px;
     align-self: center;
 }
 
 .popupFooter {
     display: flex;
     gap: 10px;
-    padding: 20px;
-    width: 27vw;
+    padding-top: 20px;
+    width: 100%;
     margin-bottom: 10px;
 }
 
@@ -270,7 +283,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .editForm .inputContainer {
@@ -285,7 +298,6 @@
     font-size: 14px;
     font-weight: 500;
     color: #333333;
-    margin-bottom: 6px;
 }
 
 .editForm .inputContainer input,

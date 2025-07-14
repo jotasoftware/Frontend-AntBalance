@@ -92,7 +92,6 @@ function GastosInativosPage() {
                 await deleteGastos(selectedGastos); 
                 toast.success(`${selectedGastos.length} gasto${selectedGastos.length > 1 ? 's' : ''} deletado${selectedGastos.length > 1 ? 's' : ''} com sucesso!`);
                 
-                //para limpar
                 setSelectedGastos([]);
                 setSelectAll(false);
                 setShowDeleteMultiplePopup(false);
@@ -215,7 +214,7 @@ function GastosInativosPage() {
                     </div>
                 )}
 
-{showDeletePopup && (
+            {showDeletePopup && (
                 <div className={styles.popupOverlay}>
                     <div className={styles.popup}>
                         <div className={styles.popupHeader}>
@@ -231,7 +230,7 @@ function GastosInativosPage() {
                         </div>
                         <div className={styles.popupContent}>
                             <div className={styles.confirmMessage}>
-                                <span>Tem certeza que deseja excluir o gasto?</span>
+                                <span>Tem certeza que deseja excluir permanentemente o gasto?</span>
                                 {gastoToDelete && (
                                     <div className={styles.gastoInfo}>
                                         <strong>{gastoToDelete.descricao}</strong>
@@ -277,7 +276,7 @@ function GastosInativosPage() {
                         <div className={styles.popupContent}>
                             <div className={styles.confirmMessage}>
                                 <span>
-                                    Tem certeza que deseja excluir {selectedGastos.length} gasto{selectedGastos.length > 1 ? 's' : ''}?
+                                    Tem certeza que deseja excluir permanentemente {selectedGastos.length} gasto{selectedGastos.length > 1 ? 's' : ''}?
                                 </span>
                                 <div className={styles.selectedGastosList}>
                                     <h4>Gastos selecionados:</h4>
