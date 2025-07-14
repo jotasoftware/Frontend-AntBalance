@@ -27,8 +27,9 @@ function GastosPage() {
     const { createSplit } = useSplit();
     
     const [showSharePopup, setShowSharePopup] = useState(false);
-    //const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [shareEmail, setShareEmail] = useState('');
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [gastoToDelete, setGastoToDelete] = useState(null);
 
     const { isMobile } = useOutletContext();
 
@@ -168,12 +169,31 @@ function GastosPage() {
     
 
     const handleDeleteGastoUnico = async(gasto) => {
-        try {
-            await inactiveGasto(gasto.id); 
-            toast.success(`${gasto.descricao} gasto removido com sucesso!`);
-        } catch (error) {
-            toast.error("Não foi possível apagar o gasto.");
+        setGastoToDelete(gasto);
+        setShowDeletePopup(true);
+        // try {
+        //     await inactiveGasto(gasto.id); 
+        //     toast.success(`${gasto.descricao} gasto removido com sucesso!`);
+        // } catch (error) {
+        //     toast.error("Não foi possível apagar o gasto.");
+        // }
+    };
+
+    const handleDeleteGastoTrue = async() => {
+        if (!gastoToDelete) return;
+            try {
+                await inactiveGasto(gastoToDelete.id);
+                toast.success(`${gastoToDelete.descricao} gasto removido com sucesso!`);
+                setShowDeletePopup(false);
+                setGastoToDelete(null);
+            } catch (error) {
+                toast.error("Não foi possível apagar o gasto.");
+            }
         }
+
+    const handleCloseDeletePopup = () => {
+        setShowDeletePopup(false);
+        setGastoToDelete(null);
     };
 
     const handleCloseSharePopup = () => {
@@ -291,6 +311,51 @@ function GastosPage() {
                             </div>
                         </div>
                     )}
+
+                {showDeletePopup && (
+                    <div className={styles.popupOverlay}>
+                        <div className={styles.popup}>
+                            <div className={styles.popupHeader}>
+                                <header>
+                                    <span>Confirmar Exclusão</span>
+                                </header>
+                                <button 
+                                    className={styles.closeButton}
+                                    onClick={handleCloseDeletePopup}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                            <div className={styles.popupContent}>
+                                <div className={styles.confirmMessage}>
+                                    <span>Tem certeza que deseja excluir o gasto?</span>
+                                    {gastoToDelete && (
+                                        <div className={styles.gastoInfo}>
+                                            <strong>{gastoToDelete.descricao}</strong>
+                                            <span className={styles.gastoValor}>
+                                                Valor: {gastoToDelete.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            <div className={styles.popupFooter}>
+                                <button 
+                                    className={styles.buttonCancel}
+                                    onClick={handleCloseDeletePopup}
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    className={styles.buttonDelete}
+                                    onClick={handleDeleteGastoTrue}
+                                >
+                                    Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 
                 {selectedGastos.length > 0 && (
                     <div className={styles.selectionInfo}>
