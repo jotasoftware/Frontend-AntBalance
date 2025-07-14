@@ -5,7 +5,16 @@ import {
     createGasto as apiCreateGasto, 
     fetchCategorias as apiFetchCategorias, 
     fetchGastos as apiFetchGastos,
-    fetchValores as apiFetchValores
+    fetchGastosInativos as apiFetchGastosInativos,
+    fetchValores as apiFetchValores,
+    inactiveGastos as apiInactiveGastos,
+    inactiveGasto as apiInactiveGasto,
+    activeGasto as apiActiveGasto,
+    deleteGastos as apiDeleteGastos,
+    deleteCategoria as apiDeleteCategoria,
+    editarGasto as apiEditarGasto, //novo
+    gerarRelatorioPdf as apiGerarRelatorioPdf,
+    gerarRelatorioPdf
 } from '../services/expenseService';
 
 export const ExpenseContext = createContext(null);
@@ -152,7 +161,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores };
+    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, gerarRelatorioPdf};
 
     return (
         <ExpenseContext.Provider value={value}>

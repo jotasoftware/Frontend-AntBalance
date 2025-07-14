@@ -74,3 +74,107 @@ export const fetchValores = async (token) => {
     throw error;
   }
 };
+
+export const editarGasto = async (id, data, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const payload = {
+      descricao: data.descricao,
+      valorTotal: data.valorTotal,
+      categoriaId: data.categoriaId,
+      parcelado: data.parcelado,
+      fonte: data.fonte,
+      numeroParcelas: data.numeroParcelas,
+      data: data.data
+    };
+
+    const response = await axios.update(`${API_CONFIG.expenses.base}/${id}`, payload, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao atualizar gasto:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const deleteGastos = async (ids, token) => {
+  try {
+    const config = {
+      ...getAuthConfig(token),
+      data: ids
+    };
+    console.log(config)
+
+    const response = await axios.delete(API_CONFIG.expenses.delete, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao deletar gastos:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const inactiveGastos = async (ids, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const response = await axios.patch(API_CONFIG.expenses.inactiveAll, ids, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao deletar gastos:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const inactiveGasto = async (id, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const response = await axios.patch(API_CONFIG.expenses.inactive(id), null, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao deletar gasto:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const activeGasto = async (id, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const response = await axios.patch(API_CONFIG.expenses.active(id), null, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao ativar gasto:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const deleteCategoria = async (id, token) => {
+  try {
+    const config = getAuthConfig(token);
+
+    const response = await axios.delete(API_CONFIG.categories.delete(id), config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao deletar categoria:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const gerarRelatorioPdf = async (payload, token) => {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        dataInicio: payload.dataInicio,
+        dataFim: payload.dataFim,
+        tipoRelatorio: payload.tipoRelatorio
+      },
+      responseType: 'blob'
+    };
+    
+    const response = await axios.get(API_CONFIG.relatorios.gerarPdf, config);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao gerar relatório:', error);
+    alert('Erro ao gerar relatório PDF');
+  } 
+};

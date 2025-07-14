@@ -7,6 +7,17 @@ import Botao from '../../components/botao/Botao';
 import { IoPrintOutline } from "react-icons/io5"
 import { FaSquarePlus } from "react-icons/fa6"
 import GridCard from '../../components/gridcard/GridCard';
+import { useExpenses } from '../../context/ExpenseContext';
+import { Link, useOutletContext } from 'react-router-dom';
+import Table from '../../components/table/Table';
+import { FaTrash } from "react-icons/fa";
+import Loading from '../../components/loading/Loading';
+import { useSplit } from '../../context/SplitExpanseContext';
+import { converterStringParaNumero } from '../../utils/converterStringNumero';
+import { formatarValorMonetario } from '../../utils/formatarValorMonetario';
+import { converterValorBruto} from '../../utils/converterValorBruto';
+import { FaPlus } from "react-icons/fa6";
+import RelatorioGastos from '../../components/relatorio/RelatorioGastos';
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
@@ -58,8 +69,11 @@ function GastosPage() {
                         </div>
                     </div>
                     <div className={styles.gastosActions}>
-                        <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>
-                        <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"}/>
+                        <Link to="/cadastrogasto">
+                            {isMobile ? <Botao icon={<FaPlus size={24} color={"white"}/>} /> : <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>}
+                        </Link>
+                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />}
+                        <RelatorioGastos>   </RelatorioGastos>
                     </div>
                 </div>
             </GridCard>
