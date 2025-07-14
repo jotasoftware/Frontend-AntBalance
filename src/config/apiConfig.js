@@ -17,6 +17,7 @@ export const API_CONFIG = {
         active: (id) => `${URL}/gastos/${id}/ativar`,
         inactive: (id) => `${URL}/gastos/${id}/desativar`,
         delete: `${URL}/gastos`,
+        edit: (id) => `${URL}/gastos/${id}`,
     },
     categories: {
         getAll: `${URL}/categorias/usuario`,

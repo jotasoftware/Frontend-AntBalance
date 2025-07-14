@@ -12,7 +12,7 @@ import {
     activeGasto as apiActiveGasto,
     deleteGastos as apiDeleteGastos,
     deleteCategoria as apiDeleteCategoria,
-    editarGasto as apiEditarGasto //novo
+    editarGasto as apiEditarGasto
 } from '../services/expenseService';
 import { converterStringParaNumero } from "../utils/converterStringNumero";
 
@@ -133,7 +133,9 @@ export const ExpenseProvider = ({ children }) => {
 
     const editarGasto = async (id, data) => {
     try {
+
         const tokenLocal = localStorage.getItem('token');
+        console.log(tokenLocal)
         const gastoAtualizado = await apiEditarGasto(id, data, tokenLocal);
         
         setGastos(prevGastos => 
@@ -141,8 +143,6 @@ export const ExpenseProvider = ({ children }) => {
             )
         );
         await fetchValores();
-        
-        return gastoAtualizado;
     } catch (error) {
         console.error("Erro ao atualizar gasto:", error);
         throw error;
@@ -155,6 +155,7 @@ export const ExpenseProvider = ({ children }) => {
             await apiInactiveGastos(data, tokenLocal);
             fetchGastos()
             fetchValores()
+            fetchGastosInativos()
         } catch (error) {
             console.error("Erro ao apagar lista de gastos:", error);
             throw error;

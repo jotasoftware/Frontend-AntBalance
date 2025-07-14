@@ -124,21 +124,6 @@ function GastosPage() {
         return selectedGastos.includes(gastoId);
     };
 
-    // const handleDeleteSelected = async () => {
-    //     if (selectedGastos.length === 0) {
-    //         toast.warning('Nenhum gasto selecionado para apagar.');
-    //         return;
-    //     }
-    //     try {
-    //         await inactiveGastos(selectedGastos); 
-    //         toast.success(`${selectedGastos.length} gastos deletado com sucesso!`);
-    //     } catch (error) {
-    //         toast.error("Não foi possível apagar os gastos.");
-    //     }
-        
-    //     setSelectedGastos([]);
-    //     setSelectAll(false);
-    // };
 
     const handleDeleteSelected = async () => {
         if (selectedGastos.length === 0) {
@@ -246,40 +231,36 @@ function GastosPage() {
     };
 
     const submitEditGasto = async () => {
-        if (!editFormData.descricao.trim()) {
-            toast.warn("Por favor, preencha o nome do gasto.");
-            return;
-        }
-
-        if (!editFormData.valor.trim()) {
-            toast.warn("Por favor, preencha o valor do gasto.");
-            return;
-        }
-
-        if (!editFormData.categoriaId) {
-            toast.warn("Por favor, selecione uma categoria.");
-            return;
-        }
-
-        if (!editFormData.fonte.trim()) {
-            toast.warn("Por favor, preencha a fonte do gasto.");
+        if (!editFormData.descricao.trim() || !editFormData.valor.trim() || !editFormData.categoriaId || !editFormData.fonte.trim()) {
+            toast.warn("Por favor, preencha todos os campos para a edição.");
             return;
         }
 
         try {
-            const valorNumerico = converterStringParaNumero(editFormData.valor);
+            // const valorNumerico = converterStringParaNumero(editFormData.valor);
 
             const updateData = {
                 descricao: editFormData.descricao,
-                valorTotal: valorNumerico,
+                ativo: gastoToEdit.ativo,
+                valorTotal: gastoToEdit.valorTotal,
+                parcelado: gastoToEdit.parcelado,
+                numeroParcelas: gastoToEdit.numeroParcelas,
                 categoriaId: editFormData.categoriaId,
-                parcelado: editFormData.numeroParcelas > 1,
                 fonte: editFormData.fonte,
-                numeroParcelas: editFormData.numeroParcelas,
-                data: gastoToEdit.data
+                data: gastoToEdit.data,
+                parcelas: gastoToEdit.parcelas
             };
 
-            await editarGasto(gastoToEdit.id, updateData);
+            try {
+                await editarGasto(gastoToEdit.id, updateData);
+                toast.success(`${gastoToEdit.descricao} gasto editado com sucesso!`);
+                setShowDeletePopup(false);
+                setGastoToDelete(null);
+            } catch (error) {
+                toast.error("Não foi possível editar o gasto.");
+            }
+
+            
             
             toast.success(`${editFormData.descricao} atualizado com sucesso!`);
             handleCloseEditPopup();
@@ -294,12 +275,6 @@ function GastosPage() {
     const handleDeleteGastoUnico = async(gasto) => {
         setGastoToDelete(gasto);
         setShowDeletePopup(true);
-        // try {
-        //     await inactiveGasto(gasto.id); 
-        //     toast.success(`${gasto.descricao} gasto removido com sucesso!`);
-        // } catch (error) {
-        //     toast.error("Não foi possível apagar o gasto.");
-        // }
     };
 
     const handleDeleteGastoTrue = async() => {
@@ -576,19 +551,6 @@ function GastosPage() {
                                     </div>
                                     
                                     <div className={styles.inputContainer}>
-                                        <label htmlFor="editValor">Valor:</label>
-                                        <div className={styles.valorInputContainer}>
-                                            <input
-                                                type="text"
-                                                id="editValor"
-                                                placeholder="0,00"
-                                                value={editFormData.valor}
-                                                onChange={(e) => handleEditValorChange(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                    
-                                    <div className={styles.inputContainer}>
                                         <label htmlFor="editCategoria">Categoria:</label>
                                         <select
                                             id="editCategoria"
@@ -620,39 +582,6 @@ function GastosPage() {
                                         />
                                     </div>
                                     
-                                    <div className={styles.inputContainer}>
-                                        <label htmlFor="editParcelas">Quantidade de Parcelas:</label>
-                                        <select
-                                            id="editParcelas"
-                                            value={editFormData.numeroParcelas}
-                                            onChange={(e) => handleEditChange('numeroParcelas', parseInt(e.target.value))}
-                                        >
-                                            <option value="1">À vista</option>
-                                            <option value="2">2x</option>
-                                            <option value="3">3x</option>
-                                            <option value="4">4x</option>
-                                            <option value="5">5x</option>
-                                            <option value="6">6x</option>
-                                            <option value="7">7x</option>
-                                            <option value="8">8x</option>
-                                            <option value="9">9x</option>
-                                            <option value="10">10x</option>
-                                            <option value="11">11x</option>
-                                            <option value="12">12x</option>
-                                            <option value="13">13x</option>
-                                            <option value="14">14x</option>
-                                            <option value="15">15x</option>
-                                            <option value="16">16x</option>
-                                            <option value="17">17x</option>
-                                            <option value="18">18x</option>
-                                            <option value="19">19x</option>
-                                            <option value="20">20x</option>
-                                            <option value="21">21x</option>
-                                            <option value="22">22x</option>
-                                            <option value="23">23x</option>
-                                            <option value="24">24x</option>
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
                             <div className={styles.popupFooter}>
