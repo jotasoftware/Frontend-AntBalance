@@ -12,6 +12,9 @@ export const API_CONFIG = {
         delete: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
         update: (id) => `${MS_EXPENSES_URL}/api/expenses/${id}`,
     },
+    relatorios: {
+        gerarPdf: `${URL}/relatorios/gastos/pdf`,
+    },
     categories: {
         getAll: `${URL}/categorias/usuario`,
         create: `${URL}/categorias`,
