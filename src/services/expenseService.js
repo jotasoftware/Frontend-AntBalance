@@ -71,6 +71,27 @@ export const fetchValores = async (token) => {
   }
 };
 
+export const editarGasto = async (id, data, token) => {
+  try {
+    const config = getAuthConfig(token);
+    const payload = {
+      descricao: data.descricao,
+      valorTotal: data.valorTotal,
+      categoriaId: data.categoriaId,
+      parcelado: data.parcelado,
+      fonte: data.fonte,
+      numeroParcelas: data.numeroParcelas,
+      data: data.data
+    };
+
+    const response = await axios.update(`${API_CONFIG.expenses.base}/${id}`, payload, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao atualizar gasto:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const deleteGastos = async (ids, token) => {
   try {
     const config = {

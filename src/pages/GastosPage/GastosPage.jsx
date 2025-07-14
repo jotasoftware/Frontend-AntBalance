@@ -14,6 +14,7 @@ import Loading from '../../components/loading/Loading';
 import { useSplit } from '../../context/SplitExpanseContext';
 import { converterStringParaNumero } from '../../utils/converterStringNumero';
 import { formatarValorMonetario } from '../../utils/formatarValorMonetario';
+import { converterValorBruto} from '../../utils/converterValorBruto';
 import { FaPlus } from "react-icons/fa6";
 
 function GastosPage() {
@@ -23,13 +24,25 @@ function GastosPage() {
     const [gastoAtual, setGastoAtual] = useState(null)
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto } = useExpenses();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto } = useExpenses();
     const { createSplit } = useSplit();
     
     const [showSharePopup, setShowSharePopup] = useState(false);
     const [shareEmail, setShareEmail] = useState('');
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [gastoToDelete, setGastoToDelete] = useState(null);
+    const [showDeleteMultiplePopup, setShowDeleteMultiplePopup] = useState(false);
+
+    const [showEditPopup, setShowEditPopup] = useState(false);
+    const [gastoToEdit, setGastoToEdit] = useState(null);
+    const [editFormData, setEditFormData] = useState({
+        descricao: '',
+        valor: '',
+        categoriaId: '',
+        categoriaNome: '',
+        fonte: '',
+        numeroParcelas: 1
+    });
 
     const { isMobile } = useOutletContext();
 
@@ -111,24 +124,47 @@ function GastosPage() {
         return selectedGastos.includes(gastoId);
     };
 
+    // const handleDeleteSelected = async () => {
+    //     if (selectedGastos.length === 0) {
+    //         toast.warning('Nenhum gasto selecionado para apagar.');
+    //         return;
+    //     }
+    //     try {
+    //         await inactiveGastos(selectedGastos); 
+    //         toast.success(`${selectedGastos.length} gastos deletado com sucesso!`);
+    //     } catch (error) {
+    //         toast.error("Não foi possível apagar os gastos.");
+    //     }
+        
+    //     setSelectedGastos([]);
+    //     setSelectAll(false);
+    // };
+
     const handleDeleteSelected = async () => {
         if (selectedGastos.length === 0) {
             toast.warning('Nenhum gasto selecionado para apagar.');
             return;
         }
+        
+        setShowDeleteMultiplePopup(true);
+    };
+
+    const handleDeleteMultipleConfirmado = async () => {
         try {
             await inactiveGastos(selectedGastos); 
-            toast.success(`${selectedGastos.length} gastos deletado com sucesso!`);
+            toast.success(`${selectedGastos.length} gasto${selectedGastos.length > 1 ? 's' : ''} deletado${selectedGastos.length > 1 ? 's' : ''} com sucesso!`);
+            
+            //para limpar
+            setSelectedGastos([]);
+            setSelectAll(false);
+            setShowDeleteMultiplePopup(false);
         } catch (error) {
             toast.error("Não foi possível apagar os gastos.");
         }
-        
-        setSelectedGastos([]);
-        setSelectAll(false);
     };
 
-    const handleShare = (e) => {
-        e.stopPropagation();
+    const handleCloseDeleteMultiplePopup = () => {
+        setShowDeleteMultiplePopup(false);
     };
 
     const handleChangeShareEmail = (event) => {
@@ -166,7 +202,94 @@ function GastosPage() {
         }
     };
 
-    
+    const handleEditGasto = (gasto) => {
+        setShowEditPopup(true);
+        setGastoToEdit(gasto);
+        setEditFormData({
+            descricao: gasto.descricao || '',
+            valor: formatarValorMonetario(converterValorBruto(gasto.valorTotal)),
+            categoriaId: gasto.categoriaId || '',
+            categoriaNome: gasto.categoria?.nome || '',
+            fonte: gasto.fonte || '',
+            numeroParcelas: gasto.numeroParcelas || 1
+        });
+        
+    };
+
+    const handleCloseEditPopup = () => {
+        setShowEditPopup(false);
+        setGastoToEdit(null);
+        setEditFormData({
+            descricao: '',
+            valor: '',
+            categoriaId: '',
+            categoriaNome: '',
+            fonte: '',
+            numeroParcelas: 1
+        });
+    };
+
+    const handleEditChange = (field, value) => {
+        setEditFormData(prev => ({...prev,[field]: value}
+        ));
+    };
+
+    const handleEditValorChange = (inputValue) => {
+        if (inputValue === '') {
+            handleEditChange('valor', '');
+            return;
+        }
+        if (inputValue.length <= 12) {
+            const valorFormatado = formatarValorMonetario(inputValue);
+            handleEditChange('valor', valorFormatado);
+        }
+    };
+
+    const submitEditGasto = async () => {
+        if (!editFormData.descricao.trim()) {
+            toast.warn("Por favor, preencha o nome do gasto.");
+            return;
+        }
+
+        if (!editFormData.valor.trim()) {
+            toast.warn("Por favor, preencha o valor do gasto.");
+            return;
+        }
+
+        if (!editFormData.categoriaId) {
+            toast.warn("Por favor, selecione uma categoria.");
+            return;
+        }
+
+        if (!editFormData.fonte.trim()) {
+            toast.warn("Por favor, preencha a fonte do gasto.");
+            return;
+        }
+
+        try {
+            const valorNumerico = converterStringParaNumero(editFormData.valor);
+
+            const updateData = {
+                descricao: editFormData.descricao,
+                valorTotal: valorNumerico,
+                categoriaId: editFormData.categoriaId,
+                parcelado: editFormData.numeroParcelas > 1,
+                fonte: editFormData.fonte,
+                numeroParcelas: editFormData.numeroParcelas,
+                data: gastoToEdit.data
+            };
+
+            await editarGasto(gastoToEdit.id, updateData);
+            
+            toast.success(`${editFormData.descricao} atualizado com sucesso!`);
+            handleCloseEditPopup();
+        } catch (error) {
+            toast.error("Erro ao atualizar o gasto. Tente novamente.");
+            console.error("Erro ao atualizar gasto:", error);
+        }
+    };
+
+
 
     const handleDeleteGastoUnico = async(gasto) => {
         setGastoToDelete(gasto);
@@ -248,7 +371,7 @@ function GastosPage() {
                             handleShareGasto(gasto);
                         }}
                         onEditGasto={(gasto) => {
-                            
+                            handleEditGasto(gasto);
                         }}
                         onDeleteGasto={(gasto) => {
                             handleDeleteGastoUnico(gasto);
@@ -257,100 +380,293 @@ function GastosPage() {
                         loading={false}
                     />
 
-                {showSharePopup && (
-                        <div className={styles.popupOverlay}>
-                            <div className={styles.popup}>
-                                <div className={styles.popupHeader}>
-                                    <header>
-                                        <span>Compartilhar Gasto</span>
-                                    </header>
-                                    <button 
-                                        className={styles.closeButton}
-                                        onClick={handleCloseSharePopup}
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                                <div className={styles.popupContent}>
-                                    <div className={styles.gastoDetails}>
-                                        
-                                    </div>
-                                    <div className={styles.inputContainer}>
-                                        <label htmlFor="shareEmail">E-mail do destinatário:</label>
-                                        <input 
-                                            type="email"
-                                            id="shareEmail"
-                                            placeholder="Digite o email para compartilhar"
-                                            value={shareEmail}
-                                            onChange={handleChangeShareEmail}
-                                        />
-                                        <label htmlFor="valorDivisao">Valor para dividir:</label>
-                                        <input
-                                            type='text'
-                                            id='valorDivisao'
-                                            placeholder='Digite o valor a dividir'
-                                            value={valorDivisao}
-                                            onChange={handleShareValor}
-                                        />
-                                    </div>
-                                </div>
-                                <div className={styles.popupFooter}>
-                                    <button 
-                                        className={styles.buttonCancel}
-                                        onClick={handleCloseSharePopup}
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button 
-                                        className={styles.buttonSubmit}
-                                        onClick={submitShareGasto}
-                                    >
-                                        Compartilhar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                {showDeletePopup && (
+            {showSharePopup && (
                     <div className={styles.popupOverlay}>
                         <div className={styles.popup}>
                             <div className={styles.popupHeader}>
                                 <header>
-                                    <span>Confirmar Exclusão</span>
+                                    <span>Compartilhar Gasto</span>
                                 </header>
                                 <button 
                                     className={styles.closeButton}
-                                    onClick={handleCloseDeletePopup}
+                                    onClick={handleCloseSharePopup}
                                 >
                                     ×
                                 </button>
                             </div>
                             <div className={styles.popupContent}>
-                                <div className={styles.confirmMessage}>
-                                    <span>Tem certeza que deseja excluir o gasto?</span>
-                                    {gastoToDelete && (
-                                        <div className={styles.gastoInfo}>
-                                            <strong>{gastoToDelete.descricao}</strong>
-                                            <span className={styles.gastoValor}>
-                                                Valor: {gastoToDelete.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                            </span>
-                                        </div>
-                                    )}
+                                <div className={styles.gastoDetails}>
+                                    
+                                </div>
+                                <div className={styles.inputContainer}>
+                                    <label htmlFor="shareEmail">E-mail do destinatário:</label>
+                                    <input 
+                                        type="email"
+                                        id="shareEmail"
+                                        placeholder="Digite o email para compartilhar"
+                                        value={shareEmail}
+                                        onChange={handleChangeShareEmail}
+                                    />
+                                    <label htmlFor="valorDivisao">Valor para dividir:</label>
+                                    <input
+                                        type='text'
+                                        id='valorDivisao'
+                                        placeholder='Digite o valor a dividir'
+                                        value={valorDivisao}
+                                        onChange={handleShareValor}
+                                    />
                                 </div>
                             </div>
                             <div className={styles.popupFooter}>
                                 <button 
                                     className={styles.buttonCancel}
-                                    onClick={handleCloseDeletePopup}
+                                    onClick={handleCloseSharePopup}
                                 >
                                     Cancelar
                                 </button>
                                 <button 
-                                    className={styles.buttonDelete}
-                                    onClick={handleDeleteGastoTrue}
+                                    className={styles.buttonSubmit}
+                                    onClick={submitShareGasto}
                                 >
-                                    Excluir
+                                    Compartilhar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+            {showDeletePopup && (
+                <div className={styles.popupOverlay}>
+                    <div className={styles.popup}>
+                        <div className={styles.popupHeader}>
+                            <header>
+                                <span>Confirmar Exclusão</span>
+                            </header>
+                            <button 
+                                className={styles.closeButton}
+                                onClick={handleCloseDeletePopup}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className={styles.popupContent}>
+                            <div className={styles.confirmMessage}>
+                                <span>Tem certeza que deseja excluir o gasto?</span>
+                                {gastoToDelete && (
+                                    <div className={styles.gastoInfo}>
+                                        <strong>{gastoToDelete.descricao}</strong>
+                                        <span className={styles.gastoValor}>
+                                            Valor: {gastoToDelete.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className={styles.popupFooter}>
+                            <button 
+                                className={styles.buttonCancel}
+                                onClick={handleCloseDeletePopup}
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                className={styles.buttonDelete}
+                                onClick={handleDeleteGastoTrue}
+                            >
+                                Excluir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showDeleteMultiplePopup && (
+                <div className={styles.popupOverlay}>
+                    <div className={styles.popup}>
+                        <div className={styles.popupHeader}>
+                            <header>
+                                <span>Confirmar Exclusão</span>
+                            </header>
+                            <button 
+                                className={styles.closeButton}
+                                onClick={handleCloseDeleteMultiplePopup}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className={styles.popupContent}>
+                            <div className={styles.confirmMessage}>
+                                <span>
+                                    Tem certeza que deseja excluir {selectedGastos.length} gasto{selectedGastos.length > 1 ? 's' : ''}?
+                                </span>
+                                <div className={styles.selectedGastosList}>
+                                    <h4>Gastos selecionados:</h4>
+                                    <div className={styles.gastosList}>
+                                        {gastosOrdenados
+                                            .filter(gasto => selectedGastos.includes(gasto.id))
+                                            .map(gasto => (
+                                                <div key={gasto.id} className={styles.gastoItem}>
+                                                    <div className={styles.gastoInfo}>
+                                                        <strong>{gasto.descricao}</strong>
+                                                        <span className={styles.gastoValor}>
+                                                            {gasto.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                    
+                                    <div className={styles.totalValue}>
+                                        <strong>
+                                            Total: {gastosOrdenados
+                                                .filter(gasto => selectedGastos.includes(gasto.id))
+                                                .reduce((total, gasto) => total + gasto.valorTotal, 0)
+                                                .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                            }
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.popupFooter}>
+                            <button 
+                                className={styles.buttonCancel}
+                                onClick={handleCloseDeleteMultiplePopup}
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                className={styles.buttonDelete}
+                                onClick={handleDeleteMultipleConfirmado}
+                            >
+                                Excluir {selectedGastos.length} gasto{selectedGastos.length > 1 ? 's' : ''}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+             )}
+
+            {showEditPopup && (
+                    <div className={styles.popupOverlay}>
+                        <div className={styles.popup}>
+                            <div className={styles.popupHeader}>
+                                <header>
+                                    <span>Editar Gasto</span>
+                                </header>
+                                <button 
+                                    className={styles.closeButton}
+                                    onClick={handleCloseEditPopup}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                            <div className={styles.popupContent}>
+                                <div className={styles.editForm}>
+                                    <div className={styles.inputContainer}>
+                                        <label htmlFor="editNome">Nome:</label>
+                                        <input
+                                            type="text"
+                                            id="editNome"
+                                            placeholder="Nome do gasto"
+                                            value={editFormData.descricao}
+                                            onChange={(e) => handleEditChange('descricao', e.target.value)}
+                                        />
+                                    </div>
+                                    
+                                    <div className={styles.inputContainer}>
+                                        <label htmlFor="editValor">Valor:</label>
+                                        <div className={styles.valorInputContainer}>
+                                            <input
+                                                type="text"
+                                                id="editValor"
+                                                placeholder="0,00"
+                                                value={editFormData.valor}
+                                                onChange={(e) => handleEditValorChange(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    
+                                    <div className={styles.inputContainer}>
+                                        <label htmlFor="editCategoria">Categoria:</label>
+                                        <select
+                                            id="editCategoria"
+                                            value={editFormData.categoriaId}
+                                            onChange={(e) => {
+                                                const selectedCat = categorias.find(cat => cat.id === e.target.value);
+                                                handleEditChange('categoriaId', e.target.value);
+                                                handleEditChange('categoriaNome', selectedCat?.nome || '');
+                                            }}
+                                           
+                                        >
+                                            <option value="">Selecione uma categoria</option>
+                                            {categorias.map(categoria => (
+                                                <option key={categoria.id} value={categoria.id}>
+                                                    {categoria.nome}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    
+                                    <div className={styles.inputContainer}>
+                                        <label htmlFor="editFonte">Fonte:</label>
+                                        <input
+                                            type="text"
+                                            id="editFonte"
+                                            placeholder="Fonte do gasto"
+                                            value={editFormData.fonte}
+                                            onChange={(e) => handleEditChange('fonte', e.target.value)}
+                                        />
+                                    </div>
+                                    
+                                    <div className={styles.inputContainer}>
+                                        <label htmlFor="editParcelas">Quantidade de Parcelas:</label>
+                                        <select
+                                            id="editParcelas"
+                                            value={editFormData.numeroParcelas}
+                                            onChange={(e) => handleEditChange('numeroParcelas', parseInt(e.target.value))}
+                                        >
+                                            <option value="1">À vista</option>
+                                            <option value="2">2x</option>
+                                            <option value="3">3x</option>
+                                            <option value="4">4x</option>
+                                            <option value="5">5x</option>
+                                            <option value="6">6x</option>
+                                            <option value="7">7x</option>
+                                            <option value="8">8x</option>
+                                            <option value="9">9x</option>
+                                            <option value="10">10x</option>
+                                            <option value="11">11x</option>
+                                            <option value="12">12x</option>
+                                            <option value="13">13x</option>
+                                            <option value="14">14x</option>
+                                            <option value="15">15x</option>
+                                            <option value="16">16x</option>
+                                            <option value="17">17x</option>
+                                            <option value="18">18x</option>
+                                            <option value="19">19x</option>
+                                            <option value="20">20x</option>
+                                            <option value="21">21x</option>
+                                            <option value="22">22x</option>
+                                            <option value="23">23x</option>
+                                            <option value="24">24x</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={styles.popupFooter}>
+                                <button 
+                                    className={styles.buttonCancel}
+                                    onClick={handleCloseEditPopup}
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    className={styles.buttonSubmit}
+                                    onClick={submitEditGasto}
+                                >
+                                    Salvar alterações
                                 </button>
                             </div>
                         </div>

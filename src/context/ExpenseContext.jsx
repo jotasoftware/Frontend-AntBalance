@@ -11,7 +11,8 @@ import {
     inactiveGasto as apiInactiveGasto,
     activeGasto as apiActiveGasto,
     deleteGastos as apiDeleteGastos,
-    deleteCategoria as apiDeleteCategoria
+    deleteCategoria as apiDeleteCategoria,
+    editarGasto as apiEditarGasto //novo
 } from '../services/expenseService';
 import { converterStringParaNumero } from "../utils/converterStringNumero";
 
@@ -129,6 +130,24 @@ export const ExpenseProvider = ({ children }) => {
             throw error;
         }
     };
+
+    const editarGasto = async (id, data) => {
+    try {
+        const tokenLocal = localStorage.getItem('token');
+        const gastoAtualizado = await apiEditarGasto(id, data, tokenLocal);
+        
+        setGastos(prevGastos => 
+            prevGastos.map(gasto => gasto.id === id ? gastoAtualizado : gasto
+            )
+        );
+        await fetchValores();
+        
+        return gastoAtualizado;
+    } catch (error) {
+        console.error("Erro ao atualizar gasto:", error);
+        throw error;
+    }
+};
 
     const inactiveGastos = async (data) => {
         try {
@@ -257,7 +276,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto };
+    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, };
 
     return (
         <ExpenseContext.Provider value={value}>
