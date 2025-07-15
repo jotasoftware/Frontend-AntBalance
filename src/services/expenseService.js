@@ -143,3 +143,25 @@ export const deleteCategoria = async (id, token) => {
     throw error;
   }
 };
+
+export const gerarRelatorioPdf = async (payload, token) => {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        dataInicio: payload.dataInicio,
+        dataFim: payload.dataFim,
+        tipoRelatorio: payload.tipoRelatorio
+      },
+      responseType: 'blob'
+    };
+    
+    const response = await axios.get(API_CONFIG.relatorios.gerarPdf, config);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao gerar relatório:', error);
+    alert('Erro ao gerar relatório PDF');
+  } 
+};
