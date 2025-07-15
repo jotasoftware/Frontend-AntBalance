@@ -16,6 +16,7 @@ import { converterStringParaNumero } from '../../utils/converterStringNumero';
 import { formatarValorMonetario } from '../../utils/formatarValorMonetario';
 import { converterValorBruto} from '../../utils/converterValorBruto';
 import { FaPlus } from "react-icons/fa6";
+import ModalCategoria from '../../components/modalCategoria/ModalCategoria';
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
@@ -24,7 +25,7 @@ function GastosPage() {
     const [gastoAtual, setGastoAtual] = useState(null)
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto } = useExpenses();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, createCategoria, fetchCategorias, deleteCategoria } = useExpenses();
     const { createSplit } = useSplit();
     
     const [showSharePopup, setShowSharePopup] = useState(false);
@@ -41,6 +42,10 @@ function GastosPage() {
         categoriaNome: '',
         fonte: '',
     });
+
+    const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
+    const [categoria, setCategoria] = useState('');
+    const [categoriaId, setCategoriaId] = useState(null);
 
     const { isMobile } = useOutletContext();
 
@@ -297,6 +302,47 @@ function GastosPage() {
         setValorDivisao('')
     };
 
+
+
+
+    const handleSelectCategoria = (categoriaSelecionada, id) => {
+        setCategoria(categoriaSelecionada);
+        setCategoriaId(id)
+        setEditFormData(prevData => ({
+            ...prevData,
+            categoriaId: id,
+            categoriaNome: categoriaSelecionada 
+        }));
+    }
+
+    const handleAddCategoria = async (novaCategoria) => {
+        if (!categorias.includes(novaCategoria)) {
+            try {
+                await createCategoria({ nome: novaCategoria });
+                toast.success(`Categoria "${novaCategoria}" criada com sucesso!`);
+            } catch (error) {
+                toast.error("Não foi possível criar a categoria.");
+            }
+        }
+    }
+
+    const handleDeleteCategoria = async (categoria) => {
+        try {
+            await deleteCategoria(categoria.id);
+
+            if (categoria.id === categoriaId) {
+                setCategoria('');
+                setCategoriaId(null);
+            }
+
+            toast.success(`Categoria ${categoria.nome} excluída com sucesso!`);
+        } catch (error) {
+            toast.error(error.response.data.mensagem);
+            console.error("Erro ao excluir categoria:", error);
+        }
+    }
+
+
     useEffect(() => {
         if (gastosOrdenados.length > 0) {
             setSelectAll(selectedGastos.length === gastosOrdenados.length);
@@ -534,38 +580,28 @@ function GastosPage() {
                                 </button>
                             </div>
                             <div className={styles.popupContent}>
-                                <div className={styles.editForm}>
-                                    <div className={styles.inputContainer}>
-                                        <label htmlFor="editNome">Nome:</label>
-                                        <input
-                                            type="text"
-                                            id="editNome"
-                                            placeholder="Nome do gasto"
-                                            value={editFormData.descricao}
-                                            onChange={(e) => handleEditChange('descricao', e.target.value)}
-                                        />
-                                    </div>
+                                <div className={styles.inputContainer}>
+                                    <label htmlFor="editNome">Nome:</label>
+                                    <input
+                                        type="text"
+                                        id="editNome"
+                                        placeholder="Nome do gasto"
+                                        value={editFormData.descricao}
+                                        onChange={(e) => handleEditChange('descricao', e.target.value)}
+                                    />
+                                </div>
                                     
-                                    <div className={styles.inputContainer}>
-                                        <label htmlFor="editCategoria">Categoria:</label>
-                                        <select
-                                            id="editCategoria"
-                                            value={editFormData.categoriaId}
-                                            onChange={(e) => {
-                                                const selectedCat = categorias.find(cat => cat.id === e.target.value);
-                                                handleEditChange('categoriaId', e.target.value);
-                                                handleEditChange('categoriaNome', selectedCat?.nome || '');
-                                            }}
-                                           
-                                        >
-                                            <option value="">Selecione uma categoria</option>
-                                            {categorias.map(categoria => (
-                                                <option key={categoria.id} value={categoria.id}>
-                                                    {categoria.nome}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                <div className={styles.inputContainer}>
+                                <div className={styles.inputContainer}>
+                                    <label htmlFor="categoria">Categoria de Gasto: </label>
+                                    <button
+                                        type="button"
+                                        className={styles.categoriaSelectButton}
+                                        onClick={() => setModalCategoriaAberto(true)}
+                                    >
+                                        {editFormData.categoriaNome || 'Selecione a categoria'}
+                                    </button>
+                                </div>
                                     
                                     <div className={styles.inputContainer}>
                                         <label htmlFor="editFonte">Fonte:</label>
@@ -613,6 +649,15 @@ function GastosPage() {
                     />
                 </div>
             </GridCard>
+
+            <ModalCategoria
+                isOpen={modalCategoriaAberto}
+                onClose={() => setModalCategoriaAberto(false)}
+                onSelectCategoria={handleSelectCategoria}
+                categorias={categorias}
+                onAddCategoria={handleAddCategoria}
+                onDeleteCategoria={handleDeleteCategoria}
+            />
         </div>
     );
 }
