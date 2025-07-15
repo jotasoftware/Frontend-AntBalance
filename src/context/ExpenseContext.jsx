@@ -12,7 +12,8 @@ import {
     activeGasto as apiActiveGasto,
     deleteGastos as apiDeleteGastos,
     deleteCategoria as apiDeleteCategoria,
-    editarGasto as apiEditarGasto
+    editarGasto as apiEditarGasto,
+    gerarRelatorioPdf as apiGerarRelatorioPdf,
 } from '../services/expenseService';
 import { converterStringParaNumero } from "../utils/converterStringNumero";
 
@@ -222,6 +223,17 @@ export const ExpenseProvider = ({ children }) => {
         }
     };
 
+    const gerarRelatorioPdf = async (payload, token) => {
+    try {
+        const token = localStorage.getItem('token');
+        const pdfBlob = await apiGerarRelatorioPdf(payload, token);
+        return pdfBlob;
+    } catch (error) {
+        console.error("Erro ao gerar relatório PDF:", error);
+        throw error;
+    }
+};
+
     useEffect(() => {
         const loadInitialData = async () => {
             if (isLoggedIn) {
@@ -277,7 +289,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, };
+    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, gerarRelatorioPdf};
 
     return (
         <ExpenseContext.Provider value={value}>

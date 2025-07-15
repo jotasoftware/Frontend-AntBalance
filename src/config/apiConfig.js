@@ -19,6 +19,9 @@ export const API_CONFIG = {
         delete: `${URL}/gastos`,
         edit: (id) => `${URL}/gastos/${id}`,
     },
+    relatorios: {
+        gerarPdf: `${URL}/relatorios/gastos/pdf`,
+    },
     categories: {
         getAll: `${URL}/categorias/usuario`,
         create: `${URL}/categorias`,

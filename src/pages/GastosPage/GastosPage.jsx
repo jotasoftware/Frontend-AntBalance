@@ -16,6 +16,8 @@ import { converterStringParaNumero } from '../../utils/converterStringNumero';
 import { formatarValorMonetario } from '../../utils/formatarValorMonetario';
 import { converterValorBruto} from '../../utils/converterValorBruto';
 import { FaPlus } from "react-icons/fa6";
+import RelatorioGastos from '../../components/relatorio/RelatorioGastos';
+
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
@@ -24,7 +26,7 @@ function GastosPage() {
     const [gastoAtual, setGastoAtual] = useState(null)
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto } = useExpenses();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf } = useExpenses();
     const { createSplit } = useSplit();
     
     const [showSharePopup, setShowSharePopup] = useState(false);
@@ -297,6 +299,41 @@ function GastosPage() {
         setValorDivisao('')
     };
 
+    const handleImprimirRelatorio = async () => {
+    try {
+        const payload = {
+            dataInicio: new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0],
+            dataFim: new Date().toISOString().split('T')[0],
+            tipoRelatorio: 'COMPLETO'
+        };
+
+        const pdfBlob = await gerarRelatorioPdf(payload, token);
+
+        if (!pdfBlob) {
+            throw new Error('Não foi possível gerar o relatório');
+        }
+
+        const url = window.URL.createObjectURL(new Blob([pdfBlob], { type: 'application/pdf' }));
+        const link = document.createElement('a');
+        link.href = url;
+        
+        const dataAtual = new Date().toISOString().split('T')[0];
+        link.setAttribute('download', `relatorio_gastos_${dataAtual}.pdf`);
+        
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        
+        window.URL.revokeObjectURL(url);
+        
+        toast.success('Relatório gerado com sucesso!');
+        
+    } catch (error) {
+        console.error('Erro ao gerar relatório:', error);
+        toast.error('Erro ao gerar relatório PDF. Tente novamente.');
+    }
+};
+
     useEffect(() => {
         if (gastosOrdenados.length > 0) {
             setSelectAll(selectedGastos.length === gastosOrdenados.length);
@@ -328,7 +365,8 @@ function GastosPage() {
                         <Link to="/cadastrogasto">
                             {isMobile ? <Botao icon={<FaPlus size={24} color={"white"}/>} /> : <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>}
                         </Link>
-                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />}
+                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} onClick={handleImprimirRelatorio} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"} onClick={handleImprimirRelatorio}/>}
+                        
                     </div>
                 </div>
                     <Table 
