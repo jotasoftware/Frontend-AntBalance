@@ -20,6 +20,40 @@ import RecoverPage from './pages/RecoverPage/RecoverPage';
 import ConfigPage from './pages/ConfigPage/ConfigPage';
 import GastosInativosPage from './pages/GastosInativosPage/GastosInativosPage';
 
+function AppContent() {
+  const { userType } = useAuth();
+
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/reset-password" element={<RecoverPage />} />
+      <Route path="/" element={
+        <Private>
+          <MainLayout />
+        </Private>
+      }>
+        <Route index element={<Navigate to="/dashboard" replace />} />
+        {userType === 'ADMIN' ? (
+          <>
+            <Route path="dashboard" element={<AdminDashboardPage />} />
+            <Route path="gastos" element={<AdminGastosPage />} />
+            <Route path="funcionarios" element={<AdminFuncionariosPage />} />
+          </>
+        ) : (
+          <>
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="gastos" element={<GastosPage />} />
+            <Route path="cadastrogasto" element={<CadastroGastoPage />} />
+            <Route path="config" element={<ConfigPage />} />
+          </>
+        )}
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+
 function App() {
   return (
     <BrowserRouter>

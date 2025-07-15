@@ -16,9 +16,9 @@ export const login = async (credentials) => {
 }
   
 
-export const register = async (userData) => {
+export const register = async (credentials) => {
     try{
-        const response = await axios.post(API_CONFIG.auth.register, userData);
+        const response = await axios.post(API_CONFIG.auth.register, credentials);
         return response.data;
     }catch(error){
         console.error("Erro no serviço de registro:", error.response?.data || error.message);

@@ -18,6 +18,7 @@ import { converterValorBruto} from '../../utils/converterValorBruto';
 import { FaPlus } from "react-icons/fa6";
 import ModalCategoria from '../../components/modalCategoria/ModalCategoria';
 import RelatorioGastos from '../../components/relatorio/RelatorioGastos';
+import FindInput from '../../components/findInput/FindInput';
 
 function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
@@ -26,7 +27,7 @@ function GastosPage() {
     const [gastoAtual, setGastoAtual] = useState(null)
     const [selectAll, setSelectAll] = useState(false); 
     const { token } = useAuth();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf } = useExpenses();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria } = useExpenses();
     const { createSplit } = useSplit();
     
     const [showSharePopup, setShowSharePopup] = useState(false);
@@ -44,6 +45,8 @@ function GastosPage() {
         fonte: '',
     });
 
+    const [findInput, setFindInput] = useState('')
+
     const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
     const [categoria, setCategoria] = useState('');
     const [categoriaId, setCategoriaId] = useState(null);
@@ -51,7 +54,14 @@ function GastosPage() {
     const { isMobile } = useOutletContext();
 
     const gastosOrdenados = useMemo(() => {
-        const sorted = [...gastos];
+        const termoBusca = findInput.toLowerCase();
+        const filtrados = gastos.filter(gasto =>
+            gasto.descricao.toLowerCase().includes(termoBusca) ||
+            gasto.categoria?.nome.toLowerCase().includes(termoBusca) ||
+            gasto.fonte.toLowerCase().includes(termoBusca)
+        );
+    
+        const sorted = [...filtrados];
         sorted.sort((a, b) => {
             switch (sortOrder) {
                 case 'maior_valor':
@@ -66,7 +76,8 @@ function GastosPage() {
             }
         });
         return sorted;
-    }, [gastos, sortOrder]);
+    }, [gastos, sortOrder, findInput]);
+    
 
     const validateForm = (email) => {
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -219,17 +230,6 @@ function GastosPage() {
         ));
     };
 
-    const handleEditValorChange = (inputValue) => {
-        if (inputValue === '') {
-            handleEditChange('valor', '');
-            return;
-        }
-        if (inputValue.length <= 12) {
-            const valorFormatado = formatarValorMonetario(inputValue);
-            handleEditChange('valor', valorFormatado);
-        }
-    };
-
     const submitEditGasto = async () => {
         if (!editFormData.descricao.trim()) {
             toast.warn("Por favor, preencha o nome.");
@@ -339,6 +339,10 @@ function GastosPage() {
             console.error("Erro ao excluir categoria:", error);
         }
     };
+
+    const handleChangeSearch = (event) => {
+        setFindInput(event.target.value)
+    }
     
     const handleImprimirRelatorio = async () => {
         try {
@@ -403,12 +407,17 @@ function GastosPage() {
                         </div>
                     </div>
                     <div className={styles.gastosActions}>
+                        {!isMobile && <FindInput find={findInput} onChangeFind={handleChangeSearch}></FindInput>}
                         <Link to="/cadastrogasto">
                             {isMobile ? <Botao icon={<FaPlus size={24} color={"white"}/>} /> : <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>}
                         </Link>
                         {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} onClick={handleImprimirRelatorio} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"} onClick={handleImprimirRelatorio}/>}
-                        
                     </div>
+                    {isMobile && 
+                        <div className={styles.searchMobileAction}>
+                            <FindInput find={findInput} onChangeFind={handleChangeSearch}></FindInput>
+                        </div>
+                    }
                 </div>
                     <Table 
                         gastos={gastosOrdenados}

@@ -7,14 +7,17 @@ export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loadingAuth, setLoadingAuth] = useState(true);
     const [userName, setUserName] = useState(null);
+    const [userRole, setUserRole] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         const storedName = localStorage.getItem('userName');
+        const storedRole = localStorage.getItem('userRole');
         if (token) {
             console.log(token)
             setIsLoggedIn(true);
             setUserName(storedName);
+            setUserRole(storedRole);
         }
         setLoadingAuth(false);
     }, []);
@@ -25,8 +28,10 @@ export const AuthProvider = ({ children }) => {
             if(response.token && response.name) {
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('userName', response.name);
+                localStorage.setItem('userRole', response.role);
                 setIsLoggedIn(true);
                 setUserName(response.name);
+                setUserRole(response.role);
             }else{
                 throw new Error("Token não retornado pela API");
             }
@@ -35,9 +40,15 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = async (userData) => {
+    const register = async (data) => {
         try {
-            const response = await apiRegister(userData);
+            const payloadParaAPI = {
+                name: data.name,
+                email: data.email, 
+                password: data.password, 
+                // selectType: data.selectType
+            };
+            const response = await apiRegister(payloadParaAPI);
             if (response.token) {
                 localStorage.setItem('token', response.token);
                 setIsLoggedIn(true);
@@ -80,11 +91,13 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userName');
+        localStorage.removeItem('userRole');
         setIsLoggedIn(false);
         setUserName(null);
+        setUserRole(null);
     };
 
-    const value = { isLoggedIn, loadingAuth, login, logout, register, edit, userName, recover, editPassword, setUserName};
+    const value = { isLoggedIn, loadingAuth, login, logout, register, edit, userName, recover, editPassword, setUserName, userRole};
 
     return (
         <AuthContext.Provider value={value}>

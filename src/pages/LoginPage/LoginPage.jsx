@@ -19,6 +19,7 @@ function LoginPage() {
     const [showEmailPopup, setShowEmailPopup] = useState(false);
     const [recoverEmail, setRecoverEmail] = useState('');
     
+    const [selectType, setSelectType] = useState(null)
 
 
     const handleChangeEmail = (event) => {
@@ -35,6 +36,10 @@ function LoginPage() {
 
     const handleChangeRecoverEmail = (event) => {
         setRecoverEmail(event.target.value);
+    }
+
+    const handleChangeSelectType = (event) => {
+        setSelectType(event.target.value);
     }
 
     const validateForm = () => {
@@ -86,10 +91,12 @@ function LoginPage() {
     const handleSubmitCreate = async () => {
         setIsLoading(true);
         try{
-            await register({email, password, name});
+            console.log(selectType)
+            await register({selectType, email, password, name});
             toast.success('Usuário criado com sucesso.');
             setPassword("");
             setName("")
+            setSelectType(null)
             setType('login')
         } catch (err){
             toast.error('Usuário não foi criado.');
@@ -123,16 +130,20 @@ function LoginPage() {
     
     const handleFormSubmit = (event) => {
         event.preventDefault();
+        if (!selectType) {
+            toast.warn("Por favor, escolha um tipo de conta.");
+            return;
+        }
+        if (type === 'signup' && !name) {
+            toast.warn("Por favor, preencha o nome.");
+            return;
+        }
         if (!email) {
             toast.warn("Por favor, preencha o e-mail.");
             return;
         }
         if (!password) {
             toast.warn("Por favor, preencha a senha.");
-            return;
-        }
-        if (type === 'signup' && !name) {
-            toast.warn("Por favor, preencha o nome.");
             return;
         }
         
@@ -154,17 +165,44 @@ function LoginPage() {
             <div className={styles.container}>
                 <form onSubmit={handleFormSubmit}>
                     {type === 'signup' &&
-                    <div className={styles.inputContainer}>
-                        <label htmlFor="email">Nome: </label>
-                        <input 
-                            type="text"
-                            name='name'
-                            id='name'
-                            placeholder='Digite o nome' 
-                            value={name}
-                            onChange={handleChangeName}
-                        />
-                    </div>}
+                    <>
+                        <div className={styles.inputContainer}>
+                            <div className={styles.inputTypeLine}>
+                                <label>
+                                    <input
+                                    type="radio"
+                                    name="tipoUso"
+                                    value="ADMIN"
+                                    checked={selectType === 'ADMIN'}
+                                    onChange={handleChangeSelectType}
+                                    />
+                                    Uso Pessoal
+                                </label>
+                                <label>
+                                    <input
+                                    type="radio"
+                                    name="tipoUso"
+                                    value="USER"
+                                    checked={selectType === 'USER'}
+                                    onChange={handleChangeSelectType}
+                                    />
+                                    Uso Empresarial
+                                </label>
+                            </div>
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <label htmlFor="email">Nome: </label>
+                            <input 
+                                type="text"
+                                name='name'
+                                id='name'
+                                placeholder='Digite o nome' 
+                                value={name}
+                                onChange={handleChangeName}
+                            />
+                        </div>
+                    </>
+                    }
                     <div className={styles.inputContainer}>
                         <label htmlFor="email">E-mail: </label>
                         <input 

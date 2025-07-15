@@ -449,6 +449,17 @@
     box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
 }
 
+.searchMobileAction{
+    width: 100%;
+}
+.searchMobileAction > div{
+    margin-top: 20px;
+    width: 100%;
+}
+.searchMobileAction > div > input{
+    width: 100%;
+}
+
 
 @media (max-width: 768px) {
     .container,
