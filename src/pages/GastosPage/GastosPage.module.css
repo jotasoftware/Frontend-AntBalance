@@ -304,7 +304,7 @@
 .editForm .inputContainer select {
     width: 100%;
     padding: 12px 16px;
-    font-size: 16px;
+    font-size: 20px;
     border: 1px solid #CFCFCF;
     border-radius: 8px;
     background-color: #fafafa;
@@ -421,6 +421,32 @@
     border-radius: 12px;
     margin-top: 10px;
     width: 100%;
+}
+
+.categoriaSelectButton {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #CFCFCF;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    text-align: left;
+    cursor: pointer;
+}
+
+.categoriaSelectButton:hover {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+}
+
+.categoriaSelectButton:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
 }
 
 

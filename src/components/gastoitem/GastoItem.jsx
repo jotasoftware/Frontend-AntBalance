@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './GastoItem.module.css';
-import { TbUserShare, TbEdit, TbTrash, TbCheck } from "react-icons/tb";
+import { IoMdUndo } from "react-icons/io";
+import { TbUserShare, TbEdit, TbTrash } from "react-icons/tb";
 
 const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever, onActive, isMobile}) => {
     const formatDate = (dataOriginal) => {
@@ -103,7 +104,7 @@ const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onS
                     ) : (
                         <>
                         <div className={styles.actionIcon} onClick={handleActive}>
-                            <TbCheck />
+                            <IoMdUndo />
                         </div>
                         <div className={styles.actionIcon} onClick={handleDeleteForever}>
                             <TbTrash />

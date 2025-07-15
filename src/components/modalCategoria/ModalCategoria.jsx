@@ -1,6 +1,6 @@
 // ModalCategoria.jsx
 import React, { useState } from 'react';
-import styles from './CadastroGastoPage.module.css';
+import styles from './ModalCategoria.module.css';
 import { toast } from 'react-toastify';
 import { IoRemoveOutline, IoCheckmarkOutline, IoCloseOutline } from "react-icons/io5";
 

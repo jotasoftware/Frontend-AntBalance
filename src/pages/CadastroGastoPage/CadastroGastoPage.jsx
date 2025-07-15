@@ -5,7 +5,7 @@ import styles from './CadastroGastoPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../components/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6";
-import ModalCategoria from './ModalCategoria';
+import ModalCategoria from '../../components/modalCategoria/ModalCategoria';
 import { formatarValorMonetario } from '../../utils/formatarValorMonetario';
 
 
