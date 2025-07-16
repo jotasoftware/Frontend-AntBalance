@@ -91,7 +91,6 @@ function LoginPage() {
     const handleSubmitCreate = async () => {
         setIsLoading(true);
         try{
-            console.log(selectType)
             await register({selectType, email, password, name});
             toast.success('Usuário criado com sucesso.');
             setPassword("");
@@ -130,7 +129,7 @@ function LoginPage() {
     
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        if (!selectType) {
+        if (type === 'signup' &&  !selectType) {
             toast.warn("Por favor, escolha um tipo de conta.");
             return;
         }
