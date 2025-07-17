@@ -24,22 +24,25 @@ import { EditPopup } from '@/components/common/editPopup/EditPopup';
 import { SharePopup } from '@/components/user/sharePopup/SharePopup';
 
 function GastosPage() {
+    //dados page
     const [sortOrder, setSortOrder] = useState('recentes');
-
     const [selectedGastos, setSelectedGastos] = useState([]); 
+    const [selectAll, setSelectAll] = useState(false); 
+    const { createSplit } = useSplit();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria } = useExpenses();
+    const [findInput, setFindInput] = useState('')
+    const { isMobile } = useOutletContext();
+
+    //dados modais e popup
+    const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [showSharePopup, setShowSharePopup] = useState(false);
+    const [showDeleteMultiplePopup, setShowDeleteMultiplePopup] = useState(false);
+    const [showEditPopup, setShowEditPopup] = useState(false);
     const [valorDivisao, setValorDivisao] = useState(""); 
     const [gastoAtual, setGastoAtual] = useState(null)
-    const [selectAll, setSelectAll] = useState(false); 
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria } = useExpenses();
-    const { createSplit } = useSplit();
-    
-    const [showSharePopup, setShowSharePopup] = useState(false);
     const [shareEmail, setShareEmail] = useState('');
-    const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [gastoToDelete, setGastoToDelete] = useState(null);
-    const [showDeleteMultiplePopup, setShowDeleteMultiplePopup] = useState(false);
-
-    const [showEditPopup, setShowEditPopup] = useState(false);
     const [gastoToEdit, setGastoToEdit] = useState(null);
     const [editFormData, setEditFormData] = useState({
         descricao: '',
@@ -47,15 +50,9 @@ function GastosPage() {
         categoriaNome: '',
         fonte: '',
     });
-
-    const [findInput, setFindInput] = useState('')
-
-    const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
-    const [categoria, setCategoria] = useState('');
     const [categoriaId, setCategoriaId] = useState(null);
 
-    const { isMobile } = useOutletContext();
-
+    //ordenaçao
     const gastosOrdenados = useMemo(() => {
         const termoBusca = findInput.toLowerCase();
         const filtrados = gastos.filter(gasto =>
@@ -63,7 +60,6 @@ function GastosPage() {
             gasto.categoria?.nome.toLowerCase().includes(termoBusca) ||
             gasto.fonte.toLowerCase().includes(termoBusca)
         );
-    
         const sorted = [...filtrados];
         sorted.sort((a, b) => {
             switch (sortOrder) {
@@ -84,7 +80,6 @@ function GastosPage() {
 
     const validateForm = (email) => {
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
         if(!regexEmail.test(email)){
             toast.warn(`Email invalido`);
             return false;
@@ -111,7 +106,6 @@ function GastosPage() {
     const handleSelectAll = (event) => {
         const isChecked = event.target.checked;
         setSelectAll(isChecked);
-        
         if (isChecked) {
             const allIds = gastosOrdenados.map(gasto => gasto.id);
             setSelectedGastos(allIds);
@@ -156,8 +150,6 @@ function GastosPage() {
         try {
             await inactiveGastos(selectedGastos); 
             toast.success(`${selectedGastos.length} gasto${selectedGastos.length > 1 ? 's' : ''} deletado${selectedGastos.length > 1 ? 's' : ''} com sucesso!`);
-            
-            //para limpar
             setSelectedGastos([]);
             setSelectAll(false);
             setShowDeleteMultiplePopup(false);
@@ -308,7 +300,6 @@ function GastosPage() {
     };
 
     const handleSelectCategoria = (categoriaSelecionada, id) => {
-        setCategoria(categoriaSelecionada);
         setCategoriaId(id);
         setEditFormData(prevData => ({
             ...prevData,
@@ -334,7 +325,6 @@ function GastosPage() {
             await deleteCategoria(categoria.id);
     
             if (categoria.id === categoriaId) {
-                setCategoria('');
                 setCategoriaId(null);
             }
     
