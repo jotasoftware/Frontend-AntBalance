@@ -210,9 +210,9 @@ export const ExpenseProvider = ({ children }) => {
         }
     };
 
-    const gerarRelatorioPdf = async (payload) => {
+    const gerarRelatorioPdf = async (data) => {
     try {
-        const pdfBlob = await apiGerarRelatorioPdf(payload, tokenAuth);
+        const pdfBlob = await apiGerarRelatorioPdf(data, tokenAuth);
         return pdfBlob;
     } catch (error) {
         console.error("Erro ao gerar relatório PDF:", error);

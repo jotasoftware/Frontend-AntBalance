@@ -144,21 +144,12 @@ export const deleteCategoria = async (id, token) => {
   }
 };
 
-export const gerarRelatorioPdf = async (payload, token) => {
+export const gerarRelatorioPdf = async (ids, token) => {
   try {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      params: {
-        dataInicio: payload.dataInicio,
-        dataFim: payload.dataFim,
-        tipoRelatorio: payload.tipoRelatorio
-      },
-      responseType: 'blob'
-    };
-    
-    const response = await axios.get(API_CONFIG.relatorios.gerarPdf, config);
+    const config = getAuthConfig(token);
+    console.log(ids)
+  
+    const response = await axios.post(API_CONFIG.relatorios.gerarPdf, { gastoIds: ids }, config);
     return response.data;
   } catch (error) {
     console.error('Erro ao gerar relatório:', error);

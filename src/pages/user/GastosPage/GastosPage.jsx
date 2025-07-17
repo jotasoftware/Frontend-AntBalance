@@ -341,13 +341,8 @@ function GastosPage() {
     
     const handleImprimirRelatorio = async () => {
         try {
-            const payload = {
-                dataInicio: new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0],
-                dataFim: new Date().toISOString().split('T')[0],
-                tipoRelatorio: 'COMPLETO'
-            };
     
-            const pdfBlob = await gerarRelatorioPdf(payload);
+            const pdfBlob = await gerarRelatorioPdf(selectedGastos);
     
             if (!pdfBlob) {
                 throw new Error('Não foi possível gerar o relatório');
