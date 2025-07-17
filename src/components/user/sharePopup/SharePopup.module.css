@@ -1,0 +1,241 @@
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    width: 30vw;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.573);
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.popupHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.popupHeader header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popupHeader header span {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.closeButton {
+    position: absolute;
+    top: -3px;
+    right: -2px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    color: #000;
+}
+
+.popupContent {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 20px;
+    gap: 15px;
+}
+
+.popupContent .inputContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.popupContent .inputContainer input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 16px;
+    border: #CFCFCF 1px solid;
+    outline: none;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Poppins";
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+
+}
+
+.popupContent .inputContainer input:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}
+
+.popupContent .inputContainer label {
+    align-self: center;
+}
+
+.popupFooter {
+    display: flex;
+    gap: 10px;
+    padding-top: 20px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.popupFooter .buttonSubmit {
+    flex: 1;
+    height: 46px;
+    margin-top: 0;
+}
+
+.buttonCancel {
+    flex: 1;
+    height: 46px;
+    border: 1px solid #CFCFCF;
+    background: white;
+    color: #666;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: .2s ease-in-out background;
+}
+
+.buttonCancel:hover {
+    background: #f5f5f5;
+}
+
+.buttonSubmit{
+    margin-top: 15px;
+    border: #CFCFCF 1px solid;
+    color: white;
+    background-color: #1a45b8;
+    cursor: pointer;
+    outline: none;
+    border-radius: 8px;
+    height: 46px;
+    width: 100%;
+    transition: .2s ease-in-out background;
+}
+.buttonSubmit:hover{
+    background-color: #191919;
+}
+
+.buttonDelete {
+    flex: 1;
+    height: 46px;
+    border: #CFCFCF 1px solid;
+    color: white;
+    background-color: #d32f2f;
+    cursor: pointer;
+    outline: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: .2s ease-in-out background;
+}
+
+.buttonDelete:hover {
+    background-color: #b71c1c;
+}
+
+.gastoInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    width: 100%;
+}
+
+.gastosList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.gastoItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+}
+
+.gastoItem:hover {
+    background-color: #f5f5f5;
+}
+
+.gastoValor {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.gastoDetails {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.categoriaSelectButton {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #CFCFCF;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    text-align: left;
+    cursor: pointer;
+}
+
+.categoriaSelectButton:hover {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+}
+
+.categoriaSelectButton:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}

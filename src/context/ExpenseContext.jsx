@@ -20,7 +20,7 @@ import { converterStringParaNumero } from "../utils/converterStringNumero";
 export const ExpenseContext = createContext(null);
 
 export const ExpenseProvider = ({ children }) => {
-    const { isLoggedIn } = useAuth(); 
+    const { isLoggedIn, tokenAuth } = useAuth(); 
 
     const [loading, setLoading] = useState(false);
     const [loadingValores, setLoadingValores] = useState(true);
@@ -46,8 +46,7 @@ export const ExpenseProvider = ({ children }) => {
     const fetchGastos = async () => {
         setLoading(true);
         try {
-            const tokenLocal = localStorage.getItem('token');
-            const response = await apiFetchGastos(tokenLocal);
+            const response = await apiFetchGastos(tokenAuth);
             setGastos(response);
         } catch (error) {
             console.error("Erro ao buscar gastos:", error);
@@ -60,8 +59,7 @@ export const ExpenseProvider = ({ children }) => {
     const fetchGastosInativos = async () => {
         setLoading(true);
         try {
-            const tokenLocal = localStorage.getItem('token');
-            const response = await apiFetchGastosInativos(tokenLocal);
+            const response = await apiFetchGastosInativos(tokenAuth);
             setGastosInativos(response);
         } catch (error) {
             console.error("Erro ao buscar gastos:", error);
@@ -73,8 +71,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const fetchCategorias = async () => {
         try {
-            const tokenLocal = localStorage.getItem('token');
-            const response = await apiFetchCategorias(tokenLocal);
+            const response = await apiFetchCategorias(tokenAuth);
             setCategorias(response);
         } catch (error) {
             console.error("Erro ao buscar categorias:", error);
@@ -85,9 +82,7 @@ export const ExpenseProvider = ({ children }) => {
     const fetchValores = async () => {
         setLoadingValores(true);
         try {
-            console.log(loadingValores)
-            const tokenLocal = localStorage.getItem('token');
-            const response = await apiFetchValores(tokenLocal);
+            const response = await apiFetchValores(tokenAuth);
             const valoresFormatados = transformarDadosDeValores(response);
 
             if (valoresFormatados.length === 0) {
@@ -122,8 +117,8 @@ export const ExpenseProvider = ({ children }) => {
                 numeroParcelas: data.parcelas,
                 data: new Date().toISOString()
             };
-            const tokenLocal = localStorage.getItem('token');
-            const novoGasto = await apiCreateGasto(payloadParaAPI, tokenLocal);
+
+            const novoGasto = await apiCreateGasto(payloadParaAPI, tokenAuth);
             setGastos(prevGastos => [...prevGastos, novoGasto]);
             fetchValores()
         } catch (error) {
@@ -134,10 +129,8 @@ export const ExpenseProvider = ({ children }) => {
 
     const editarGasto = async (id, data) => {
     try {
-
-        const tokenLocal = localStorage.getItem('token');
-        console.log(tokenLocal)
-        const gastoAtualizado = await apiEditarGasto(id, data, tokenLocal);
+        console.log(tokenAuth)
+        const gastoAtualizado = await apiEditarGasto(id, data, tokenAuth);
         
         setGastos(prevGastos => 
             prevGastos.map(gasto => gasto.id === id ? gastoAtualizado : gasto
@@ -152,8 +145,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const inactiveGastos = async (data) => {
         try {
-            const tokenLocal = localStorage.getItem('token');
-            await apiInactiveGastos(data, tokenLocal);
+            await apiInactiveGastos(data, tokenAuth);
             fetchGastos()
             fetchValores()
             fetchGastosInativos()
@@ -165,8 +157,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const inactiveGasto = async (data) => {
         try {
-            const tokenLocal = localStorage.getItem('token');
-            await apiInactiveGasto(data, tokenLocal);
+            await apiInactiveGasto(data, tokenAuth);
             fetchGastos()
             fetchValores()
             fetchGastosInativos()
@@ -178,8 +169,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const activeGasto = async (data) => {
         try {
-            const tokenLocal = localStorage.getItem('token');
-            await apiActiveGasto(data, tokenLocal);
+            await apiActiveGasto(data, tokenAuth);
             fetchGastosInativos();
             fetchGastos()
             fetchValores()
@@ -191,8 +181,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const deleteGastos = async (data) => {
         try {
-            const tokenLocal = localStorage.getItem('token');
-            await apiDeleteGastos(data, tokenLocal);
+            await apiDeleteGastos(data, tokenAuth);
             fetchGastosInativos()
         } catch (error) {
             console.error("Erro ao apagar lista de gastos:", error);
@@ -203,8 +192,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const createCategoria = async (data) => {
         try {
-            const tokenLocal = localStorage.getItem('token');
-            const novaCategoria = await apiCreateCategoria(data, tokenLocal);
+            const novaCategoria = await apiCreateCategoria(data, tokenAuth);
             setCategorias(prevCategorias => [...prevCategorias, novaCategoria]);
         } catch (error) {
             console.error("Erro ao criar categoria:", error);
@@ -214,8 +202,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const deleteCategoria = async (data) => {
         try {
-            const tokenLocal = localStorage.getItem('token');
-            await apiDeleteCategoria(data, tokenLocal);
+            await apiDeleteCategoria(data, tokenAuth);
             fetchCategorias()
         } catch (error) {
             console.error("Erro ao apagar lista de Categoria:", error);
@@ -223,10 +210,9 @@ export const ExpenseProvider = ({ children }) => {
         }
     };
 
-    const gerarRelatorioPdf = async (payload, token) => {
+    const gerarRelatorioPdf = async (payload) => {
     try {
-        const token = localStorage.getItem('token');
-        const pdfBlob = await apiGerarRelatorioPdf(payload, token);
+        const pdfBlob = await apiGerarRelatorioPdf(payload, tokenAuth);
         return pdfBlob;
     } catch (error) {
         console.error("Erro ao gerar relatório PDF:", error);
@@ -242,12 +228,11 @@ export const ExpenseProvider = ({ children }) => {
                     return;
                 }
                 try {
-                    const tokenLocal = localStorage.getItem('token');
                     const [gastosData, categoriasData, gastosInativosData, valoresData] = await Promise.all([
-                        apiFetchGastos(tokenLocal),
-                        apiFetchCategorias(tokenLocal),
-                        apiFetchGastosInativos(tokenLocal),
-                        apiFetchValores(tokenLocal)
+                        apiFetchGastos(tokenAuth),
+                        apiFetchCategorias(tokenAuth),
+                        apiFetchGastosInativos(tokenAuth),
+                        apiFetchValores(tokenAuth)
                     ]);
 
                     setGastos(gastosData);

@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
     const [loadingAuth, setLoadingAuth] = useState(true);
     const [userName, setUserName] = useState(null);
     const [userRole, setUserRole] = useState(null);
+    const [tokenAuth, setTokenAuth] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -18,6 +19,7 @@ export const AuthProvider = ({ children }) => {
             setIsLoggedIn(true);
             setUserName(storedName);
             setUserRole(storedRole);
+            setTokenAuth(token)
         }
         setLoadingAuth(false);
     }, []);
@@ -25,13 +27,14 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try{
             const response = await apiLogin(credentials);
-            if(response.token && response.name) {
+            if(response.token && response.name && response.role) {
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('userName', response.name);
                 localStorage.setItem('userRole', response.role);
                 setIsLoggedIn(true);
                 setUserName(response.name);
                 setUserRole(response.role);
+                setTokenAuth(response.token);
             }else{
                 throw new Error("Token não retornado pela API");
             }
@@ -46,7 +49,7 @@ export const AuthProvider = ({ children }) => {
                 name: data.name,
                 email: data.email, 
                 password: data.password, 
-                // selectType: data.selectType
+                role: data.selectRole
             };
             const response = await apiRegister(payloadParaAPI);
             if (response.token) {
@@ -71,8 +74,7 @@ export const AuthProvider = ({ children }) => {
 
     const edit = async (credentials) => {
         try {
-            const tokenLocal = localStorage.getItem('token');
-            const response = await apiEdit(credentials, tokenLocal);
+            const response = await apiEdit(credentials, tokenAuth);
             return response
         } catch (error) {
             throw error;
@@ -95,9 +97,10 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(false);
         setUserName(null);
         setUserRole(null);
+        setTokenAuth(null)
     };
 
-    const value = { isLoggedIn, loadingAuth, login, logout, register, edit, userName, recover, editPassword, setUserName, userRole};
+    const value = { isLoggedIn, loadingAuth, login, logout, register, edit, userName, recover, editPassword, setUserName, userRole, tokenAuth};
 
     return (
         <AuthContext.Provider value={value}>

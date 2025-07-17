@@ -11,7 +11,7 @@ import { converterStringParaNumero } from "../utils/converterStringNumero";
 export const SplitExpanseContext = createContext(null);
 
 export const SplitExpenseProvider = ({ children }) => {
-    const { isLoggedIn } = useAuth(); 
+    const { isLoggedIn, tokenAuth } = useAuth(); 
 
     const [loadingSplit, setLoadingSplit] = useState(false);
     const [splitGastos, setSplitGastos] = useState([]);
@@ -19,8 +19,7 @@ export const SplitExpenseProvider = ({ children }) => {
     const fetchSplitGastos = async () => {
         try {
             setLoadingSplit(true);
-            const token = localStorage.getItem('token');
-            const response = await apiFetchSplitGastos(token);
+            const response = await apiFetchSplitGastos(tokenAuth);
             setSplitGastos(response);
         } catch (error) {
             console.error('Erro ao buscar gastos para aceitar:', error);
@@ -37,8 +36,7 @@ export const SplitExpenseProvider = ({ children }) => {
                 usuarioDoisId: email, 
                 valorDividido: valorNumerico, 
             };
-            const tokenLocal = localStorage.getItem('token');
-            await apiCreateSplit(payloadParaAPI, tokenLocal);
+            await apiCreateSplit(payloadParaAPI, tokenAuth);
         } catch (error) {
             console.error("Erro ao criar gasto:", error);
             throw error;
@@ -50,8 +48,7 @@ export const SplitExpenseProvider = ({ children }) => {
             const payloadParaAPI = {
                 id: id,
             };
-            const tokenLocal = localStorage.getItem('token');
-            await apiAcceptSplit(payloadParaAPI, tokenLocal);
+            await apiAcceptSplit(payloadParaAPI, tokenAuth);
         } catch (error) {
             console.error("Erro ao aceitar gasto:", error);
             throw error;
@@ -63,8 +60,7 @@ export const SplitExpenseProvider = ({ children }) => {
             const payloadParaAPI = {
                 id: id,
             };
-            const tokenLocal = localStorage.getItem('token');
-            await apiRefuseSplit(payloadParaAPI, tokenLocal);
+            await apiRefuseSplit(payloadParaAPI, tokenAuth);
         } catch (error) {
             console.error("Erro ao recusar gasto:", error);
             throw error;
@@ -75,10 +71,9 @@ export const SplitExpenseProvider = ({ children }) => {
         const loadInitialData = async () => {
             if (isLoggedIn) {
                 setLoadingSplit(true);
-                const tokenLocal = localStorage.getItem('token');
                 try {
                     const [gastosDividido] = await Promise.all([
-                        apiFetchSplitGastos(tokenLocal),
+                        apiFetchSplitGastos(tokenAuth),
                     ])
 
                     setSplitGastos(gastosDividido);
