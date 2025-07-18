@@ -146,7 +146,14 @@ export const deleteCategoria = async (id, token) => {
 
 export const gerarRelatorioPdf = async (ids, token) => {
   try {
-    const config = getAuthConfig(token);
+    const config = {
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      responseType: 'blob' 
+    };
+    
     console.log(ids)
   
     const response = await axios.post(API_CONFIG.relatorios.gerarPdf, { gastoIds: ids }, config);
