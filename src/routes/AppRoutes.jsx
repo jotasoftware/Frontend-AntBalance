@@ -12,6 +12,7 @@ import DashboardPage from '@/pages/user/DashboardPage/DashboardPage';
 import CadastroGastoPage from '@/pages/user/CadastroGastoPage/CadastroGastoPage';
 import CadastroGastoCompanyPage from '@/pages/company/CadastroGastoCompanyPage/CadastroGastoCompanyPage';
 import GastosInativosPage from '@/pages/user/GastosInativosPage/GastosInativosPage';
+import CategoriasPage from '@/pages/user/CategoriasPage/CategoriasPage';
 
 export default function PrivateRoutes() {
     const { userRole, loadingAuth } = useAuth();
@@ -38,6 +39,7 @@ export default function PrivateRoutes() {
                         <Route path="gastos" element={<GastosPage />} />
                         <Route path="gastosinativos" element={<GastosInativosPage />} />
                         <Route path="cadastrogasto" element={<CadastroGastoPage />} />
+                        <Route path="categorias" element={<CategoriasPage />} />
                     </>
                 ) : (
                     <>

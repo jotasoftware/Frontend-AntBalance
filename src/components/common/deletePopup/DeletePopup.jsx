@@ -1,6 +1,6 @@
 import styles from './DeletePopup.module.css'; 
 
-const DeletePopup = ({ show, onClose, onConfirm, gastoToDelete}) => {
+const DeletePopup = ({ show, onClose, onConfirm, infoToDelete, type}) => {
     if (!show) return null;
 
     return (
@@ -18,20 +18,33 @@ const DeletePopup = ({ show, onClose, onConfirm, gastoToDelete}) => {
                 </button>
                 </div>
                 <div className={styles.popupContent}>
-                <div className={styles.confirmMessage}>
-                    <span>Tem certeza que deseja excluir o gasto?</span>
-                    {gastoToDelete && (
-                    <div className={styles.gastoInfo}>
-                        <strong>{gastoToDelete.descricao}</strong>
-                        <span className={styles.gastoValor}>
-                        Valor: {gastoToDelete.valorTotal.toLocaleString('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL',
-                        })}
+                    <div className={styles.confirmMessage}>
+                        <span>
+                            Tem certeza que deseja excluir{" "}
+                            {type === "GASTO" && "o gasto"}
+                            {type === "CATEGORIA" && "a categoria"}?
                         </span>
+
+                        {infoToDelete && (
+                            <div className={styles.gastoInfo}>
+                            <strong>
+                                {type === "GASTO" && infoToDelete.descricao}
+                                {type === "CATEGORIA" && infoToDelete.nome}
+                            </strong>
+
+                            {type === "GASTO" && (
+                                <span className={styles.gastoValor}>
+                                Valor:{" "}
+                                {infoToDelete.valorTotal.toLocaleString("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                })}
+                                </span>
+                            )}
+                            </div>
+                        )}
                     </div>
-                    )}
-                </div>
+
                 </div>
                 <div className={styles.popupFooter}>
                 <button

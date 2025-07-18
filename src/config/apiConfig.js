@@ -26,6 +26,7 @@ export const API_CONFIG = {
         getAll: `${URL}/categorias/usuario`,
         create: `${URL}/categorias`,
         delete: (id) => `${URL}/categorias/${id}`,
+        edit: (id) => `${URL}/categorias/${id}`,
     },
     split: {
         getAll: `${URL}/divisao`,

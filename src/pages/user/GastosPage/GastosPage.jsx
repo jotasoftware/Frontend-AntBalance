@@ -427,7 +427,7 @@ function GastosPage() {
                         handleDeleteGastoUnico(gasto);
                     }}
                     isMobile={isMobile}
-                    loading={false}
+                    loading={loadingGasto}
                 />
 
                 <SharePopup
