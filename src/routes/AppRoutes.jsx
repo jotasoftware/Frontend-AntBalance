@@ -13,6 +13,7 @@ import CadastroGastoPage from '@/pages/user/CadastroGastoPage/CadastroGastoPage'
 import CadastroGastoCompanyPage from '@/pages/company/CadastroGastoCompanyPage/CadastroGastoCompanyPage';
 import GastosInativosPage from '@/pages/user/GastosInativosPage/GastosInativosPage';
 import CategoriasPage from '@/pages/user/CategoriasPage/CategoriasPage';
+import CadastroFuncionarioPage from '@/pages/company/CadastroFuncionarioPage/CadastroFuncionarioPage';
 
 export default function PrivateRoutes() {
     const { userRole, loadingAuth } = useAuth();
@@ -50,6 +51,7 @@ export default function PrivateRoutes() {
                     </>)}
                 <Route path="editarcadastro" element={<EditarCadastroPage />} />
                 <Route path="config" element={<ConfigPage />} />
+                <Route path="cadastrofuncionario" element={< CadastroFuncionarioPage/>} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
