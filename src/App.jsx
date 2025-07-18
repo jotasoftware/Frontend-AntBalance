@@ -5,16 +5,9 @@ import './App.css'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider} from './context/AuthContext';
 import { ExpenseProvider } from './context/ExpenseContext';
 import { SplitExpenseProvider } from './context/SplitExpanseContext';
-
-import MainLayout from './layouts/MainLayout/MainLayout';
-import LoginPage from './pages/common/LoginPage/LoginPage';
-import EditarCadastroPage from './pages/common/EditarCadastroPage/EditarCadastroPage'
-import RecoverPage from './pages/common/RecoverPage/RecoverPage';
-import ConfigPage from './pages/common/ConfigPage/ConfigPage';
-import Private from './components/common/private/Private';
 
 import AppRoutes from '@/routes/AppRoutes';  
 

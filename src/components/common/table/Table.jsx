@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GastoItem from '@/components/user/gastoitem/GastoItem';
 import Loading from '@/components/common/loading/Loading';
 import styles from './Table.module.css';

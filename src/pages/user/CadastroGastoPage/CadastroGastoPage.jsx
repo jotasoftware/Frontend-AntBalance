@@ -113,8 +113,11 @@ function CadastroGastoPage() {
         setIsLoading(true);
 
         try {
-            await createGasto({ nome, valor, categoriaId, fonte, parcelas });
+            const response = await createGasto({ nome, valor, categoriaId, fonte, parcelas });
             toast.success('Gasto adicionado com sucesso.');
+            if(response.excedeu){
+                toast.warn('Atenção! Limite de valor para a categoria excedido.');
+            }
             setNome("")
             setValor("");
             setCategoria("");

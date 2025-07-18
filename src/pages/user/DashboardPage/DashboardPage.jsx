@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import styles from './DashboardPage.module.css';
 import { toast } from 'react-toastify';
-import Botao from '../../../components/common/botao/Botao';
+import Botao from '@/components/common/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6"
-import GridCard from '../../../components/common/gridcard/GridCard';
-import Valores from '../../../components/user/valores/Valores';
+import GridCard from '@/components/common/gridcard/GridCard';
+import Valores from '@/components/user/valores/Valores';
 import { Link } from 'react-router-dom'
-import { useExpenses } from '../../../context/ExpenseContext';
+import { useExpenses } from '@/context/ExpenseContext';
 import { Chart as ChartJS } from 'chart.js/auto';
 import { Doughnut, Line } from 'react-chartjs-2';
-import Charts from '../../../components/user/charts/Charts';
-import Loading from '../../../components/common/loading/Loading';
+import Charts from '@/components/user/charts/Charts';
+import Loading from '@/components/common/loading/Loading';
 
 function DashboardPage() {
 

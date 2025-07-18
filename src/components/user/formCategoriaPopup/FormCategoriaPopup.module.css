@@ -1,0 +1,271 @@
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    width: 30vw;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.573);
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.popupHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.popupHeader header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popupHeader header span {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.closeButton {
+    position: absolute;
+    top: -3px;
+    right: -2px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    color: #000;
+}
+
+.popupContent {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 20px;
+    gap: 15px;
+}
+
+.popupContent .inputContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.popupContent .inputContainer input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: #CFCFCF 1px solid;
+    outline: none;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Poppins";
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.popupContent .inputContainer .inputEditNome {
+    padding: 10px 16px;
+}
+
+.popupContent .inputContainer input:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}
+
+.popupContent .inputContainer label {
+    align-self: center;
+}
+
+.popupFooter {
+    display: flex;
+    gap: 10px;
+    padding-top: 20px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.popupFooter .buttonSubmit {
+    flex: 1;
+    height: 46px;
+    margin-top: 0;
+}
+
+.buttonCancel {
+    flex: 1;
+    height: 46px;
+    border: 1px solid #CFCFCF;
+    background: white;
+    color: #666;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: .2s ease-in-out background;
+}
+
+.buttonCancel:hover {
+    background: #f5f5f5;
+}
+
+.buttonSubmit{
+    margin-top: 15px;
+    border: #CFCFCF 1px solid;
+    color: white;
+    background-color: #1a45b8;
+    cursor: pointer;
+    outline: none;
+    border-radius: 8px;
+    height: 46px;
+    width: 100%;
+    transition: .2s ease-in-out background;
+}
+.buttonSubmit:hover{
+    background-color: #191919;
+}
+
+.gastoInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    width: 100%;
+}
+
+
+.limiteWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(16px);
+}
+
+.labelSwitchWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.limiteWrapper input:disabled {
+    background-color: #f0f0f0;
+    color: #a0a0a0;
+    border: 1px solid #ccc;
+}
+
+
+.limiteWrapper {
+    width: 100%;
+    position: relative;
+    display: flex;
+}
+
+.limiteWrapper::before {
+    content: 'R$';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666666;
+    font-weight: 600;
+    font-size: 16px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.limiteWrapper input {
+    width: 11%;
+    padding: 8px 16px 8px 45px;
+    font-size: 16px;
+    border: 1px solid #CFCFCF;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.limiteWrapper input:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}

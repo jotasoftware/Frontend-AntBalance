@@ -23,6 +23,10 @@ function ConfigPage() {
                         <HiOutlineTrash size={30}></HiOutlineTrash>
                         Lixeira de gastos
                     </Link>
+                    <Link to="/categorias">
+                        <HiOutlineTrash size={30}></HiOutlineTrash>
+                        Categorias
+                    </Link>
                 </div>
                 
             </GridCard>

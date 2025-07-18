@@ -144,6 +144,18 @@ export const deleteCategoria = async (id, token) => {
   }
 };
 
+export const editarCategoria = async (id, data, token) => {
+  try {
+    const config = getAuthConfig(token);
+    console.log(data)
+    const response = await axios.put(API_CONFIG.categories.edit(id), data, config);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao atualizar gasto:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const gerarRelatorioPdf = async (ids, token) => {
   try {
     const config = {

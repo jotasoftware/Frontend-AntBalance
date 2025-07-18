@@ -44,4 +44,7 @@ edit: import { TbEdit } from "react-icons/tb";
 
 trash: import { TbTrash } from "react-icons/tb";
 
+categoria: import { TbCategory } from "react-icons/tb";
+
+
 

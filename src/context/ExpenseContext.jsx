@@ -13,6 +13,7 @@ import {
     deleteGastos as apiDeleteGastos,
     deleteCategoria as apiDeleteCategoria,
     editarGasto as apiEditarGasto,
+    editarCategoria as apiEditarCategoria,
     gerarRelatorioPdf as apiGerarRelatorioPdf,
 } from '../services/expenseService';
 import { converterStringParaNumero } from "../utils/converterStringNumero";
@@ -44,7 +45,7 @@ export const ExpenseProvider = ({ children }) => {
     }
 
     const fetchGastos = async () => {
-        setLoading(true);
+        setLoadingGasto(true);
         try {
             const response = await apiFetchGastos(tokenAuth);
             setGastos(response);
@@ -52,7 +53,7 @@ export const ExpenseProvider = ({ children }) => {
             console.error("Erro ao buscar gastos:", error);
             throw error;
         } finally {
-            setLoading(false);
+            setLoadingGasto(false);
         }
     };
 
@@ -70,12 +71,16 @@ export const ExpenseProvider = ({ children }) => {
     };
 
     const fetchCategorias = async () => {
+        setLoading(true);
         try {
             const response = await apiFetchCategorias(tokenAuth);
             setCategorias(response);
         } catch (error) {
             console.error("Erro ao buscar categorias:", error);
             throw error;
+        } finally {
+            console.log(loading)
+            setLoading(false);
         }
     };
 
@@ -107,20 +112,43 @@ export const ExpenseProvider = ({ children }) => {
 
     const createGasto = async (data) => {
         try {
-            const valorNumerico = converterStringParaNumero(data.valor)
+            const valorNumerico = converterStringParaNumero(data.valor);
+
             const payloadParaAPI = {
                 descricao: data.nome,
-                valorTotal: valorNumerico, 
-                categoriaId: data.categoriaId, 
+                valorTotal: valorNumerico,
+                categoriaId: data.categoriaId,
                 parcelado: true,
                 fonte: data.fonte,
                 numeroParcelas: data.parcelas,
-                data: new Date().toISOString()
+                data: new Date().toISOString(),
             };
 
             const novoGasto = await apiCreateGasto(payloadParaAPI, tokenAuth);
+            fetchValores();
+            
+            let gastosMesmaCategoria = null;
+            let totalGastoCategoria = null;
+            let excedeu = false;
+            if(novoGasto.categoria.limiteDeGasto!=null){
+                gastosMesmaCategoria = gastos.filter(
+                    gasto => gasto.categoriaId === novoGasto.categoriaId
+                );
+                if(novoGasto.numeroParcelas>1){
+                    totalGastoCategoria = gastosMesmaCategoria.reduce((acc, gasto) => acc + gasto.parcelas[0],0);
+                    totalGastoCategoria += novoGasto.parcelas[0]
+                }else{
+                    totalGastoCategoria = gastosMesmaCategoria.reduce((acc, gasto) => acc + gasto.valorTotal,0);
+                    totalGastoCategoria += novoGasto.valorTotal
+                }
+                if(novoGasto.categoria.limiteDeGasto < totalGastoCategoria) excedeu = true;
+            }
             setGastos(prevGastos => [...prevGastos, novoGasto]);
-            fetchValores()
+            
+            return {
+                novoGasto,
+                excedeu
+            };
         } catch (error) {
             console.error("Erro ao criar gasto:", error);
             throw error;
@@ -128,20 +156,19 @@ export const ExpenseProvider = ({ children }) => {
     };
 
     const editarGasto = async (id, data) => {
-    try {
-        console.log(tokenAuth)
-        const gastoAtualizado = await apiEditarGasto(id, data, tokenAuth);
-        
-        setGastos(prevGastos => 
-            prevGastos.map(gasto => gasto.id === id ? gastoAtualizado : gasto
-            )
-        );
-        await fetchValores();
-    } catch (error) {
-        console.error("Erro ao atualizar gasto:", error);
-        throw error;
-    }
-};
+        try {
+            const gastoAtualizado = await apiEditarGasto(id, data, tokenAuth);
+            
+            setGastos(prevGastos => 
+                prevGastos.map(gasto => gasto.id === id ? gastoAtualizado : gasto
+                )
+            );
+            await fetchValores();
+        } catch (error) {
+            console.error("Erro ao atualizar gasto:", error);
+            throw error;
+        }
+    };
 
     const inactiveGastos = async (data) => {
         try {
@@ -192,7 +219,19 @@ export const ExpenseProvider = ({ children }) => {
 
     const createCategoria = async (data) => {
         try {
-            const novaCategoria = await apiCreateCategoria(data, tokenAuth);
+            let payloadParaAPI
+            if(data.usarLimite){
+                const valorNumerico = converterStringParaNumero(data.limiteDeGasto)
+                payloadParaAPI = {
+                    nome: data.nome,
+                    limiteDeGasto: valorNumerico,
+                };
+            }else{
+                payloadParaAPI = {
+                    nome: data.nome,
+                };
+            }
+            const novaCategoria = await apiCreateCategoria(payloadParaAPI, tokenAuth);
             setCategorias(prevCategorias => [...prevCategorias, novaCategoria]);
         } catch (error) {
             console.error("Erro ao criar categoria:", error);
@@ -206,6 +245,33 @@ export const ExpenseProvider = ({ children }) => {
             fetchCategorias()
         } catch (error) {
             console.error("Erro ao apagar lista de Categoria:", error);
+            throw error;
+        }
+    };
+
+    const editarCategoria = async (id, data) => {
+        try {
+            let payloadParaAPI
+            if(data.usarLimite){
+                const valorNumerico = converterStringParaNumero(data.limiteDeGasto)
+                payloadParaAPI = {
+                    nome: data.nome,
+                    limiteDeGasto: valorNumerico,
+                };
+            }else{
+                payloadParaAPI = {
+                    nome: data.nome,
+                };
+            }
+            const categoriaAtualizada = await apiEditarCategoria(id, payloadParaAPI, tokenAuth);
+            
+            setCategorias(prevCategorias => 
+                prevCategorias.map(categoria => categoria.id === id ? categoriaAtualizada : categoria
+                )
+            );
+            await fetchGastos();
+        } catch (error) {
+            console.error("Erro ao atualizar categoria:", error);
             throw error;
         }
     };
@@ -228,6 +294,9 @@ export const ExpenseProvider = ({ children }) => {
                     return;
                 }
                 try {
+                    setLoading(true);
+                    setLoadingGasto(true);
+                    setLoadingValores(true)
                     const [gastosData, categoriasData, gastosInativosData, valoresData] = await Promise.all([
                         apiFetchGastos(tokenAuth),
                         apiFetchCategorias(tokenAuth),
@@ -274,7 +343,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, gerarRelatorioPdf};
+    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, editarCategoria, gerarRelatorioPdf};
 
     return (
         <ExpenseContext.Provider value={value}>

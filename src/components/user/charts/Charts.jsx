@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import styles from './Charts.module.css';
-import { Chart as ChartJS } from 'chart.js/auto';
+import { Chart as ChartJS, Colors } from 'chart.js/auto';
 import { Doughnut, Bar, Line, Radar } from 'react-chartjs-2';
-import { TbChartDonutFilled } from "react-icons/tb";
+import { TbChartDonutFilled, TbCategory } from "react-icons/tb";
 import { IoBarChart } from "react-icons/io5";
 import { PiChartBarHorizontalFill } from "react-icons/pi";
 
@@ -39,6 +39,21 @@ const Charts = ({gastos, valores}) => {
     gastos.forEach((gasto) => {
       const categoriaNome = gasto.categoria?.nome || 'Sem Categoria';
       retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.valorTotal;
+    });
+
+    return {
+      labels: Object.keys(retorno),
+      dados: Object.values(retorno),
+    };
+
+  }, [gastos]);
+
+  const dadosPorLimiteCategoria = useMemo(() => {
+    const retorno = {};
+
+    gastos.forEach((gasto) => {
+      const categoriaLimite = gasto.categoria?.limiteDeGasto || 'Sem limite de categoria';
+      retorno[categoriaLimite] = (retorno[categoriaLimite] || 0) + gasto.categoria?.limiteDeGasto;
     });
 
     return {
@@ -106,8 +121,12 @@ const Charts = ({gastos, valores}) => {
           <div className={styles.typeIconDiv} onClick={() => setSelected(2)}>
             <PiChartBarHorizontalFill style={{ color: (selected === 2) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
+          <div className={styles.typeIconDiv} onClick={() => setSelected(3)}>
+          <TbCategory style={{ color: (selected === 3) ? "white" : "black" }} className={styles.typeIcon}/>
+          </div>
         </div>
       </div>
+
       {selected === 0 && (
   <div className={styles.graficoCard}>
     <div className={styles.graficoInput}>
@@ -165,6 +184,7 @@ const Charts = ({gastos, valores}) => {
           cutout: '50%',
         }}
       />
+
     </div>
   </div>
 )}
@@ -253,6 +273,65 @@ const Charts = ({gastos, valores}) => {
     </div>
   </div>
 )}
+
+{selected === 3 && (
+<div className={styles.graficoCard}>
+    <div className={styles.graficoInput}>
+      <Bar
+        data={{
+          labels: dadosPorCategoria.labels,
+          datasets: [
+            {
+              label: "Gastos na Categoria",
+              data: dadosPorCategoria.dados,
+              backgroundColor: coresPaleta,
+              borderColor: '#ffffff',
+              borderWidth: 0,
+              borderRadius: 6,
+            },
+            {
+              label: "Limite da Categoria",
+              data: dadosPorLimiteCategoria.dados,
+              backgroundColor: '#191919',
+              borderColor: '#ffffff',
+              borderWidth: 0,
+              borderRadius: 6,
+            }
+
+          ]
+        }}
+        options={{
+          indexAxis: 'x',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              backgroundColor: '#000000',
+              padding: 12,
+              cornerRadius: 10,
+              callbacks: {
+                label: function(context) {
+                  return ` Total: ${context.parsed.y.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              stacked: true,
+            },
+          }
+        }}
+      />
+    </div>
+  </div>
+  )}
 
       
   </div>
