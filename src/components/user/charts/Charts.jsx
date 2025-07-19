@@ -13,7 +13,8 @@ const Charts = ({gastos, valores}) => {
   const types = [
     "Gastos por categorias",
     "Gastos por mês",
-    "Gastos por fonte"
+    "Gastos por fonte",
+    "Gastos por limite"
   ]
 
   const itemWidth = 30;
@@ -22,24 +23,39 @@ const Charts = ({gastos, valores}) => {
 
   const coresPaleta = [
     '#1a45b8', // Azul principal
-    '#3b82f6', // Azul médio
-    '#8b5cf6', // Violeta
+    '#6366f1', // Índigo
     '#ec4899', // Rosa
+    '#8b5cf6', // Violeta
     '#f59e0b', // Laranja
     '#10b981', // Verde
     '#06b6d4', // Ciano
-    '#6366f1', // Índigo
+    '#3b82f6', // Azul médio
     '#f43f5e', // Vermelho rosa
     '#84cc16',
   ];
 
   const dadosPorCategoria = useMemo(() => {
-    const retorno = {};
+  const retorno = {};
 
-    gastos.forEach((gasto) => {
-      const categoriaNome = gasto.categoria?.nome || 'Sem Categoria';
+  gastos.forEach((gasto) => {
+    const categoriaNome = gasto.categoria?.nome || 'Sem Categoria';
+    
+    if(gasto.numeroParcelas > 1) {
+      console.log('Gasto parcelado:', {
+        categoria: categoriaNome,
+        numeroParcelas: gasto.numeroParcelas,
+        parcelas: gasto.parcelas,
+        primeiraParcelaExiste: gasto.parcelas && gasto.parcelas[0],
+        valorPrimeiraParcela: gasto.parcelas?.[0]
+      });
+    }
+
+    if(gasto.numeroParcelas > 1){
+      retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.parcelas[0].valorParcela;
+    } else {
       retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.valorTotal;
-    });
+    }
+  });
 
     return {
       labels: Object.keys(retorno),
@@ -48,20 +64,37 @@ const Charts = ({gastos, valores}) => {
 
   }, [gastos]);
 
-  const dadosPorLimiteCategoria = useMemo(() => {
-    const retorno = {};
+  const dadosPorLimiteCategoria = useMemo(() => { //novos retornos para manipular cada tipo de dados
+    const retorno = {
+      labels: [],
+      limites: [],
+      gastos: [],
+      porcentagens: []
+    };
 
+    
+    const limitesMap = {};
     gastos.forEach((gasto) => {
-      const categoriaLimite = gasto.categoria?.limiteDeGasto || 'Sem limite de categoria';
-      retorno[categoriaLimite] = (retorno[categoriaLimite] || 0) + gasto.categoria?.limiteDeGasto;
+      if (gasto.categoria?.nome && gasto.categoria?.limiteDeGasto) {
+        limitesMap[gasto.categoria.nome] = gasto.categoria.limiteDeGasto;
+      }
     });
 
-    return {
-      labels: Object.keys(retorno),
-      dados: Object.values(retorno),
-    };
+    
+      dadosPorCategoria.labels.forEach((categoria, index) => {
+        const gasto = dadosPorCategoria.dados[index];
+        const limite = limitesMap[categoria] || 0;
+      
+        if (limite > 0) { 
+          retorno.labels.push(categoria);
+          retorno.limites.push(limite);
+          retorno.gastos.push(gasto);
+          retorno.porcentagens.push(Math.min((gasto / limite) * 100, 150));
+        }
+    });
 
-  }, [gastos]);
+    return retorno;
+  }, [gastos, dadosPorCategoria]);
 
   const dadosPorData = useMemo(() => {
     const retorno = {};
@@ -91,7 +124,11 @@ const Charts = ({gastos, valores}) => {
 
     gastos.forEach((gasto) => {
       const fonte = gasto.fonte || 'Sem Fonte';
-      retorno[fonte] = (retorno[fonte] || 0) + gasto.valorTotal;
+        if(gasto.numeroParcelas > 1){
+        retorno[fonte] = (retorno[fonte] || 0) + gasto.parcelas[0].valorParcela;
+      } else {
+        retorno[fonte] = (retorno[fonte] || 0) + gasto.valorTotal;
+      }
     });
 
     const ordenarDados = Object.entries(retorno)
@@ -279,34 +316,71 @@ const Charts = ({gastos, valores}) => {
     <div className={styles.graficoInput}>
       <Bar
         data={{
-          labels: dadosPorCategoria.labels,
+          labels: dadosPorLimiteCategoria.labels,
           datasets: [
             {
-              label: "Gastos na Categoria",
-              data: dadosPorCategoria.dados,
-              backgroundColor: coresPaleta,
-              borderColor: '#ffffff',
-              borderWidth: 0,
-              borderRadius: 6,
-            },
-            {
-              label: "Limite da Categoria",
-              data: dadosPorLimiteCategoria.dados,
-              backgroundColor: '#191919',
+              label: "% do Limite Utilizado",
+              data: dadosPorLimiteCategoria.porcentagens,
+              backgroundColor: dadosPorLimiteCategoria.porcentagens.map(porcentagem => {
+                if (porcentagem > 100) return '#dc2626'; 
+                if (porcentagem > 80) return '#f59e0b'; 
+                if (porcentagem > 60) return '#eab308';
+                return '#22c55e';
+              }),
               borderColor: '#ffffff',
               borderWidth: 0,
               borderRadius: 6,
             }
-
           ]
         }}
         options={{
-          indexAxis: 'x',
+          indexAxis: 'y',
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: false,
+              display: true,
+              position: 'bottom',
+              labels: {
+                generateLabels: function() {
+                  return [
+                    {
+                      text: 'Seguro',
+                      fillStyle: '#22c55e',
+                      strokeStyle: '#22c55e',
+                      lineWidth: 0,
+                      hidden: false,
+                    },
+                    {
+                      text: 'Atenção',
+                      fillStyle: '#eab308',
+                      strokeStyle: '#eab308',
+                      lineWidth: 0,
+                      hidden: false,
+                    },
+                    {
+                      text: 'Limite quase atingido',
+                      fillStyle: '#f59e0b',
+                      strokeStyle: '#f59e0b',
+                      lineWidth: 0,
+                      hidden: false,
+                    },
+                    {
+                      text: 'Limite Excedido',
+                      fillStyle: '#dc2626',
+                      strokeStyle: '#dc2626',
+                      lineWidth: 0,
+                      hidden: false,
+                    }
+                  ]
+                },
+              usePointStyle: true,
+                padding: 20,
+                font: {
+                  size: 12,
+                  family: 'Poppins'
+                }
+              }
             },
             tooltip: {
               backgroundColor: '#000000',
@@ -314,24 +388,56 @@ const Charts = ({gastos, valores}) => {
               cornerRadius: 10,
               callbacks: {
                 label: function(context) {
-                  return ` Total: ${context.parsed.y.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+                  const index = context.dataIndex;
+                  const gasto = dadosPorLimiteCategoria.gastos[index];
+                  const limite = dadosPorLimiteCategoria.limites[index];
+                  const porcentagem = context.parsed.x;
+                  
+                  return [
+                    ` Gasto: ${gasto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
+                    ` Limite: ${limite.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
+                    ` ${porcentagem.toFixed(1)}% do limite`
+                  ];
                 },
               },
             },
+            
+            annotation: {
+              annotations: {
+                line1: {
+                  type: 'line',
+                  xMin: 100,
+                  xMax: 100,
+                  borderColor: '#ef4444',
+                  borderWidth: 2,
+                  borderDash: [5, 5],
+                  label: {
+                    display: true,
+                    content: 'Limite',
+                    position: 'start',
+                  }
+                }
+              }
+            }
           },
           scales: {
             x: {
-              stacked: true,
-            },
-            y: {
-              stacked: true,
+              beginAtZero: true,
+              max: 150,
+              ticks: {
+
+                stepSize: 25,
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
             },
           }
         }}
       />
     </div>
   </div>
-  )}
+)}
 
       
   </div>
