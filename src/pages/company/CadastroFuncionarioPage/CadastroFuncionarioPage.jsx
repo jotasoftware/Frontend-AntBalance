@@ -5,21 +5,16 @@ import { toast } from 'react-toastify';
 import Botao from '@/components/common/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6";
 import ModalSetor from '@/components/company/modalSetor/ModalSetor';
+import { useEmployee } from '@/context/EmployeeContext';
+import { useNavigate } from 'react-router-dom';
 
+function CadastroFuncionarioPage() {
+    const navigate = useNavigate();
+    const { createFuncionario, createSetor, setores, fetchSetores, deleteSetor } = useEmployee();
 
-//Setor, 
-function CadastroGastoPage() {
-    // const navigate = useNavigate();
-    // const { createGasto, createCategoria, fetchCategorias, categorias, deleteCategoria } = useExpenses();
-
-    const setores = [
-        { id: 1, nome: 'Financeiro' },
-        { id: 2, nome: 'Recursos Humanos' },
-        { id: 3, nome: 'TI' },
-        { id: 4, nome: 'Marketing' },
-        { id: 5, nome: 'Vendas' },
-        { id: 6, nome: 'Logística' },
-    ];
+    useEffect(()=>{
+        fetchSetores()
+    }, [])
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -85,21 +80,19 @@ function CadastroGastoPage() {
     }
 
     const handleDeleteSetor = async (setor) => {
-        console.log(setor);
         try {
             await deleteSetor(setor.id);
-
+    
             if (setor.id === setorId) {
-                setSetor('');
                 setSetorId(null);
             }
-
-            toast.success(`Setor ${setor.nome} excluída com sucesso!`);
+    
+            toast.success(`Setor ${setor.nome} excluído com sucesso!`);
         } catch (error) {
             toast.error(error.response.data.mensagem);
-            console.error("Erro ao excluir setor:", error);
+            console.error("Erro ao excluir categoria:", error);
         }
-    }
+    };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
@@ -126,23 +119,21 @@ function CadastroGastoPage() {
         }
 
         setIsLoading(true);
-
-        console.log({ nome, salario, setorId, cargo, telefone })
-        // try {
-        //     await createGasto({ nome, valor, categoriaId, fonte, parcelas });
-        //     toast.success('Gasto adicionado com sucesso.');
-        //     setNome("")
-        //     setSalario("");
-        //     setSetor("");
-        //     setCargo("");
-        //     setTelefone("");
-        //     navigate('/gastos', { replace: true });
-        // } catch (err) {
-        //     toast.error('Dados inválidos, tente novamente.');
-        //     console.error("Falha no cadastro do gasto:", err);
-        // } finally {
-        //     setIsLoading(false);
-        // }
+        try {
+            await createFuncionario({ nome, salario, setorId, cargo, telefone });
+            toast.success('Funcionario adicionado com sucesso.');
+            setNome("")
+            setSalario("");
+            setSetorId("");
+            setCargo("");
+            setTelefone("");
+            navigate('/funcionarios', { replace: true });
+        } catch (err) {
+            toast.error('Dados inválidos, tente novamente.');
+            console.error("Falha no cadastro do gasto:", err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -231,4 +222,4 @@ function CadastroGastoPage() {
     );
 }
 
-export default CadastroGastoPage;
+export default CadastroFuncionarioPage;

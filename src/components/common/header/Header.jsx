@@ -8,7 +8,7 @@ import NotificationDropdown from "@/components/common/notificationDropdown/Notif
 import { TiThMenu } from "react-icons/ti";
 
 const Header = ({onToggleSidebar}) => {
-  const { userName } = useAuth();
+  const { userName, userRole } = useAuth();
   const { splitGastos, fetchSplitGastos } = useSplit();
   const [greetings, setGreetings] = useState("Olá");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,8 +45,14 @@ const Header = ({onToggleSidebar}) => {
             <button onClick={onToggleSidebar} className={styles.hamburgerButton} data-sidebar-toggle>
                 <TiThMenu size={24} />
             </button>
-            <h2>{greetings}, {userName}</h2>
-            <p>Olhe seus gastos</p>
+            {userRole === "PESSOAL" ? 
+            <>
+              <h2>{greetings}, {userName}</h2>
+              <p>Olhe seus gastos</p>
+            </>
+            : 
+            <h1>{userName}</h1>
+            }
         </div>
         <div className={styles.infoContainer}>
         <div className={styles.notificationWrapper} ref={dropdownRef}>

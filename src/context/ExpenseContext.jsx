@@ -47,7 +47,7 @@ export const ExpenseProvider = ({ children }) => {
     const fetchGastos = async () => {
         setLoadingGasto(true);
         try {
-            const response = await apiFetchGastos(tokenAuth);
+            const response = await apiFetchGastos();
             setGastos(response);
         } catch (error) {
             console.error("Erro ao buscar gastos:", error);
@@ -60,7 +60,7 @@ export const ExpenseProvider = ({ children }) => {
     const fetchGastosInativos = async () => {
         setLoading(true);
         try {
-            const response = await apiFetchGastosInativos(tokenAuth);
+            const response = await apiFetchGastosInativos();
             setGastosInativos(response);
         } catch (error) {
             console.error("Erro ao buscar gastos:", error);
@@ -73,7 +73,7 @@ export const ExpenseProvider = ({ children }) => {
     const fetchCategorias = async () => {
         setLoading(true);
         try {
-            const response = await apiFetchCategorias(tokenAuth);
+            const response = await apiFetchCategorias();
             setCategorias(response);
         } catch (error) {
             console.error("Erro ao buscar categorias:", error);
@@ -87,7 +87,7 @@ export const ExpenseProvider = ({ children }) => {
     const fetchValores = async () => {
         setLoadingValores(true);
         try {
-            const response = await apiFetchValores(tokenAuth);
+            const response = await apiFetchValores();
             const valoresFormatados = transformarDadosDeValores(response);
 
             if (valoresFormatados.length === 0) {
@@ -124,7 +124,7 @@ export const ExpenseProvider = ({ children }) => {
                 data: new Date().toISOString(),
             };
 
-            const novoGasto = await apiCreateGasto(payloadParaAPI, tokenAuth);
+            const novoGasto = await apiCreateGasto(payloadParaAPI);
             fetchValores();
             
             let gastosMesmaCategoria = null;
@@ -157,7 +157,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const editarGasto = async (id, data) => {
         try {
-            const gastoAtualizado = await apiEditarGasto(id, data, tokenAuth);
+            const gastoAtualizado = await apiEditarGasto(id, data);
             
             setGastos(prevGastos => 
                 prevGastos.map(gasto => gasto.id === id ? gastoAtualizado : gasto
@@ -172,7 +172,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const inactiveGastos = async (data) => {
         try {
-            await apiInactiveGastos(data, tokenAuth);
+            await apiInactiveGastos(data);
             fetchGastos()
             fetchValores()
             fetchGastosInativos()
@@ -184,7 +184,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const inactiveGasto = async (data) => {
         try {
-            await apiInactiveGasto(data, tokenAuth);
+            await apiInactiveGasto(data);
             fetchGastos()
             fetchValores()
             fetchGastosInativos()
@@ -196,7 +196,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const activeGasto = async (data) => {
         try {
-            await apiActiveGasto(data, tokenAuth);
+            await apiActiveGasto(data);
             fetchGastosInativos();
             fetchGastos()
             fetchValores()
@@ -208,7 +208,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const deleteGastos = async (data) => {
         try {
-            await apiDeleteGastos(data, tokenAuth);
+            await apiDeleteGastos(data);
             fetchGastosInativos()
         } catch (error) {
             console.error("Erro ao apagar lista de gastos:", error);
@@ -231,7 +231,7 @@ export const ExpenseProvider = ({ children }) => {
                     nome: data.nome,
                 };
             }
-            const novaCategoria = await apiCreateCategoria(payloadParaAPI, tokenAuth);
+            const novaCategoria = await apiCreateCategoria(payloadParaAPI);
             setCategorias(prevCategorias => [...prevCategorias, novaCategoria]);
         } catch (error) {
             console.error("Erro ao criar categoria:", error);
@@ -241,7 +241,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const deleteCategoria = async (data) => {
         try {
-            await apiDeleteCategoria(data, tokenAuth);
+            await apiDeleteCategoria(data);
             fetchCategorias()
         } catch (error) {
             console.error("Erro ao apagar lista de Categoria:", error);
@@ -263,7 +263,7 @@ export const ExpenseProvider = ({ children }) => {
                     nome: data.nome,
                 };
             }
-            const categoriaAtualizada = await apiEditarCategoria(id, payloadParaAPI, tokenAuth);
+            const categoriaAtualizada = await apiEditarCategoria(id, payloadParaAPI);
             
             setCategorias(prevCategorias => 
                 prevCategorias.map(categoria => categoria.id === id ? categoriaAtualizada : categoria
@@ -298,10 +298,10 @@ export const ExpenseProvider = ({ children }) => {
                     setLoadingGasto(true);
                     setLoadingValores(true)
                     const [gastosData, categoriasData, gastosInativosData, valoresData] = await Promise.all([
-                        apiFetchGastos(tokenAuth),
-                        apiFetchCategorias(tokenAuth),
-                        apiFetchGastosInativos(tokenAuth),
-                        apiFetchValores(tokenAuth)
+                        apiFetchGastos(),
+                        apiFetchCategorias(),
+                        apiFetchGastosInativos(),
+                        apiFetchValores()
                     ]);
 
                     setGastos(gastosData);

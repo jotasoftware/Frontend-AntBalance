@@ -1,4 +1,5 @@
 import { API_CONFIG } from '../config/apiConfig';
+import api from '@/config/apiClient';
 import axios from 'axios';
 
 const getAuthConfig = (token) => {
@@ -7,7 +8,7 @@ const getAuthConfig = (token) => {
 
 export const login = async (credentials) => {
   try{
-    const response = await axios.post(API_CONFIG.auth.login, credentials);
+    const response = await api.post(API_CONFIG.auth.login, credentials);
     return response.data;
   }catch(error){
     console.error("Erro no serviço de login:", error.response?.data || error.message);
@@ -18,7 +19,7 @@ export const login = async (credentials) => {
 
 export const register = async (credentials) => {
   try{
-    const response = await axios.post(API_CONFIG.auth.register, credentials);
+    const response = await api.post(API_CONFIG.auth.register, credentials);
     return response.data;
   }catch(error){
     console.error("Erro no serviço de registro:", error.response?.data || error.message);
@@ -31,7 +32,7 @@ export const recover = async (email) => {
     const payloadParaAPI = {
       email: email.recoverEmail,
     };
-    const response = await axios.post(API_CONFIG.auth.recover, payloadParaAPI);
+    const response = await api.post(API_CONFIG.auth.recover, payloadParaAPI);
     return response.data;
   }catch(error){
     console.error("Erro no serviço de registro:", error.response?.data || error.message);
@@ -47,7 +48,7 @@ export const edit = async (credentials, token) => {
       newPassword: credentials.senhaNova
     };
     const config = getAuthConfig(token);
-    const response = await axios.patch(API_CONFIG.auth.edit, payloadParaAPI, config);
+    const response = await api.patch(API_CONFIG.auth.edit, payloadParaAPI);
     return response.data;
   }catch(error){
     console.error("Erro no serviço de registro:", error.response?.data || error.message);
@@ -61,7 +62,7 @@ export const editPassword = async (credentials) => {
       token: credentials.token,
       newPassword: credentials.senhaNova,
     };
-    const response = await axios.post(API_CONFIG.auth.editPassword, payloadParaAPI);
+    const response = await api.post(API_CONFIG.auth.editPassword, payloadParaAPI);
     return response.data;
   }catch(error){
     console.error("Erro no serviço de registro:", error.response?.data || error.message);

@@ -213,3 +213,31 @@
     margin-bottom: 20px;
     width: 100%;
 }
+
+@media (max-width: 768px) {
+    .container,
+    .popup {
+        width: 90vw;
+    }
+    
+    .inputContainer input,
+    .popupContent .inputContainer input {
+        width: 80vw;
+    }
+    
+    .create,
+    .popupFooter {
+        width: 80vw;
+    }
+    
+    .popupContent .inputContainer label {
+        margin-left: 0;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .gastosContainer{
+        padding: 15px;
+    }
+}

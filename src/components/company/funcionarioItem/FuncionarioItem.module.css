@@ -1,0 +1,161 @@
+.gastoLine {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #ddd;
+    padding: 13px 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    transition: max-height 0.5s ease-in-out;
+    justify-content: space-between;
+    font-size: 14px;
+}
+.gastoItem {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    transition: max-height 0.5s ease-in-out;
+    justify-content: space-between;
+}
+
+.gastoItem .gastoInfo{
+    display: flex;
+    width: 97%;
+    height: 42px;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    transition: max-height 0.5s ease-in-out;
+    font-size: 14px;
+}
+
+.gastoLine:hover {
+    background-color: #f9f9f9;
+}
+
+.gastoInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gastoInfo h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.gastoInfo p {
+    margin: 0;
+    color: #666;
+
+}
+
+.gastoValorData {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #444;
+}
+
+.gastoDetalhes {
+    display: flex;
+    justify-content: flex-end;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    margin-top: 0;
+    padding-right: 9px;
+}
+.gastoDetalhes {
+    display: flex;
+    justify-content: flex-end;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    margin-top: 0;
+    padding: 0 9px 0 252px;
+    align-items: center;
+    gap: 30px;
+}
+
+.gastoDetalhes .actionIconsDiv{
+    display: flex;
+    justify-content: row;
+    gap: 10px;
+}
+
+.gastoDetalhes .actionIconsDiv .actionIcon{
+    background-color: rgb(228, 228, 228);
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color .3s linear, color .3s linear;
+    position: relative;
+    cursor: pointer;
+}
+.gastoDetalhes .actionIconsDiv .actionIcon:hover{
+    background-color: #1a45b8;
+    color: white;
+}
+
+.gastoDetalhes.expandido {
+    max-height: 200px; 
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.gastoMobileInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-right: 10px;
+    width: 100%;
+    gap: 7px;
+}
+
+
+@media (max-width: 768px) {
+
+    .gastoItem .gastoInfo{
+      width: 89%;
+    }
+
+    .gastoDetalhes {
+        align-self: flex-end;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        width: 89%;
+        padding: 0;
+    }
+    
+    .gastoDetalhes .actionIconsDiv{
+        align-self: flex-end;
+        margin-right: 10px;
+    }
+    
+    .gastoDetalhes .actionIconsDiv .actionIcon{
+        background-color: rgb(228, 228, 228);
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color .3s linear, color .3s linear;
+        position: relative;
+        cursor: pointer;
+    }
+    .gastoDetalhes .actionIconsDiv .actionIcon:hover{
+        background-color: #1a45b8;
+        color: white;
+    }
+  }

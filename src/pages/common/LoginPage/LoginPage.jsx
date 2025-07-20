@@ -5,10 +5,12 @@ import styles from './LoginPage.module.css';
 import { toast } from 'react-toastify';
 import Loading from '../../../components/common/loading/Loading';
 import { useExpenses } from '../../../context/ExpenseContext';
+import { useEmployee } from '@/context/EmployeeContext';
 
 function LoginPage() {
     const {login, register, recover} = useAuth();
     const {fetchValores, fetchCategorias, fetchGastosInativos, fetchGastos} = useExpenses();
+    const {fetchFuncionarios, fetchSetores} =useEmployee()
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -72,8 +74,10 @@ function LoginPage() {
             await login({ email, password });
             await fetchValores();
             await fetchGastos();
-            // await fetchCategorias();
-            await fetchGastosInativos();
+            const role = localStorage.getItem('userRole');
+            if (role === 'EMPRESARIAL') {
+                await fetchFuncionarios();
+            }
             toast.success('Login bem sucedido.');
             setEmail("");
             setPassword("");

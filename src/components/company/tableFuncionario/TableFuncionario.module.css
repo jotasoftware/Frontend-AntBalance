@@ -1,0 +1,62 @@
+.gastosLista{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tableHeaderGasto{
+  display: flex;
+  justify-content: space-between;
+  background-color: #1a45b8;
+  color: white;
+  font-weight: 500;
+  padding: 13px 10px;
+  border-radius: 16px;
+}
+
+.tableHeaderGasto > div{
+  width: 97%;
+  display: flex;
+  justify-content: space-between;
+  background-color: #1a45b8;
+  color: white;
+  font-weight: 500;
+  border-radius: 16px;
+}
+
+.tableBodyGasto {
+  border: #80808047 1px solid;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  overflow: hidden; 
+  height: 50vh;
+  overflow-y: auto;
+  scrollbar-width: none; 
+}
+.tableBodyGasto::-webkit-scrollbar {
+  display: none;         
+}
+.tableBodyGasto p{
+  text-align: center;
+  margin-top: 30px;
+}
+
+.gastosLoading{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .tableHeaderGasto > div{
+    width: 89%;
+  }
+
+  .tableBodyGasto {
+    height: 100%;
+  }
+}

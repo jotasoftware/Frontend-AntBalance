@@ -1,14 +1,9 @@
 import { API_CONFIG } from '../config/apiConfig';
-import axios from 'axios';
+import api from '@/config/apiClient';
 
-const getAuthConfig = (token) => {
-  return { headers: { Authorization: `Bearer ${token}` } };
-}
-
-export const createSplit = async (credentials, token) => {
+export const createSplit = async (credentials) => {
   try{
-    const config = getAuthConfig(token);
-    const response = await axios.post(API_CONFIG.split.create, credentials, config);
+    const response = await api.post(API_CONFIG.split.create, credentials);
     return response.data;
   }catch(error){
     console.error("Erro no serviço de criar divisão: ", error.response?.data || error.message);
@@ -16,10 +11,9 @@ export const createSplit = async (credentials, token) => {
   }
 }
 
-export const fetchSplitGastos = async (token) => {
+export const fetchSplitGastos = async () => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.get(API_CONFIG.split.getAll, config);
+    const response = await api.get(API_CONFIG.split.getAll);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar gastos divididos:", error.response?.data || error.message);
@@ -27,10 +21,9 @@ export const fetchSplitGastos = async (token) => {
   }
 };
 
-export const acceptSplit = async (credentials, token) => {
+export const acceptSplit = async (credentials) => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.post(API_CONFIG.split.accept, credentials, config);
+    const response = await api.post(API_CONFIG.split.accept, credentials);
     return response.data;
   } catch (error) {
     console.error("Erro ao aceitar gasto dividido:", error.response?.data || error.message);
@@ -38,13 +31,12 @@ export const acceptSplit = async (credentials, token) => {
   }
 };
 
-export const refuseSplit = async (credentials, token) => {
+export const refuseSplit = async (credentials) => {
   try {
     const config = {
-      ...getAuthConfig(token),
       data: credentials,
     };
-    const response = await axios.delete(API_CONFIG.split.refuse, config);
+    const response = await api.delete(API_CONFIG.split.refuse);
     return response.data;
   } catch (error) {
     console.error("Erro ao recusar gasto dividido:", error.response?.data || error.message);

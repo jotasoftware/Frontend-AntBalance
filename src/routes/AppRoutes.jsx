@@ -14,10 +14,11 @@ import CadastroGastoCompanyPage from '@/pages/company/CadastroGastoCompanyPage/C
 import GastosInativosPage from '@/pages/user/GastosInativosPage/GastosInativosPage';
 import CategoriasPage from '@/pages/user/CategoriasPage/CategoriasPage';
 import CadastroFuncionarioPage from '@/pages/company/CadastroFuncionarioPage/CadastroFuncionarioPage';
+import FuncionariosPage from '@/pages/company/FuncionariosPage/FuncionariosPage';
+import FuncionariosInativosPage from '@/pages/company/FuncionariosInativosPage/FuncionariosInativosPage';
 
 export default function PrivateRoutes() {
     const { userRole, loadingAuth } = useAuth();
-    console.log(userRole)
 
     if (loadingAuth) return <Loading />;
 
@@ -38,7 +39,6 @@ export default function PrivateRoutes() {
                         <Route index element={<Navigate to="dashboard" replace />} />
                         <Route path="dashboard" element={<DashboardPage />} />
                         <Route path="gastos" element={<GastosPage />} />
-                        <Route path="gastosinativos" element={<GastosInativosPage />} />
                         <Route path="cadastrogasto" element={<CadastroGastoPage />} />
                         <Route path="categorias" element={<CategoriasPage />} />
                     </>
@@ -48,10 +48,13 @@ export default function PrivateRoutes() {
                         <Route path="dashboard" element={<DashboardPage />} />
                         <Route path="gastos" element={<GastosPage />} />
                         <Route path="cadastrogasto" element={<CadastroGastoCompanyPage />} />
+                        <Route path="cadastrofuncionario" element={< CadastroFuncionarioPage/>} />
+                        <Route path="funcionarios" element={< FuncionariosPage/>} />
+                        <Route path="funcionariosinativos" element={< FuncionariosInativosPage/>} />
                     </>)}
+                <Route path="gastosinativos" element={<GastosInativosPage />} />
                 <Route path="editarcadastro" element={<EditarCadastroPage />} />
                 <Route path="config" element={<ConfigPage />} />
-                <Route path="cadastrofuncionario" element={< CadastroFuncionarioPage/>} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

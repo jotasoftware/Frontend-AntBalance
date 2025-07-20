@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { useExpenses } from '@/context/ExpenseContext';
 import CategoriaItem from '@/components/user/categoriaItem/CategoriaItem';
 import { FormCategoriaPopup } from '@/components/user/formCategoriaPopup/FormCategoriaPopup';
-import { formatarValorMonetario } from '@/utils/formatarValorMonetario';
+import { formatarValorMonetario, formatarValorInicioMonetario } from '@/utils/formatarValorMonetario';
 import DeletePopup from '@/components/common/deletePopup/DeletePopup';
 import { FaPlus } from "react-icons/fa6";
 import Loading from '@/components/common/loading/Loading';
@@ -36,10 +36,9 @@ function CategoriasPage() {
         const flag = categoria.limiteDeGasto == null
         setShowEditPopup(true);
         setCategoriaToEdit(categoria);
-        console.log(categoria.limiteDeGasto)
         setEditFormData({
             nome: categoria.nome || '',
-            limiteDeGasto: formatarValorMonetario(categoria.limiteDeGasto?.toString() || ''),
+            limiteDeGasto: formatarValorInicioMonetario(categoria.limiteDeGasto?.toString() || ''),
             usarLimite: !flag
         });
     };
@@ -92,23 +91,43 @@ function CategoriasPage() {
     };
 
     const handleEditChange = (field, value) => {
-        if (field === 'limiteDeGasto') {
-            if (value === '') {
-                setEditFormData(prev => ({ ...prev, [field]: '' }));
-                return;
-            }
-            if (value.length > 12) return;
-            const valorFormatado = formatarValorMonetario(value);
-    
-            setEditFormData(prev => ({ ...prev, [field]: valorFormatado }));
-            return;
-        }
+    if (field === 'telefone') {
+        let input = value.replace(/\D/g, '');
+        if (input.length > 11) input = input.slice(0, 11);
+
+        let formatted = input;
+        if (input.length > 0) formatted = `(${input.slice(0, 2)}`;
+        if (input.length >= 3) formatted += `) ${input.slice(2, 7)}`;
+        if (input.length >= 8) formatted += `-${input.slice(7, 11)}`;
 
         setEditFormData(prev => ({
             ...prev,
-            [field]: value
+            [field]: formatted
         }));
-    };
+        return;
+    }
+
+    if (field === 'limiteDeGasto') {
+        if (value === '') {
+            setEditFormData(prev => ({ ...prev, [field]: '' }));
+            return;
+        }
+
+        if (value.length > 12) return;
+
+        const valorFormatado = formatarValorMonetario(value);
+
+        setEditFormData(prev => ({ ...prev, [field]: valorFormatado }));
+        return;
+    }
+
+    // Default fallback para outros campos
+    setEditFormData(prev => ({
+        ...prev,
+        [field]: value
+    }));
+};
+
 
     const handleDeleteCategoria = async (categoria) => {
         setCategoriaToDelete(categoria);

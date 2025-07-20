@@ -1,8 +1,7 @@
 import styles from './DeletePopup.module.css'; 
 
-const DeletePopup = ({ show, onClose, onConfirm, infoToDelete, type}) => {
+const DeletePopup = ({ show, onClose, onConfirm, infoToDelete, type='GASTO'}) => {
     if (!show) return null;
-
     return (
         <div className={styles.popupOverlay}>
             <div className={styles.popup}>
@@ -22,6 +21,7 @@ const DeletePopup = ({ show, onClose, onConfirm, infoToDelete, type}) => {
                         <span>
                             Tem certeza que deseja excluir{" "}
                             {type === "GASTO" && "o gasto"}
+                            {type === "FUNCIONARIO" && "o funcionario"}
                             {type === "CATEGORIA" && "a categoria"}?
                         </span>
 
@@ -29,6 +29,7 @@ const DeletePopup = ({ show, onClose, onConfirm, infoToDelete, type}) => {
                             <div className={styles.gastoInfo}>
                             <strong>
                                 {type === "GASTO" && infoToDelete.descricao}
+                                {type === "FUNCIONARIO" && infoToDelete.nome}
                                 {type === "CATEGORIA" && infoToDelete.nome}
                             </strong>
 

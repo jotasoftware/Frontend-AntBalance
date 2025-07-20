@@ -166,7 +166,7 @@ function GastosInativosPage() {
                         </div>
                     </div>
                     <div className={styles.gastosActions}>
-                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} />} /> : <Botao icon={<IoPrintOutline size={24} color={"white"} />} name={"Imprimir"} />}
+                        
                     </div>
                 </div>
                 <Table 

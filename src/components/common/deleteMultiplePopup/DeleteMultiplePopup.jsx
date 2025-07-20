@@ -27,28 +27,38 @@ const DeleteMultiplePopup = ({ show, onClose, onConfirm, selectedItems, itemList
                   <div className={styles.gastosList}>
                     {selected.map(item => (
                       <div key={item.id} className={styles.gastoItem}>
-                        <div className={styles.gastoInfo}>
-                          <strong>{item.descricao}</strong>
-                          <span className={styles.gastoValor}>
-                            {item.valorTotal.toLocaleString('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL'
-                            })}
-                          </span>
-                        </div>
+                        {itemLabel === 'gasto' && (
+                          <div className={styles.gastoInfo}>
+                            <strong>{item.descricao}</strong>
+                            <span className={styles.gastoValor}>
+                              {item.valorTotal.toLocaleString('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                              })}
+                            </span>
+                          </div>
+                        )}
+                        {itemLabel === 'funcionário' && (
+                          <div className={styles.gastoInfo}>
+                            <strong>{item.nome}</strong>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
     
-                  <div className={styles.totalValue}>
-                    <strong>
-                      Total:{' '}
-                      {total.toLocaleString('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                      })}
-                    </strong>
-                  </div>
+                  {itemLabel === 'gasto' && (
+                    <div className={styles.totalValue}>
+                      <strong>
+                        Total:{' '}
+                        {total.toLocaleString('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })}
+                      </strong>
+                    </div>
+                  )}
+
                 </div>
               </div>
             </div>

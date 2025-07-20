@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import './Menu.css';
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext';
 import { RiCoinsLine } from "react-icons/ri"
 import { IoSettingsSharp, IoLogOutOutline, IoApps } from "react-icons/io5"
 import { toast } from 'react-toastify';
+import { GoPeople } from "react-icons/go";
+
 
 const Menu = () => {
 
-  const {logout} = useAuth();
+  const {logout, userRole} = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -26,8 +28,11 @@ const Menu = () => {
   return (
     <div className='menuContainer'>
         <div className='menuItens1'>
-            <div className='menuLink'><NavLink to="/dashboard" className={({ isActive }) => isActive ? 'active' : ''}><IoApps /> Dashboard</NavLink></div>
-            <div className='menuLink'><NavLink to="/gastos" className={({ isActive }) => isActive ? 'active' : ''}><RiCoinsLine /> Gastos</NavLink></div>
+            <div className='menuLink'><NavLink to="/dashboard" className={({ isActive }) => isActive ? 'active' : ''}><IoApps />Dashboard</NavLink></div>
+            <div className='menuLink'><NavLink to="/gastos" className={({ isActive }) => isActive ? 'active' : ''}><RiCoinsLine />Gastos</NavLink></div>
+            {userRole==='EMPRESARIAL' &&
+              <div className='menuLink'><NavLink to="/funcionarios" className={({ isActive }) => isActive ? 'active' : ''}><GoPeople />Funcionários</NavLink></div>
+            }
         </div>
 
         <div className='menuItens2'>

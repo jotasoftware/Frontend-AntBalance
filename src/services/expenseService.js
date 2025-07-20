@@ -1,25 +1,19 @@
 import { API_CONFIG } from '../config/apiConfig';
-import axios from 'axios';
+import api from '@/config/apiClient';
 
-const getAuthConfig = (token) => {
-  return { headers: { Authorization: `Bearer ${token}` } };
-}
-
-export const createGasto = async (credentials, token) => {
-    try{
-      const config = getAuthConfig(token);
-      const response = await axios.post(API_CONFIG.expenses.create, credentials, config);
-      return response.data;
-    }catch(error){
-      console.error("Erro no serviço de criar gasto: ", error.response?.data || error.message);
-      throw error;
-    }
-}
-
-export const createCategoria = async (credentials, token) => {
+export const createGasto = async (credentials) => {
   try{
-    const config = getAuthConfig(token);
-    const response = await axios.post(API_CONFIG.categories.create, credentials, config);
+    const response = await api.post(API_CONFIG.expenses.create, credentials);
+    return response.data;
+  }catch(error){
+    console.error("Erro no serviço de criar gasto: ", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+export const createCategoria = async (credentials) => {
+  try{
+    const response = await api.post(API_CONFIG.categories.create, credentials);
     return response.data;
   }catch(error){
     console.error("Erro no serviço de criar categoria: ", error.response?.data || error.message);
@@ -27,10 +21,9 @@ export const createCategoria = async (credentials, token) => {
   }
 }
 
-export const fetchGastos = async (token) => {
+export const fetchGastos = async () => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.get(API_CONFIG.expenses.getAll, config);
+    const response = await api.get(API_CONFIG.expenses.getAll);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar gastos:", error.response?.data || error.message);
@@ -38,10 +31,9 @@ export const fetchGastos = async (token) => {
   }
 };
 
-export const fetchGastosInativos = async (token) => {
+export const fetchGastosInativos = async () => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.get(API_CONFIG.expenses.getAllInactives, config);
+    const response = await api.get(API_CONFIG.expenses.getAllInactives);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar gastos inativos:", error.response?.data || error.message);
@@ -49,10 +41,9 @@ export const fetchGastosInativos = async (token) => {
   }
 };
 
-export const fetchCategorias = async (token) => {
+export const fetchCategorias = async () => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.get(API_CONFIG.categories.getAll, config);
+    const response = await api.get(API_CONFIG.categories.getAll);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar categorias:", error.response?.data || error.message);
@@ -60,10 +51,9 @@ export const fetchCategorias = async (token) => {
   }
 };
 
-export const fetchValores = async (token) => {
+export const fetchValores = async () => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.get(API_CONFIG.expenses.getValores, config);
+    const response = await api.get(API_CONFIG.expenses.getValores);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar os valores:", error.response?.data || error.message);
@@ -71,11 +61,9 @@ export const fetchValores = async (token) => {
   }
 };
 
-export const editarGasto = async (id, data, token) => {
+export const editarGasto = async (id, data) => {
   try {
-    const config = getAuthConfig(token);
-
-    const response = await axios.patch(API_CONFIG.expenses.edit(id), data, config);
+    const response = await api.patch(API_CONFIG.expenses.edit(id), data);
     return response.data;
   } catch (error) {
     console.error("Erro ao atualizar gasto:", error.response?.data || error.message);
@@ -83,15 +71,13 @@ export const editarGasto = async (id, data, token) => {
   }
 };
 
-export const deleteGastos = async (ids, token) => {
+export const deleteGastos = async (ids) => {
   try {
     const config = {
-      ...getAuthConfig(token),
       data: ids
     };
-    console.log(config)
 
-    const response = await axios.delete(API_CONFIG.expenses.delete, config);
+    const response = await api.delete(API_CONFIG.expenses.delete, config);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar gastos:", error.response?.data || error.message);
@@ -99,10 +85,9 @@ export const deleteGastos = async (ids, token) => {
   }
 };
 
-export const inactiveGastos = async (ids, token) => {
+export const inactiveGastos = async (ids) => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.patch(API_CONFIG.expenses.inactiveAll, ids, config);
+    const response = await api.patch(API_CONFIG.expenses.inactiveAll, ids);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar gastos:", error.response?.data || error.message);
@@ -110,10 +95,9 @@ export const inactiveGastos = async (ids, token) => {
   }
 };
 
-export const inactiveGasto = async (id, token) => {
+export const inactiveGasto = async (id) => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.patch(API_CONFIG.expenses.inactive(id), null, config);
+    const response = await api.patch(API_CONFIG.expenses.inactive(id), null);
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar gasto:", error.response?.data || error.message);
@@ -121,10 +105,9 @@ export const inactiveGasto = async (id, token) => {
   }
 };
 
-export const activeGasto = async (id, token) => {
+export const activeGasto = async (id) => {
   try {
-    const config = getAuthConfig(token);
-    const response = await axios.patch(API_CONFIG.expenses.active(id), null, config);
+    const response = await api.patch(API_CONFIG.expenses.active(id), null);
     return response.data;
   } catch (error) {
     console.error("Erro ao ativar gasto:", error.response?.data || error.message);
@@ -132,11 +115,9 @@ export const activeGasto = async (id, token) => {
   }
 };
 
-export const deleteCategoria = async (id, token) => {
+export const deleteCategoria = async (id) => {
   try {
-    const config = getAuthConfig(token);
-
-    const response = await axios.delete(API_CONFIG.categories.delete(id), config);
+    const response = await api.delete(API_CONFIG.categories.delete(id));
     return response.data;
   } catch (error) {
     console.error("Erro ao deletar categoria:", error.response?.data || error.message);
@@ -144,11 +125,9 @@ export const deleteCategoria = async (id, token) => {
   }
 };
 
-export const editarCategoria = async (id, data, token) => {
+export const editarCategoria = async (id, data) => {
   try {
-    const config = getAuthConfig(token);
-    console.log(data)
-    const response = await axios.put(API_CONFIG.categories.edit(id), data, config);
+    const response = await api.put(API_CONFIG.categories.edit(id), data);
     return response.data;
   } catch (error) {
     console.error("Erro ao atualizar gasto:", error.response?.data || error.message);
@@ -168,7 +147,7 @@ export const gerarRelatorioPdf = async (ids, token) => {
     
     console.log(ids)
   
-    const response = await axios.post(API_CONFIG.relatorios.gerarPdf, { gastoIds: ids }, config);
+    const response = await api.post(API_CONFIG.relatorios.gerarPdf, { gastoIds: ids }, config);
     return response.data;
   } catch (error) {
     console.error('Erro ao gerar relatório:', error);

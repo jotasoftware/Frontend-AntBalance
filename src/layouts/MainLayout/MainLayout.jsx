@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import styles from './MainLayout.module.css';
-import Menu from '@/components/user/menu/Menu';
+import Menu from '@/components/common/menu/Menu';
 import Header from '@/components/common/header/Header';
 
 function MainLayout() {

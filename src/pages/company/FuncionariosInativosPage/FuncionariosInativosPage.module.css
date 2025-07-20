@@ -1,0 +1,423 @@
+.gastosContainer{
+    padding: 35px;
+}
+
+.gastosContainer .gastosHeaderContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.gastosContainer .gastosHeaderContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.gastosContainer .sortContainer{
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.gastosContainer .sortSelect {
+    margin-left: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: fit-content;
+    font-family: 'Poppins', sans-serif;
+    color: #1a45b8;
+}
+
+.gastosContainer .sortSelect:focus {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    outline: none;
+}
+  
+
+.gastosContainer .gastosHeaderContainer .gastosActions{
+    display: flex;
+    gap: 20px;
+}
+.gastosContainer .botaoApagar{
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+.popupContent {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 20px;
+    gap: 15px;
+}
+
+.popupContent .inputContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.popupContent .inputContainer input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 16px;
+    border: #CFCFCF 1px solid;
+    outline: none;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: "Poppins";
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+
+}
+
+.popupContent .inputContainer input:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}
+
+.popupContent .inputContainer label {
+    align-self: center;
+}
+
+.popupFooter {
+    display: flex;
+    gap: 10px;
+    padding-top: 20px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.popupFooter .buttonSubmit {
+    flex: 1;
+    height: 46px;
+    margin-top: 0;
+}
+
+.buttonCancel {
+    flex: 1;
+    height: 46px;
+    border: 1px solid #CFCFCF;
+    background: white;
+    color: #666;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: .2s ease-in-out background;
+}
+
+.buttonCancel:hover {
+    background: #f5f5f5;
+}
+
+.buttonSubmit{
+    margin-top: 15px;
+    border: #CFCFCF 1px solid;
+    color: white;
+    background-color: #1a45b8;
+    cursor: pointer;
+    outline: none;
+    border-radius: 8px;
+    height: 46px;
+    width: 100%;
+    transition: .2s ease-in-out background;
+}
+.buttonSubmit:hover{
+    background-color: #191919;
+}
+
+.buttonDelete {
+    flex: 1;
+    height: 46px;
+    border: #CFCFCF 1px solid;
+    color: white;
+    background-color: #d32f2f;
+    cursor: pointer;
+    outline: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: .2s ease-in-out background;
+}
+
+.buttonDelete:hover {
+    background-color: #b71c1c;
+}
+
+.confirmMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    font-size: 18px;
+}
+
+.gastoInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    width: 100%;
+}
+
+.gastosList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.gastoItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+}
+
+.gastoItem:hover {
+    background-color: #f5f5f5;
+}
+
+.gastoValor {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.gastoDetails {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.editForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.editForm .inputContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+}
+
+.editForm .inputContainer label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.editForm .inputContainer input,
+.editForm .inputContainer select {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 20px;
+    border: 1px solid #CFCFCF;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.editForm .inputContainer input:focus,
+.editForm .inputContainer select:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}
+
+.editForm .valorInputContainer {
+    width: 100%;
+    position: relative;
+    display: flex;
+}
+
+.editForm .valorInputContainer::before {
+    content: 'R$';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666666;
+    font-weight: 600;
+    font-size: 16px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.editForm .valorInputContainer input {
+    width: 100%;
+    padding: 12px 16px 12px 45px !important;
+    font-size: 16px;
+    border: 1px solid #CFCFCF;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.editForm .valorInputContainer input:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}
+
+.editForm select {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #CFCFCF;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.valorInputContainer {
+    width: 100%;
+    position: relative;
+    display: flex;
+}
+
+.valorInputContainer::before {
+    content: 'R$';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666666;
+    font-weight: 600;
+    font-size: 16px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.valorInputContainer input {
+    width: 100%;
+    padding: 10px 10px 10px 45px !important;
+    font-size: 16px;
+    border: 1px solid #CFCFCF;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.valorInputContainer input:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px;
+    background-color: #1a45b8;
+    border-radius: 12px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.categoriaSelectButton {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #CFCFCF;
+    border-radius: 8px;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    text-align: left;
+    cursor: pointer;
+}
+
+.categoriaSelectButton:hover {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+}
+
+.categoriaSelectButton:focus {
+    border-color: #1a45b8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}
+
+.searchMobileAction{
+    width: 100%;
+}
+.searchMobileAction > div{
+    margin-top: 20px;
+    width: 100%;
+}
+.searchMobileAction > div > input{
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .container,
+    .popup {
+        width: 90vw;
+    }
+    
+    .inputContainer input,
+    .popupContent .inputContainer input {
+        width: 80vw;
+    }
+    
+    .create,
+    .popupFooter {
+        width: 80vw;
+    }
+    
+    .popupContent .inputContainer label {
+        margin-left: 0;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .gastosContainer{
+        padding: 15px;
+    }
+}

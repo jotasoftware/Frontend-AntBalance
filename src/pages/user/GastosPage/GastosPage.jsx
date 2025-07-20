@@ -1,20 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import styles from './GastosPage.module.css';
-import { toast } from 'react-toastify';
-import Botao from '@/components/common/botao/Botao';
-import { IoPrintOutline } from "react-icons/io5";
-import { FaSquarePlus } from "react-icons/fa6";
-import GridCard from '@/components/common/gridcard/GridCard';
-import { useExpenses } from '@/context/ExpenseContext';
 import { Link, useOutletContext } from 'react-router-dom';
-import Table from '@/components/common/table/Table';
-import { FaTrash } from "react-icons/fa";
-import Loading from '@/components/common/loading/Loading';
+import { toast } from 'react-toastify';
+import { IoPrintOutline } from 'react-icons/io5';
+import { FaSquarePlus, FaPlus, FaTrash } from 'react-icons/fa6';
+
+import { useAuth } from '@/context/AuthContext';
+import { useExpenses } from '@/context/ExpenseContext';
 import { useSplit } from '@/context/SplitExpanseContext';
-import { converterStringParaNumero } from '@/utils/converterStringNumero';
-import { formatarValorMonetario } from '@/utils/formatarValorMonetario';
-import { FaPlus } from "react-icons/fa6";
+
+import Botao from '@/components/common/botao/Botao';
+import GridCard from '@/components/common/gridcard/GridCard';
+import Table from '@/components/common/table/Table';
+import Loading from '@/components/common/loading/Loading';
 import ModalCategoria from '@/components/user/modalCategoria/ModalCategoria';
 import RelatorioGastos from '@/components/user/relatorio/RelatorioGastos';
 import FindInput from '@/components/common/findInput/FindInput';
@@ -23,13 +20,18 @@ import DeleteMultiplePopup from '@/components/common/deleteMultiplePopup/DeleteM
 import { EditPopup } from '@/components/common/editPopup/EditPopup';
 import { SharePopup } from '@/components/user/sharePopup/SharePopup';
 
+import { converterStringParaNumero } from '@/utils/converterStringNumero';
+import { formatarValorMonetario } from '@/utils/formatarValorMonetario';
+
+import styles from './GastosPage.module.css';
+
 function GastosPage() {
     //dados page
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
     const { createSplit } = useSplit();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria } = useExpenses();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias } = useExpenses();
     const [findInput, setFindInput] = useState('')
     const { isMobile } = useOutletContext();
 
@@ -52,6 +54,10 @@ function GastosPage() {
     });
     const [categoriaId, setCategoriaId] = useState(null);
 
+
+    useEffect(()=>{
+        fetchCategorias()
+    },[])
     //ordenaçao
     const gastosOrdenados = useMemo(() => {
         const termoBusca = findInput.toLowerCase();
@@ -444,7 +450,7 @@ function GastosPage() {
                     show={showDeletePopup}
                     onClose={handleCloseDeletePopup}
                     onConfirm={handleDeleteGastoTrue}
-                    gastoToDelete={gastoToDelete}
+                    infoToDelete={gastoToDelete}
                 />
 
                 <DeleteMultiplePopup

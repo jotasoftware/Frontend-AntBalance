@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider} from './context/AuthContext';
 import { ExpenseProvider } from './context/ExpenseContext';
 import { SplitExpenseProvider } from './context/SplitExpanseContext';
+import { EmployeeProvider } from './context/EmployeeContext';
 
 import AppRoutes from '@/routes/AppRoutes';  
 
@@ -29,7 +30,9 @@ function App() {
       <AuthProvider>
         <ExpenseProvider>
           <SplitExpenseProvider>
-            <AppRoutes />
+            <EmployeeProvider>
+              <AppRoutes />
+            </EmployeeProvider>
           </SplitExpenseProvider>
         </ExpenseProvider>
       </AuthProvider>

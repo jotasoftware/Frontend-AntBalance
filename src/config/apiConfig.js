@@ -19,6 +19,17 @@ export const API_CONFIG = {
         delete: `${URL}/gastos`,
         edit: (id) => `${URL}/gastos/${id}`,
     },
+    employees: {
+        getAll: `${URL}/funcionarios/ativos`,
+        getAllInactives: `${URL}/funcionarios/inativos`,
+        create: `${URL}/funcionarios`,
+        getValores: `${URL}/funcionarios/total-por-mes`,
+        inactiveAll: `${URL}/funcionarios/desativar-lote`,
+        active: (id) => `${URL}/funcionarios/${id}/ativar`,
+        inactive: (id) => `${URL}/funcionarios/${id}/desativar`,
+        delete: `${URL}/funcionarios`,
+        edit: (id) => `${URL}/funcionarios/${id}`,
+    },
     relatorios: {
         gerarPdf: `${URL}/relatorios/gastos/pdf`,
     },
@@ -27,6 +38,12 @@ export const API_CONFIG = {
         create: `${URL}/categorias`,
         delete: (id) => `${URL}/categorias/${id}`,
         edit: (id) => `${URL}/categorias/${id}`,
+    },
+    sectors: {
+        getAll: `${URL}/setores/usuario`,
+        create: `${URL}/setores`,
+        delete: (id) => `${URL}/setores/${id}`,
+        edit: (id) => `${URL}/setores/${id}`,
     },
     split: {
         getAll: `${URL}/divisao`,
