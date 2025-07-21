@@ -1,0 +1,74 @@
+.graficosContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.graficoCard {
+  display: flex;
+  flex-direction: column;
+  width: 99%;
+}
+
+.graficoInput {
+  box-sizing: border-box;
+  height: 65vh;
+  border: #80808071 1px solid;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+}
+  
+.graficoTitulo{
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.graficoName{
+  display: flex;
+  justify-content: space-between;
+}
+  
+.graficosType {
+  position: relative;
+  display: flex;
+  gap: 5px;
+  background-color: rgb(239, 239, 239);
+  border-radius: 15px;
+  width: max-content;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.225);
+}
+
+.typeIconDiv {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.typeIcon:hover {
+  transition: scale .3s ease-in-out;
+}
+
+.typeIcon:hover {
+  scale: 1.05;
+}
+
+
+.indicator {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: #1a45b8;
+  border-radius: 50%;
+  z-index: 0;
+  transition: left 0.3s ease;
+}
