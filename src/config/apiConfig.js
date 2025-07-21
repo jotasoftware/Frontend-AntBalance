@@ -52,5 +52,6 @@ export const API_CONFIG = {
         create: `${URL}/divisao`,
         accept: `${URL}/divisao/aceitar`,
         refuse: `${URL}/divisao/negar`,
+        list: (id) => `${URL}/divisao/listar/${id}`,
     },
 }

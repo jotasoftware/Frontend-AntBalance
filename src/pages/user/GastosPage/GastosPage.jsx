@@ -30,8 +30,8 @@ function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const { createSplit } = useSplit();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias, loadingDelete } = useExpenses();
+    const { createSplit, fetchPedidosList } = useSplit();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias, loadingDelete, fetchPedidos } = useExpenses();
     const [findInput, setFindInput] = useState('')
     const { isMobile } = useOutletContext();
     const {userRole} = useAuth();
@@ -46,6 +46,7 @@ function GastosPage() {
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [valorDivisao, setValorDivisao] = useState(""); 
     const [gastoAtual, setGastoAtual] = useState(null)
+    const [pedidosDivisaoList, setPedidosDivisaoList] = useState(null)
     const [shareEmail, setShareEmail] = useState('');
     const [gastoToDelete, setGastoToDelete] = useState(null);
     const [gastoToEdit, setGastoToEdit] = useState(null);
@@ -181,6 +182,14 @@ function GastosPage() {
         }else{
             setGastoAtual(gasto)
             setShowSharePopup(true);
+            try {
+                console.log(gasto.id)
+                const response = await fetchPedidosList(gasto.id);
+                console.log(pedidosDivisaoList) 
+                setPedidosDivisaoList(response)
+            } catch (error) {
+                console.error("Não foi possível apagar os gastos.")
+            }
         }
     };
 
@@ -200,6 +209,7 @@ function GastosPage() {
             setValorDivisao("");
             setShareEmail("")
             setShowSharePopup(false);
+            setPedidosDivisaoList(null)
         } catch (error) {
             toast.error("Não foi possível dividir o gasto.");
             console.error(error)
@@ -304,6 +314,7 @@ function GastosPage() {
 
     const handleCloseSharePopup = () => {
         setShowSharePopup(false);
+        setPedidosDivisaoList(null)
         setShareEmail('');
         setValorDivisao('')
     };
@@ -390,6 +401,10 @@ function GastosPage() {
         }
     }, [gastosOrdenados.length, selectedGastos.length]);
 
+    useEffect(() => {
+        console.log(pedidosDivisaoList)
+    }, [pedidosDivisaoList]);
+
     return (
         <div className={styles.gastosContainer}>
             <GridCard flex={1}>
@@ -454,6 +469,7 @@ function GastosPage() {
                     handleShareValor={handleShareValor}
                     handleCloseSharePopup={handleCloseSharePopup}
                     submitShareGasto={submitShareGasto}
+                    pedidos={pedidosDivisaoList}
                 />
 
                 <DeletePopup

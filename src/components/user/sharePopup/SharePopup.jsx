@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './SharePopup.module.css';
+import Avatar from '@/components/common/avatar/Avatar';
 
-export function SharePopup({show, shareEmail, valorDivisao, handleChangeShareEmail, handleShareValor, handleCloseSharePopup, submitShareGasto}) {
+export function SharePopup({show, shareEmail, valorDivisao, handleChangeShareEmail, handleShareValor, handleCloseSharePopup, submitShareGasto, pedidos}) {
+
     if (!show) return null;
 
     return (
@@ -42,6 +44,31 @@ export function SharePopup({show, shareEmail, valorDivisao, handleChangeShareEma
                 onChange={handleShareValor}
                 />
             </div>
+            {pedidos!=null && (pedidos.pendentes.length > 0 || pedidos.aceitos.length > 0) && (
+                <div className={styles.shareContainer}>
+                    <div className={styles.shareDiv}>
+                        <span>Pendentes:</span>
+                        <div className={styles.iconsShare}>
+                            {pedidos.pendentes.map((item) => (
+                                <div key={item.id} className={styles.item}>
+                                <Avatar name={item.usuarioDoisId} size={25}shadow={'none'} borderSize={'2px solid white'}></Avatar>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className={styles.shareDiv}>
+                    <span>Aceitos:</span>
+                        <div className={styles.iconsShare}>
+                            {pedidos.aceitos.map((item) => (
+                                <div key={item.id} className={styles.item}>
+                                <Avatar name={item.idUsuario} size={25}shadow={'none'} borderSize={'2px solid white'}></Avatar>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
             </div>
 
             <div className={styles.popupFooter}>

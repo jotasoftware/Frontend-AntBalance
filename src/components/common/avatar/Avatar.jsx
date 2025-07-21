@@ -1,6 +1,6 @@
 import React from "react";
 
-const Avatar = ({ name, size = 55, backgroundColor = "rgb(235, 235, 235)", textColor = "#191919"}) => {
+const Avatar = ({ name, size = 55, backgroundColor = "rgb(235, 235, 235)", textColor = "#191919", shadow= '0px 2px 8px rgba(0, 0, 0, 0.573)', borderSize = 'none'}) => {
   const getInitials = (fullName) => {
     if (!fullName) return "";
     const parts = fullName.trim().split(" ");
@@ -24,7 +24,8 @@ const Avatar = ({ name, size = 55, backgroundColor = "rgb(235, 235, 235)", textC
     textTransform: "uppercase",
     userSelect: "none",
     cursor: 'pointer',
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.573)'
+    boxShadow: shadow,
+    border: borderSize
   }
 
   return <div style={style}>{initials}</div>;

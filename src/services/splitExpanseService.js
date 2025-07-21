@@ -43,3 +43,13 @@ export const refuseSplit = async (credentials) => {
     throw error;
   }
 };
+
+export const fetchPedidosList = async (id) => {
+  try {
+    const response = await api.get(API_CONFIG.split.list(id));
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao listar dados divididos:", error.response?.data || error.message);
+    throw error;
+  }
+};

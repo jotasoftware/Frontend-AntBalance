@@ -4,7 +4,8 @@ import {
     fetchSplitGastos as apiFetchSplitGastos,
     createSplit as apiCreateSplit,
     acceptSplit as apiAcceptSplit,
-    refuseSplit as apiRefuseSplit
+    refuseSplit as apiRefuseSplit,
+    fetchPedidosList as apiFetchPedidosList
 } from '../services/splitExpanseService';
 import { converterStringParaNumero } from "../utils/converterStringNumero";
 
@@ -67,6 +68,15 @@ export const SplitExpenseProvider = ({ children }) => {
         }
     };
 
+    const fetchPedidosList = async (id) => {
+        try {
+            const response = await apiFetchPedidosList(id);
+            return response 
+        } catch (error) {
+            console.error('Erro ao buscar lista de pedidos:', error);
+        }
+    };
+
     useEffect(() => {
         const loadInitialData = async () => {
             if (isLoggedIn) {
@@ -89,7 +99,7 @@ export const SplitExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loadingSplit, splitGastos, createSplit, fetchSplitGastos, acceptSplit, refuseSplit };
+    const value = { loadingSplit, splitGastos, createSplit, fetchSplitGastos, acceptSplit, refuseSplit, fetchPedidosList };
 
     return (
         <SplitExpanseContext.Provider value={value}>
