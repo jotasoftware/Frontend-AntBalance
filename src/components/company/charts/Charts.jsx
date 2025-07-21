@@ -11,6 +11,12 @@ import { PiChartBarHorizontalFill } from "react-icons/pi";
 const Charts = ({gastos, valores, funcionarios}) => {
 
   const [selected, setSelected] = useState(0);
+  const [view, setView] = useState('atual');
+  const { isMobile } = useOutletContext();
+
+  const handleSetView = (event) => {
+    setView(event.target.value);
+  };
 
   const types = [
     "Gastos por categorias",
@@ -154,7 +160,32 @@ const Charts = ({gastos, valores, funcionarios}) => {
   return (
    <div className={styles.graficosContainer}>
       <div className={styles.graficoName}>
-        <h4 className={styles.graficoTitulo}>{types[selected]}</h4>
+      <div className={styles.graficoTitulo}>
+          <h4>{types[selected]}</h4>
+          {isMobile && <div className={styles.sortContainer}>
+              <select
+                  id="sort"
+                  value={view}
+                  onChange={handleSetView}
+                  className={styles.sortSelect}
+              >
+                  <option value="atual">Esse mês</option>
+                  <option value="todos">Todos os meses</option>
+              </select>
+          </div>}
+        </div>
+        <div className={styles.graficoEnd}>
+          {!isMobile && <div className={styles.sortContainer}>
+              <select
+                  id="sort"
+                  value={view}
+                  onChange={handleSetView}
+                  className={styles.sortSelect}
+              >
+                  <option value="atual">Esse mês</option>
+                  <option value="todos">Todos os meses</option>
+              </select>
+          </div>}
         <div className={styles.graficosType}>
           <div className={styles.indicator} style={{ left: `${left}px` }}></div>
           <div className={styles.typeIconDiv} onClick={() => setSelected(0)}>
@@ -172,6 +203,7 @@ const Charts = ({gastos, valores, funcionarios}) => {
           <div className={styles.typeIconDiv} onClick={() => setSelected(4)}>
           <TbChartDonutFilled style={{ color: (selected === 4) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
+        </div>
         </div>
       </div>
 

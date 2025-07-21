@@ -17,7 +17,6 @@ import Loading from '@/components/common/loading/Loading';
 function DashboardPage() {
 
     const { valorAtual, valoresFuturos, gastos, valores, loadingValores, gastosMes } = useExpenses();
-    console.log(gastosMes)
     useEffect(() => {
         const shouldBlockScroll = loadingValores || valores.length === 0;
 

@@ -32,9 +32,42 @@
   justify-content: space-between;
 }
   
+.graficoEnd{
+  display: flex;
+  gap: 30px;
+}
+
+.sortContainer{
+  display: flex;
+  align-items: center;
+}
+
+.sortSelect {
+  width: 50px;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  font-family: 'Poppins', sans-serif;
+  color: #1a45b8;
+}
+.sortSelect:focus {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  outline: none;
+}
+
+  
 .graficosType {
   position: relative;
   display: flex;
+  height: 30px;
   gap: 5px;
   background-color: rgb(239, 239, 239);
   border-radius: 15px;
@@ -71,4 +104,13 @@
   border-radius: 50%;
   z-index: 0;
   transition: left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .gastosContainer{
+      padding: 15px;
+  }
+  .sortSelect{
+    text-align: start;
+  }
 }

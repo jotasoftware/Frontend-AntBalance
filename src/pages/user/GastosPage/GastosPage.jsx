@@ -31,7 +31,7 @@ function GastosPage() {
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
     const { createSplit, fetchPedidosList } = useSplit();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias, loadingDelete, fetchPedidos } = useExpenses();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias, loadingDelete } = useExpenses();
     const [findInput, setFindInput] = useState('')
     const { isMobile } = useOutletContext();
     const {userRole} = useAuth();
@@ -183,12 +183,10 @@ function GastosPage() {
             setGastoAtual(gasto)
             setShowSharePopup(true);
             try {
-                console.log(gasto.id)
                 const response = await fetchPedidosList(gasto.id);
-                console.log(pedidosDivisaoList) 
                 setPedidosDivisaoList(response)
             } catch (error) {
-                console.error("Não foi possível apagar os gastos.")
+                console.error("Não foi possível pegar os gastos.")
             }
         }
     };

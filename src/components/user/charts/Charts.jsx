@@ -5,10 +5,17 @@ import { Doughnut, Bar, Line, Radar } from 'react-chartjs-2';
 import { TbChartDonutFilled, TbCategory } from "react-icons/tb";
 import { IoBarChart } from "react-icons/io5";
 import { PiChartBarHorizontalFill } from "react-icons/pi";
+import { useOutletContext } from 'react-router-dom';
 
 const Charts = ({gastos, valores}) => {
 
   const [selected, setSelected] = useState(0);
+  const [view, setView] = useState('atual');
+  const { isMobile } = useOutletContext();
+
+  const handleSetView = (event) => {
+    setView(event.target.value);
+  };
 
   const types = [
     "Gastos por categorias",
@@ -146,20 +153,46 @@ const Charts = ({gastos, valores}) => {
   return (
    <div className={styles.graficosContainer}>
       <div className={styles.graficoName}>
-        <h4 className={styles.graficoTitulo}>{types[selected]}</h4>
-        <div className={styles.graficosType}>
-          <div className={styles.indicator} style={{ left: `${left}px` }}></div>
-          <div className={styles.typeIconDiv} onClick={() => setSelected(0)}>
-            <TbChartDonutFilled style={{ color: (selected === 0) ? "white" : "black" }} className={styles.typeIcon}/>
-          </div>
-          <div className={styles.typeIconDiv} onClick={() => setSelected(1)}>
-            <IoBarChart style={{ color: (selected === 1) ? "white" : "black" }} className={styles.typeIcon}/>
-          </div>
-          <div className={styles.typeIconDiv} onClick={() => setSelected(2)}>
-            <PiChartBarHorizontalFill style={{ color: (selected === 2) ? "white" : "black" }} className={styles.typeIcon}/>
-          </div>
-          <div className={styles.typeIconDiv} onClick={() => setSelected(3)}>
-          <TbCategory style={{ color: (selected === 3) ? "white" : "black" }} className={styles.typeIcon}/>
+        <div className={styles.graficoTitulo}>
+          <h4>{types[selected]}</h4>
+          {isMobile && <div className={styles.sortContainer}>
+              <select
+                  id="sort"
+                  value={view}
+                  onChange={handleSetView}
+                  className={styles.sortSelect}
+              >
+                  <option value="atual">Esse mês</option>
+                  <option value="todos">Todos os meses</option>
+              </select>
+          </div>}
+        </div>
+        <div className={styles.graficoEnd}>
+          {!isMobile && <div className={styles.sortContainer}>
+              <select
+                  id="sort"
+                  value={view}
+                  onChange={handleSetView}
+                  className={styles.sortSelect}
+              >
+                  <option value="atual">Esse mês</option>
+                  <option value="todos">Todos os meses</option>
+              </select>
+          </div>}
+          <div className={styles.graficosType}>
+            <div className={styles.indicator} style={{ left: `${left}px` }}></div>
+            <div className={styles.typeIconDiv} onClick={() => setSelected(0)}>
+              <TbChartDonutFilled style={{ color: (selected === 0) ? "white" : "black" }} className={styles.typeIcon}/>
+            </div>
+            <div className={styles.typeIconDiv} onClick={() => setSelected(1)}>
+              <IoBarChart style={{ color: (selected === 1) ? "white" : "black" }} className={styles.typeIcon}/>
+            </div>
+            <div className={styles.typeIconDiv} onClick={() => setSelected(2)}>
+              <PiChartBarHorizontalFill style={{ color: (selected === 2) ? "white" : "black" }} className={styles.typeIcon}/>
+            </div>
+            <div className={styles.typeIconDiv} onClick={() => setSelected(3)}>
+            <TbCategory style={{ color: (selected === 3) ? "white" : "black" }} className={styles.typeIcon}/>
+            </div>
           </div>
         </div>
       </div>
