@@ -1,10 +1,15 @@
+import { useEffect } from 'react';
 import styles from './DeleteMultiplePopup.module.css'; 
 
-const DeleteMultiplePopup = ({ show, onClose, onConfirm, selectedItems, itemList, itemLabel = 'gasto'}) => {
+const DeleteMultiplePopup = ({ show, onClose, onConfirm, selectedItems, itemList, itemLabel = 'gasto', loading}) => {
     if (!show) return null;
 
     const selected = itemList.filter(item => selectedItems.includes(item.id));
     const total = selected.reduce((sum, item) => sum + item.valorTotal, 0);
+
+    useEffect(()=>{
+      console.log(loading)
+    }, [loading])
 
     return (
         <div className={styles.popupOverlay}>
@@ -47,6 +52,8 @@ const DeleteMultiplePopup = ({ show, onClose, onConfirm, selectedItems, itemList
                     ))}
                   </div>
     
+
+                </div>
                   {itemLabel === 'gasto' && (
                     <div className={styles.totalValue}>
                       <strong>
@@ -58,8 +65,6 @@ const DeleteMultiplePopup = ({ show, onClose, onConfirm, selectedItems, itemList
                       </strong>
                     </div>
                   )}
-
-                </div>
               </div>
             </div>
     
@@ -67,8 +72,14 @@ const DeleteMultiplePopup = ({ show, onClose, onConfirm, selectedItems, itemList
               <button className={styles.buttonCancel} onClick={onClose}>
                 Cancelar
               </button>
-              <button className={styles.buttonDelete} onClick={onConfirm}>
-                Excluir {selected.length} {itemLabel}{selected.length > 1 ? 's' : ''}
+              <button
+                className={`${styles.buttonDelete} ${loading ? styles.loading : ''}`}
+                onClick={onConfirm}
+                disabled={loading}
+              >
+                {loading
+                  ? 'Excluindo...'
+                  : `Excluir ${selected.length} ${itemLabel}${selected.length > 1 ? 's' : ''}`}
               </button>
             </div>
           </div>

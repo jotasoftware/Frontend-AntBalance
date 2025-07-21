@@ -10,7 +10,7 @@ import { useEmployee } from '@/context/EmployeeContext';
 function LoginPage() {
     const {login, register, recover} = useAuth();
     const {fetchValores, fetchCategorias, fetchGastosInativos, fetchGastos} = useExpenses();
-    const {fetchFuncionarios, fetchSetores} =useEmployee()
+    const {fetchFuncionarios, fetchSetores, fetchValoresSetor} =useEmployee()
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -77,6 +77,7 @@ function LoginPage() {
             const role = localStorage.getItem('userRole');
             if (role === 'EMPRESARIAL') {
                 await fetchFuncionarios();
+                await fetchValoresSetor();
             }
             toast.success('Login bem sucedido.');
             setEmail("");

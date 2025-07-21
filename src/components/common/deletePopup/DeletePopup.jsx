@@ -1,6 +1,6 @@
 import styles from './DeletePopup.module.css'; 
 
-const DeletePopup = ({ show, onClose, onConfirm, infoToDelete, type='GASTO'}) => {
+const DeletePopup = ({ show, onClose, onConfirm, infoToDelete, type='GASTO', loading}) => {
     if (!show) return null;
     return (
         <div className={styles.popupOverlay}>
@@ -55,10 +55,11 @@ const DeletePopup = ({ show, onClose, onConfirm, infoToDelete, type='GASTO'}) =>
                     Cancelar
                 </button>
                 <button
-                    className={styles.buttonDelete}
+                    className={`${styles.buttonDelete} ${loading ? styles.loading : ''}`}
                     onClick={onConfirm}
-                >
-                    Excluir
+                    disabled={loading}
+                    >
+                    {loading ? 'Excluindo...' : 'Excluir'}
                 </button>
                 </div>
             </div>

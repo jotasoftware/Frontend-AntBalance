@@ -26,6 +26,7 @@ import styles from './FuncionariosPage.module.css';
 import { EditFuncionarioPopup } from '@/components/company/editFuncionarioPopup/EditFuncionarioPopup';
 import ModalSetor from '@/components/company/modalSetor/ModalSetor';
 import { ChangeSalarioPopup } from '@/components/company/changeSalarioPopup/ChangeSalarioPopup';
+import { IoPersonAdd } from "react-icons/io5";
 
 
 function FuncionariosPage() {
@@ -33,13 +34,17 @@ function FuncionariosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedFuncionarios, setSelectedFuncionarios] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const {funcionarios, createSetor, setores, fetchFuncionarios, inactiveFuncionario, fetchSetores, editarFuncionario, deleteSetor, inactiveFuncionarios, loadingFuncionario } = useEmployee();
+    const {funcionarios, createSetor, setores, fetchFuncionarios, inactiveFuncionario, fetchSetores, editarFuncionario, deleteSetor, inactiveFuncionarios, loadingFuncionario, loadingDelete } = useEmployee();
     const [findInput, setFindInput] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false);
     const { isMobile } = useOutletContext();
     useEffect(()=>{
         fetchSetores()
-        console.log(funcionarios)
     },[])
+    useEffect(()=>{
+        console.log(loadingDelete)
+    },[loadingDelete])
 
     //dados modais e popup
     const [modalSetorAberto, setModalSetorAberto] = useState(false);
@@ -102,20 +107,6 @@ function FuncionariosPage() {
     
         return sorted;
     }, [funcionarios, sortOrder, findInput]);
-    
-    
-
-    // const handleShareValor = (event) => {
-    //     const valorNumerico = event.target.value;
-    //     if (valorNumerico === '') {
-    //         setValor('');
-    //         return;
-    //     }
-    //     if (valorNumerico.length <= 12) {
-    //         const valorFormatado = formatarValorMonetario(valorNumerico);
-    //         setValorDivisao(valorFormatado);
-    //     }
-    // }
 
     const handleSortChange = (event) => {
         setSortOrder(event.target.value);
@@ -342,16 +333,20 @@ function FuncionariosPage() {
     const handleAddSetor = async (novoSetor) => {
         if (!setores.includes(novoSetor)) {
             try {
+                setIsLoading(true)
                 await createSetor({ nome: novoSetor });
                 toast.success(`Setor "${novoSetor}" criado com sucesso!`);
             } catch (error) {
                 toast.error("Não foi possível criar a setor.");
+            }finally{
+                setIsLoading(false)
             }
         }
     };
     
     const handleDeleteSetor = async (setor) => {
         try {
+            setIsLoadingDelete(true)
             console.log(setor.nome)
             await deleteSetor(setor.id);
     
@@ -363,6 +358,8 @@ function FuncionariosPage() {
         } catch (error) {
             toast.error(error.response.data.mensagem);
             console.error("Erro ao excluir o setor:", error);
+        }finally{
+            setIsLoadingDelete(false)
         }
     };
 
@@ -432,7 +429,7 @@ function FuncionariosPage() {
                     <div className={styles.gastosActions}>
                         {!isMobile && <FindInput find={findInput} onChangeFind={handleChangeSearch}></FindInput>}
                         <Link to="/cadastrofuncionario">
-                            {isMobile ? <Botao icon={<FaPlus size={24} color={"white"}/>} /> : <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>}
+                            {isMobile ? <Botao icon={<FaPlus size={24} color={"white"}/>} /> : <Botao icon={<IoPersonAdd size={18} color={"white"}/>} name={"Adicionar"}/>}
                         </Link>
                         {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} onClick={handleImprimirRelatorio} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"} onClick={handleImprimirRelatorio}/>}
                     </div>
@@ -466,6 +463,7 @@ function FuncionariosPage() {
                     onConfirm={handleDeleteFuncionarioTrue}
                     infoToDelete={funcionarioToDelete}
                     type={"FUNCIONARIO"}
+                    loading={loadingDelete}
                 />
 
                 <DeleteMultiplePopup
@@ -475,6 +473,7 @@ function FuncionariosPage() {
                     selectedItems={selectedFuncionarios}
                     itemList={funcionariosOrdenados}
                     itemLabel="funcionário"
+                    loading={loadingDelete}
                 />
 
                 <EditFuncionarioPopup
@@ -508,6 +507,8 @@ function FuncionariosPage() {
                 setores={setores}
                 onAddSetor={handleAddSetor}
                 onDeleteSetor={handleDeleteSetor}
+                loadingAdd={isLoading}
+                loadingDelete={isLoadingDelete}
             />
         </div>
     );

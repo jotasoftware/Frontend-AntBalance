@@ -51,7 +51,7 @@ export const fetchSetores = async () => {
   }
 };
 
-export const fetchValores = async () => {
+export const fetchValoresSetor = async () => {
   try {
     const response = await api.get(API_CONFIG.employees.getValores);
     return response.data;

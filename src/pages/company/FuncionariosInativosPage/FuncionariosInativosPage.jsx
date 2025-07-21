@@ -31,11 +31,8 @@ function FuncionariosInativosPage() {
     const [selectedFuncionarios, setSelectedFuncionarios] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
     const [funcionarioToDelete, setFuncionarioToDelete] = useState(false); 
-    const {funcionariosInativos, activeFuncionario, fetchFuncionarios, fetchFuncionariosInativos, deleteFuncionarios, loadingInativo } = useEmployee();
+    const {funcionariosInativos, activeFuncionario, fetchFuncionarios, fetchFuncionariosInativos, deleteFuncionarios, loadingInativo, loadingDelete } = useEmployee();
     const { isMobile } = useOutletContext();
-    useEffect(()=>{
-        fetchFuncionariosInativos()
-    },[])
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showDeleteMultiplePopup, setShowDeleteMultiplePopup] = useState(false);
       
@@ -227,6 +224,7 @@ function FuncionariosInativosPage() {
                     onConfirm={handleDeleteFuncionarioTrue}
                     infoToDelete={funcionarioToDelete}
                     type={"FUNCIONARIO"}
+                    loading={loadingDelete}
                 />
 
                 <DeleteMultiplePopup
@@ -236,6 +234,7 @@ function FuncionariosInativosPage() {
                     selectedItems={selectedFuncionarios}
                     itemList={funcionariosOrdenados}
                     itemLabel="funcionário"
+                    loading={loadingDelete}
                 />
                             
                 {selectedFuncionarios.length > 0 && (

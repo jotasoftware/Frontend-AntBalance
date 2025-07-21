@@ -3,11 +3,13 @@ import styles from './ModalSetor.module.css';
 import { toast } from 'react-toastify';
 import { IoRemoveOutline, IoCheckmarkOutline, IoCloseOutline } from "react-icons/io5";
 import {FaPlus, FaTimes} from 'react-icons/fa';
+import Loading from '@/components/common/loading/Loading';
 
 
-const ModalSetor = ({ isOpen, onClose, onSelectSetor, setores, onAddSetor, onDeleteSetor }) => {
+const ModalSetor = ({ isOpen, onClose, onSelectSetor, setores, onAddSetor, onDeleteSetor, loadingAdd, loadingDelete }) => {
     const [novoSetor, setNovoSetor] = useState('');
     const [mostrarInputNovo, setMostrarInputNovo] = useState(false);
+    const [setorDeletandoId, setSetorDeletandoId] = useState(null)
 
 
     const handleAddNovoSetor = () => {
@@ -36,8 +38,11 @@ const ModalSetor = ({ isOpen, onClose, onSelectSetor, setores, onAddSetor, onDel
 
     const handleDeleteSetor = (setor, e) => {
         e.stopPropagation();
+        setSetorDeletandoId(setor.id);
         if (window.confirm('Tem certeza que deseja excluir ' + setor.nome + '?')) {
             onDeleteSetor(setor);
+        }else{
+            setSetorDeletandoId(null)
         }
     };
 
@@ -76,13 +81,27 @@ const ModalSetor = ({ isOpen, onClose, onSelectSetor, setores, onAddSetor, onDel
                                 <IoRemoveOutline size={12} />
                             </span>
                             <span className={styles.setorIcon}>
-                                {index+1}
+                                {setorDeletandoId === setor.id && loadingDelete ? (
+                                    <div className={styles.setorDeleteLoading}>
+                                        <Loading />
+                                    </div>
+                                ) : (
+                                    index + 1
+                                )}
                             </span>
                             <span className={styles.setorNome}>
                                 {setor.nome}
                             </span>
                         </button>
                     ))}
+
+                    {loadingAdd && <div
+                        className={styles.setorLoading}
+                    >
+                        <div>
+                            <Loading></Loading>
+                        </div>
+                    </div>}
 
                     {!mostrarInputNovo ? (
                         <button

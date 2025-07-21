@@ -129,6 +129,29 @@
     text-align: center;
 }
 
+.setorLoading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 100px;
+    gap: 10px;
+}
+.setorLoading >div >div{
+    height: 30px;
+    width: 30px;
+}
+.setorDeleteLoading > div{
+    height: 20px;
+    width: 20px;
+    background-color: transparent;
+}
+
 .addSetorButton {
     background-color: #f0f7ff;
     border: 2px dashed #1a45b8;

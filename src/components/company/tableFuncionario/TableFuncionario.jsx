@@ -5,7 +5,6 @@ import styles from './TableFuncionario.module.css';
 
 function TableFuncionario({ funcionarios, onSelectFuncionario, isFuncionarioSelected, selectAll, onSelectAll, type, onEditFuncionario, onDeleteFuncionario, onActiveFuncionario, loading, isMobile }) {
     const [funcionarioExpandidoId, setFuncionarioExpandidoId] = useState(null);
-    console.log(funcionarios)
 
     const handleToggle = (id) => {
         setFuncionarioExpandidoId(prevId => (prevId === id ? null : id));

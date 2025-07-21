@@ -7,6 +7,7 @@ import Botao from '@/components/common/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6";
 import ModalCategoria from '@/components/user/modalCategoria/ModalCategoria';
 import { formatarValorMonetario } from '@/utils/formatarValorMonetario';
+import { useAuth } from '@/context/AuthContext';
 
 
 function CadastroGastoCompanyPage() {
@@ -14,6 +15,8 @@ function CadastroGastoCompanyPage() {
     const { createGasto, createCategoria, fetchCategorias, categorias, deleteCategoria } = useExpenses();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+    const {userRole} = useAuth();
 
     const [nome, setNome] = useState('');
     const [valor, setValor] = useState('');
@@ -49,11 +52,6 @@ function CadastroGastoCompanyPage() {
         if (event.target.value.length <= 25) setFonte(event.target.value);
     }
 
-    const handleChangeParcelas = (event) => {
-        const numParcelas = parseInt(event.target.value);
-        setParcelas(numParcelas);
-    }
-
     const handleSelectCategoria = (categoriaSelecionada, id) => {
         setCategoria(categoriaSelecionada);
         setCategoriaId(id)
@@ -61,17 +59,21 @@ function CadastroGastoCompanyPage() {
 
     const handleAddCategoria = async (novaCategoria) => {
         if (!categorias.includes(novaCategoria)) {
+            setIsLoading(true);
             try {
                 await createCategoria({ nome: novaCategoria });
                 toast.success(`Categoria "${novaCategoria}" criada com sucesso!`);
             } catch (error) {
                 toast.error("Não foi possível criar a categoria.");
+            }finally{
+                setIsLoading(false);
             }
         }
     }
 
     const handleDeleteCategoria = async (categoria) => {
         try {
+            setIsLoadingDelete(true)
             await deleteCategoria(categoria.id);
 
             if (categoria.id === categoriaId) {
@@ -83,6 +85,8 @@ function CadastroGastoCompanyPage() {
         } catch (error) {
             toast.error(error.response.data.mensagem);
             console.error("Erro ao excluir categoria:", error);
+        }finally{
+            setIsLoadingDelete(false)
         }
     }
 
@@ -98,7 +102,7 @@ function CadastroGastoCompanyPage() {
             return;
         }
         if (!categoria) {
-            toast.warn("Por favor, selecione uma categoria.");
+            toast.warn("Por favor, selecione um plano de contas.");
             return;
         }
         if (!fonte) {
@@ -161,13 +165,13 @@ function CadastroGastoCompanyPage() {
                     </div>
                 </div>
                 <div className={styles.inputContainer}>
-                    <label htmlFor="categoria">Categoria de Gasto: </label>
+                    <label htmlFor="categoria">Plano de contas: </label>
                     <button
                         type="button"
                         className={styles.categoriaSelectButton}
                         onClick={() => setModalCategoriaAberto(true)}
                     >
-                        {categoria || 'Selecione a categoria'}
+                        {categoria || 'Selecione um plano de contas'}
                     </button>
                 </div>
                 <div className={styles.inputContainer}>
@@ -202,6 +206,9 @@ function CadastroGastoCompanyPage() {
                 categorias={categorias}
                 onAddCategoria={handleAddCategoria}
                 onDeleteCategoria={handleDeleteCategoria}
+                role={userRole}
+                loadingAdd={isLoading}
+                loadingDelete={isLoadingDelete}
             />
         </div>
     );

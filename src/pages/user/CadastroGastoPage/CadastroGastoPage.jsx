@@ -14,6 +14,7 @@ function CadastroGastoPage() {
     const { createGasto, createCategoria, fetchCategorias, categorias, deleteCategoria } = useExpenses();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
     const [nome, setNome] = useState('');
     const [valor, setValor] = useState('');
@@ -61,19 +62,22 @@ function CadastroGastoPage() {
 
     const handleAddCategoria = async (novaCategoria) => {
         if (!categorias.includes(novaCategoria)) {
+            setIsLoading(true);
             try {
                 await createCategoria({ nome: novaCategoria });
                 toast.success(`Categoria "${novaCategoria}" criada com sucesso!`);
             } catch (error) {
                 toast.error("Não foi possível criar a categoria.");
+            }finally{
+                setIsLoading(false);
             }
         }
     }
 
     const handleDeleteCategoria = async (categoria) => {
         try {
+            setIsLoadingDelete(true);
             await deleteCategoria(categoria.id);
-
             if (categoria.id === categoriaId) {
                 setCategoria('');
                 setCategoriaId(null);
@@ -83,6 +87,8 @@ function CadastroGastoPage() {
         } catch (error) {
             toast.error(error.response.data.mensagem);
             console.error("Erro ao excluir categoria:", error);
+        } finally{
+            setIsLoadingDelete(false);
         }
     }
 
@@ -240,6 +246,8 @@ function CadastroGastoPage() {
                 categorias={categorias}
                 onAddCategoria={handleAddCategoria}
                 onDeleteCategoria={handleDeleteCategoria}
+                loadingAdd={isLoading}
+                loadingDelete={isLoadingDelete}
             />
         </div>
     );

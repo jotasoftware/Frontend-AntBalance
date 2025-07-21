@@ -12,7 +12,7 @@ import {
     deleteFuncionarios as apiDeleteFuncionarios,
     deleteSetor as apiDeleteSetor,
     editarFuncionario as apiEditarFuncionario,
-    editarSetor as apiEditarSetor,
+    fetchValoresSetor as apiFetchValoresSetor
 } from '../services/employeeService';
 import { converterStringParaNumero } from "@/utils/converterStringNumero";
 
@@ -21,10 +21,12 @@ export const EmployeeContext = createContext(null);
 export const EmployeeProvider = ({ children }) => {
     const { isLoggedIn, tokenAuth } = useAuth();
 
-    const [loading, setLoading] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
     const [loadingFuncionario, setLoadingFuncionario] = useState(true);
+    const [loadingValoresSetor, setLoadingValoresSetor] = useState(true);
     const [loadingInativo, setLoadingInativo] = useState(true);
     const [funcionarios, setFuncionarios] = useState([]);
+    const [valoresSetor, setValoresSetor] = useState([]);
     const [funcionariosInativos, setFuncionariosInativos] = useState([]);
     const [setores, setSetores] = useState([]);
     const [initialDataLoaded, setInitialDataLoaded] = useState(false);
@@ -50,6 +52,19 @@ export const EmployeeProvider = ({ children }) => {
             throw error;
         }finally{
             setLoadingFuncionario(false)
+        }
+    };
+
+    const fetchValoresSetor = async () => {
+        setLoadingValoresSetor(true)
+        try {
+            const response = await apiFetchValoresSetor();
+            setValoresSetor(response);
+        } catch (error) {
+            console.error("Erro ao buscar funcionarios:", error);
+            throw error;
+        }finally{
+            setLoadingValoresSetor(false)
         }
     };
 
@@ -80,6 +95,7 @@ export const EmployeeProvider = ({ children }) => {
             };
             const novoFuncionario = await apiCreateFuncionario(payloadParaAPI);
             setFuncionarios(prevFuncionarios => [...prevFuncionarios, novoFuncionario]);
+            fetchValoresSetor()
         } catch (error) {
             console.error("Erro ao criar funcionario:", error);
             throw error;
@@ -94,6 +110,7 @@ export const EmployeeProvider = ({ children }) => {
                 prevFuncionarios.map(funcionario => funcionario.id === id ? funcionarioAtualizado : funcionario
                 )
             );
+            fetchValoresSetor()
         } catch (error) {
             console.error("Erro ao atualizar funcionario:", error);
             throw error;
@@ -101,25 +118,33 @@ export const EmployeeProvider = ({ children }) => {
     };
 
     const inactiveFuncionarios = async (data) => {
+        setLoadingDelete(true)
         try {
             await apiInactiveFuncionarios(data);
             fetchFuncionarios()
             fetchFuncionariosInativos()
+            fetchValoresSetor()
         } catch (error) {
             console.error("Erro ao apagar lista de funcionarios:", error);
             throw error;
+        }finally{
+            setLoadingDelete(false)
         }
     };
 
     const inactiveFuncionario = async (data) => {
+        setLoadingDelete(true)
         try {
             console.log(data)
             await apiInactiveFuncionario(data);
             fetchFuncionarios()
             fetchFuncionariosInativos()
+            fetchValoresSetor()
         } catch (error) {
             console.error("Erro ao apagar lista de funcionarios:", error);
             throw error;
+        }finally{
+            setLoadingDelete(false)
         }
     };
     const activeFuncionario = async (data) => {
@@ -127,6 +152,7 @@ export const EmployeeProvider = ({ children }) => {
             await apiActiveFuncionario(data);
             fetchFuncionariosInativos();
             fetchFuncionarios()
+            fetchValoresSetor()
         } catch (error) {
             console.error("Erro ao ativar o funcionario:", error);
             throw error;
@@ -134,12 +160,16 @@ export const EmployeeProvider = ({ children }) => {
     };
 
     const deleteFuncionarios = async (data) => {
+        setLoadingDelete(true)
         try {
             await apiDeleteFuncionarios(data);
             fetchFuncionariosInativos()
+            fetchValoresSetor()
         } catch (error) {
             console.error("Erro ao apagar lista de funcionarios:", error);
             throw error;
+        }finally{
+            setLoadingDelete(false)
         }
     };
 
@@ -173,30 +203,33 @@ export const EmployeeProvider = ({ children }) => {
                 }
                 try {
                     setLoadingFuncionario(true)
-                    const [funcionariosData, setoresData] = await Promise.all([
+                    setLoadingValoresSetor(true)
+                    const [funcionariosData, setoresData, valoresSetorData] = await Promise.all([
                         apiFetchFuncionarios(),
-                        apiFetchSetores()
+                        apiFetchSetores(),
+                        apiFetchValoresSetor()
                     ]);
-                    console.log(funcionariosData)
                     setFuncionarios(funcionariosData);
                     setSetores(setoresData);
-    
+                    setValoresSetor(valoresSetorData);
                     setInitialDataLoaded(true);
                 } catch (error) {
                     console.error("Erro ao buscar funcionários e setores:", error);
                 }finally{
                     setLoadingFuncionario(false)
+                    setLoadingValoresSetor(false)
                 }
             } else {
                 setFuncionarios([]);
                 setSetores([]);
+                setValoresSetor([])
             }
         };
         loadFuncionarioAndSetores();
     }, [isLoggedIn]);
     
 
-    const value = { createFuncionario, createSetor, setores, funcionarios, fetchSetores, fetchFuncionarios, inactiveFuncionario, editarFuncionario, inactiveFuncionarios, deleteSetor, activeFuncionario, deleteFuncionarios, funcionariosInativos, fetchFuncionariosInativos, loadingFuncionario, loadingInativo };
+    const value = { createFuncionario, createSetor, setores, funcionarios, fetchSetores, fetchFuncionarios, inactiveFuncionario, editarFuncionario, inactiveFuncionarios, deleteSetor, activeFuncionario, deleteFuncionarios, funcionariosInativos, fetchFuncionariosInativos, loadingFuncionario, loadingInativo, fetchValoresSetor, valoresSetor, loadingValoresSetor, loadingDelete };
 
     return (
         <EmployeeContext.Provider value={value}>

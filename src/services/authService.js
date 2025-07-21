@@ -1,6 +1,5 @@
 import { API_CONFIG } from '../config/apiConfig';
 import api from '@/config/apiClient';
-import axios from 'axios';
 
 const getAuthConfig = (token) => {
   return { headers: { Authorization: `Bearer ${token}` } };

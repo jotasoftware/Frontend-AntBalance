@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import Botao from '@/components/common/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6"
 import GridCard from '@/components/common/gridcard/GridCard';
-import Valores from '@/components/user/valores/Valores';
+import Valores from '@/components/common/valores/Valores';
 import { Link } from 'react-router-dom'
 import { useExpenses } from '@/context/ExpenseContext';
 import { Chart as ChartJS } from 'chart.js/auto';
@@ -16,8 +16,8 @@ import Loading from '@/components/common/loading/Loading';
 
 function DashboardPage() {
 
-    const { valorAtual, valoresFuturos, gastos, valores, loadingValores } = useExpenses();
-
+    const { valorAtual, valoresFuturos, gastos, valores, loadingValores, gastosMes } = useExpenses();
+    console.log(gastosMes)
     useEffect(() => {
         const shouldBlockScroll = loadingValores || valores.length === 0;
 
@@ -46,8 +46,8 @@ function DashboardPage() {
                 }
                 <GridCard flex={2}>
                     <h4>Resumo</h4>
-                    <Valores mes="Esse mês" valor={valorAtual} bgColor={'#1a45b8'} mesColor={'white'} valorColor={'white'}></Valores>
-                    <Valores mes="Proximos meses" dadosMensais={valoresFuturos} bgColor={'transparent'} mesColor={'black'} valorColor={'#1a45b8'}></Valores>
+                    <Valores mensagem="Esse mês" valor={valorAtual} bgColor={'#1a45b8'} mesColor={'white'} valorColor={'white'}></Valores>
+                    <Valores mensagem="Proximos meses" dadosMensais={valoresFuturos} bgColor={'transparent'} mesColor={'black'} valorColor={'#1a45b8'}></Valores>
                 </GridCard>
                 <GridCard flex={3}>
                     <Charts gastos={gastos} valores={valores}></Charts>

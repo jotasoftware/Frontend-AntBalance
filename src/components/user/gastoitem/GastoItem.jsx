@@ -3,7 +3,7 @@ import styles from './GastoItem.module.css';
 import { IoMdUndo } from "react-icons/io";
 import { TbUserShare, TbEdit, TbTrash } from "react-icons/tb";
 
-const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever, onActive, isMobile}) => {
+const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onShare, onEdit, onDelete, onDeleteForever, onActive, isMobile, role}) => {
     const formatDate = (dataOriginal) => {
         const dateObj = new Date(dataOriginal);
         const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -63,14 +63,18 @@ const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onS
                         })}
                     </div>
                     {!isMobile &&
-                        <>
+                       (role == "EMPRESARIAL" ? <>
+                            <div style={{width: '170px'}}>{gasto.categoria.nome}</div>
+                            <div style={{width: '150px'}}>{gasto.fonte}</div>
+                            <div style={{width: '110px'}}>{formatDate(gasto.data)}</div>
+                        </> : <>
                             <div style={{width: '90px'}}>
                                 {(gasto.numeroParcelas) > 1 ? gasto.numeroParcelas : 'À Vista'}
                             </div>
                             <div style={{width: '140px'}}>{gasto.categoria.nome}</div>
                             <div style={{width: '140px'}}>{gasto.fonte}</div>
                             <div style={{width: '100px'}}>{formatDate(gasto.data)}</div>
-                        </>
+                        </>)
                     }
                     
                 </div>
@@ -91,9 +95,11 @@ const GastoItem = ({ gasto, expandido, onToggle, isSelected, onSelect, type, onS
                     <div className={styles.actionIconsDiv}>
                     {type === 'active' ? (
                         <>
-                        <div className={styles.actionIcon} onClick={handleShare}>
+                        {role == "PESSOAL" &&
+                            <div className={styles.actionIcon} onClick={handleShare}>
                             <TbUserShare />
-                        </div>
+                            </div>
+                        }
                         <div className={styles.actionIcon} onClick={handleEdit}>
                             <TbEdit />
                         </div>

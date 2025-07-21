@@ -14,7 +14,6 @@
 }
 
 .headerContainer .notificationDiv{
-  /* background-color: rgba(255, 255, 255, 0.477); */
   border-radius: 50%;
   position: relative;
   cursor: pointer;
@@ -64,7 +63,8 @@
 
 @media (max-width: 768px) {
   .welcomeContainer h2,
-  .welcomeContainer p {
+  .welcomeContainer p,
+  .welcomeContainer h1 {
     display: none;
   }
 

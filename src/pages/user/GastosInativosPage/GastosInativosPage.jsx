@@ -17,10 +17,11 @@ function GastosInativosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const { gastosInativos, loadingInativo, deleteGastos, activeGasto } = useExpenses();
+    const { gastosInativos, loadingInativo, deleteGastos, activeGasto, loadingDelete } = useExpenses();
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [gastoToDelete, setGastoToDelete] = useState(null);
     const [showDeleteMultiplePopup, setShowDeleteMultiplePopup] = useState(false);
+    const {userRole} = useAuth();
 
     const { isMobile } = useOutletContext();
 
@@ -185,6 +186,7 @@ function GastosInativosPage() {
                     }}
                     isMobile={isMobile}
                     loading={loadingInativo}
+                    role={userRole}
                 />
                 
                 {selectedGastos.length > 0 && (
@@ -198,6 +200,7 @@ function GastosInativosPage() {
                     onClose={handleCloseDeletePopup}
                     onConfirm={handleDeleteGastoTrue}
                     gastoToDelete={gastoToDelete}
+                    loading={loadingDelete}
                 />
 
                 <DeleteMultiplePopup
@@ -207,6 +210,7 @@ function GastosInativosPage() {
                     selectedItems={selectedGastos}
                     itemList={gastosOrdenados}
                     itemLabel="gasto"
+                    loading={loadingDelete}
                 />
 
                 <div className={styles.botaoApagar}>

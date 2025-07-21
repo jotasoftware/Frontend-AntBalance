@@ -10,6 +10,7 @@ export const API_CONFIG = {
     },
     expenses: {
         getAll: `${URL}/gastos/ativos`,
+        getAllMonths: `${URL}/gastos/total-por-mes-agrupado`,
         getAllInactives: `${URL}/gastos/inativos`,
         create: `${URL}/gastos`,
         getValores: `${URL}/gastos/total-por-mes`,
@@ -23,7 +24,7 @@ export const API_CONFIG = {
         getAll: `${URL}/funcionarios/ativos`,
         getAllInactives: `${URL}/funcionarios/inativos`,
         create: `${URL}/funcionarios`,
-        getValores: `${URL}/funcionarios/total-por-mes`,
+        getValores: `${URL}/funcionarios/total-salarios-por-setor`,
         inactiveAll: `${URL}/funcionarios/desativar-lote`,
         active: (id) => `${URL}/funcionarios/${id}/ativar`,
         inactive: (id) => `${URL}/funcionarios/${id}/desativar`,

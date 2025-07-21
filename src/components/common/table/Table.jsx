@@ -3,7 +3,7 @@ import GastoItem from '@/components/user/gastoitem/GastoItem';
 import Loading from '@/components/common/loading/Loading';
 import styles from './Table.module.css';
 
-function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectAll, onSelectAll, type, onShareGasto, onEditGasto, onDeleteGasto, onActiveGasto, loading, isMobile }) {
+function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectAll, onSelectAll, type, onShareGasto, onEditGasto, onDeleteGasto, onActiveGasto, loading, isMobile, role }) {
     const [gastoExpandidoId, setGastoExpandidoId] = useState(null);
 
     const handleToggle = (id) => {
@@ -23,12 +23,16 @@ function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectA
                     <div style={{width: '150px'}}>Gastos</div>
                     <div style={{width: '100px'}}>Valor</div>
                     {!isMobile &&
-                        <>
+                        (role == "EMPRESARIAL" ? <>
+                            <div style={{width: '170px'}}>Plano de contas</div>
+                            <div style={{width: '150px'}}>Fonte</div>
+                            <div style={{width: '110px'}}>Data</div>
+                        </> : <>
                             <div style={{width: '90px'}}>Parcelas</div>
                             <div style={{width: '140px'}}>Categoria</div>
                             <div style={{width: '140px'}}>Fonte</div>
                             <div style={{width: '100px'}}>Data</div>
-                        </>
+                        </>)
                     }
                 </div>
             </div>
@@ -56,6 +60,7 @@ function Table({ gastos, selectedGastos, onSelectGasto, isGastoSelected, selectA
                             onDeleteForever={onDeleteGasto}
                             onActive={onActiveGasto}
                             isMobile={isMobile}
+                            role={role}
                         />
                     ))
                 ))}

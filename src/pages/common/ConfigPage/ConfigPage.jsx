@@ -10,11 +10,19 @@ import { useAuth } from '@/context/AuthContext';
 import { TbCategory } from "react-icons/tb";
 import { useExpenses } from '@/context/ExpenseContext';
 import { useEmployee } from '@/context/EmployeeContext';
+import { IoPersonRemoveOutline } from "react-icons/io5";
 
 
 function ConfigPage() {
 
     const { userRole } = useAuth();
+    const {fetchCategorias} = useExpenses()
+    const {fetchFuncionariosInativos} = useEmployee()
+
+    useEffect(()=>{
+        fetchCategorias()
+        if(userRole=="EMPRESARIAL") fetchFuncionariosInativos()
+    },[])
 
     return (
         <div className={styles.configContainer}>
@@ -37,7 +45,7 @@ function ConfigPage() {
                     }
                     {userRole == 'EMPRESARIAL' &&
                         <Link to="/funcionariosinativos">
-                            <HiOutlineTrash size={30}></HiOutlineTrash>
+                            <IoPersonRemoveOutline size={30}></IoPersonRemoveOutline>
                             Funcionários Inativos
                         </Link>
                     }

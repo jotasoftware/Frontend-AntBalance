@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import styles from './Valores.module.css';
 
-const Valores = ({ mes, valor, dadosMensais, bgColor, mesColor, valorColor }) => {
+const Valores = ({ mensagem, valor, dadosMensais, bgColor, mesColor, valorColor }) => {
   const isExpandable = !!dadosMensais;
   
   const [isExpanded, setIsExpanded] = useState(false);
@@ -13,8 +13,11 @@ const Valores = ({ mes, valor, dadosMensais, bgColor, mesColor, valorColor }) =>
   }
 
   const displayValue = useMemo(() => {
-    if (isExpandable) {
+    if (isExpandable && mensagem!="Salários" ) {
       return dadosMensais.reduce((soma, item) => soma + item.valor, 0);
+    }
+    if (isExpandable && mensagem=="Salários" ) {
+      return dadosMensais.reduce((soma, item) => soma + item.totalSalarios, 0);
     }
     return valor || 0;
   }, [valor, dadosMensais, isExpandable])
@@ -39,14 +42,14 @@ const Valores = ({ mes, valor, dadosMensais, bgColor, mesColor, valorColor }) =>
         cursor: isExpandable ? 'pointer' : 'default'
       }}
     >
-      <h5>{mes}</h5>
+      <h5>{mensagem}</h5>
       <p style={{ color: valorColor }}>
         <span className={styles.sifraoSpan}>R$</span>
         <span className={styles.inteiroSpan}>{inteiro}</span>
         <span className={styles.centsSpan}>,{centavos}</span>
       </p>
 
-      {isExpandable && (
+      {(isExpandable && mensagem!="Salários") && (
         <div className={`${styles.expandableSection} ${isExpanded ? styles.expanded : ''}`}>
           {dadosMensais.map((item) => (
             <div key={item.mes} className={styles.detalheMensal}>
@@ -58,6 +61,19 @@ const Valores = ({ mes, valor, dadosMensais, bgColor, mesColor, valorColor }) =>
           ))}
         </div>
       )}
+
+      {(isExpandable && mensagem=="Salários") && (
+          <div className={`${styles.expandableSection} ${isExpanded ? styles.expanded : ''}`}>
+            {dadosMensais.map((item, index) => (
+              <div key={index} className={styles.detalheMensal}>
+                <span>{item.setorNome}:</span>
+                <strong>
+                  {item.totalSalarios.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                </strong>
+              </div>
+            ))}
+          </div>
+        )}
     </div>
   );
 };

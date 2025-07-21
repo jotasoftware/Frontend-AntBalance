@@ -17,6 +17,7 @@ function CadastroFuncionarioPage() {
     }, [])
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
 
     const [nome, setNome] = useState('');
@@ -68,19 +69,21 @@ function CadastroFuncionarioPage() {
 
     const handleAddSetor = async (novoSetor) => {
         if (!setores.includes(novoSetor)) {
-            console.log(novoSetor)
+            setIsLoading(true)
             try {
-                // Criar o expense para funcionar este metodo
                 await createSetor({ nome: novoSetor });
                 toast.success(`Setor "${novoSetor}" criado com sucesso!`);
             } catch (error) {
                 toast.error("Não foi possível criar o setor.");
+            }finally{
+                setIsLoading(false)
             }
         }
     }
 
     const handleDeleteSetor = async (setor) => {
         try {
+            setIsLoadingDelete(true)
             await deleteSetor(setor.id);
     
             if (setor.id === setorId) {
@@ -91,6 +94,8 @@ function CadastroFuncionarioPage() {
         } catch (error) {
             toast.error(error.response.data.mensagem);
             console.error("Erro ao excluir categoria:", error);
+        }finally{
+            setIsLoadingDelete(false)
         }
     };
 
@@ -217,6 +222,8 @@ function CadastroFuncionarioPage() {
                 setores={setores}
                 onAddSetor={handleAddSetor}
                 onDeleteSetor={handleDeleteSetor}
+                loadingAdd={isLoading}
+                loadingDelete={isLoadingDelete}
             />
         </div>
     );

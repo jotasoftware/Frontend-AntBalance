@@ -16,6 +16,7 @@ import CategoriasPage from '@/pages/user/CategoriasPage/CategoriasPage';
 import CadastroFuncionarioPage from '@/pages/company/CadastroFuncionarioPage/CadastroFuncionarioPage';
 import FuncionariosPage from '@/pages/company/FuncionariosPage/FuncionariosPage';
 import FuncionariosInativosPage from '@/pages/company/FuncionariosInativosPage/FuncionariosInativosPage';
+import DashboardPageCompany from '@/pages/company/DashboardPageCompany/DashboardPageCompany';
 
 export default function PrivateRoutes() {
     const { userRole, loadingAuth } = useAuth();
@@ -45,7 +46,7 @@ export default function PrivateRoutes() {
                 ) : (
                     <>
                         <Route index element={<Navigate to="dashboard" replace />} />
-                        <Route path="dashboard" element={<DashboardPage />} />
+                        <Route path="dashboard" element={<DashboardPageCompany />} />
                         <Route path="gastos" element={<GastosPage />} />
                         <Route path="cadastrogasto" element={<CadastroGastoCompanyPage />} />
                         <Route path="cadastrofuncionario" element={< CadastroFuncionarioPage/>} />

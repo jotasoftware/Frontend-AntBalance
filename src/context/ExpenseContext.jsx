@@ -5,6 +5,7 @@ import {
     createGasto as apiCreateGasto, 
     fetchCategorias as apiFetchCategorias, 
     fetchGastos as apiFetchGastos,
+    fetchGastosMes as apiFetchGastosMes,
     fetchGastosInativos as apiFetchGastosInativos,
     fetchValores as apiFetchValores,
     inactiveGastos as apiInactiveGastos,
@@ -17,6 +18,7 @@ import {
     gerarRelatorioPdf as apiGerarRelatorioPdf,
 } from '../services/expenseService';
 import { converterStringParaNumero } from "../utils/converterStringNumero";
+import { getMesAtualFormatado } from "@/utils/getMesAtualFormatado";
 
 export const ExpenseContext = createContext(null);
 
@@ -25,9 +27,11 @@ export const ExpenseProvider = ({ children }) => {
 
     const [loading, setLoading] = useState(false);
     const [loadingValores, setLoadingValores] = useState(true);
+    const [loadingDelete, setLoadingDelete] = useState(false);
     const [loadingGasto, setLoadingGasto] = useState(true);
     const [loadingInativo, setLoadingInativo] = useState(true);
     const [gastos, setGastos] = useState([]);
+    const [gastosMes, setGastosMes] = useState([]);
     const [gastosInativos, setGastosInativos] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [valorAtual, setValorAtual] = useState(0);
@@ -49,11 +53,23 @@ export const ExpenseProvider = ({ children }) => {
         try {
             const response = await apiFetchGastos();
             setGastos(response);
+            const responseMes = await apiFetchGastosMes();
+            setGastosMes(responseMes)
         } catch (error) {
             console.error("Erro ao buscar gastos:", error);
             throw error;
         } finally {
             setLoadingGasto(false);
+        }
+    };
+
+    const fetchGastosMes = async () => {
+        try {
+            const responseMes = await apiFetchGastosMes();
+            setGastosMes(responseMes)
+        } catch (error) {
+            console.error("Erro ao buscar gastos:", error);
+            throw error;
         }
     };
 
@@ -127,24 +143,27 @@ export const ExpenseProvider = ({ children }) => {
             const novoGasto = await apiCreateGasto(payloadParaAPI);
             fetchValores();
             
-            let gastosMesmaCategoria = null;
-            let totalGastoCategoria = null;
             let excedeu = false;
             if(novoGasto.categoria.limiteDeGasto!=null){
-                gastosMesmaCategoria = gastos.filter(
-                    gasto => gasto.categoriaId === novoGasto.categoriaId
-                );
+                let gastosMesmaCategoria = null;
+                let totalGastoCategoria = null;
+                const mesAtual = getMesAtualFormatado();
+                const gastosDoMes = gastosMes.find((mes) => mes.mes === mesAtual)?.gastos || [];
+                gastosMesmaCategoria = gastosDoMes.filter(
+                    gasto => {
+                        return gasto.categoria === novoGasto.categoria.nome
+                    }
+                  );
+                totalGastoCategoria = gastosMesmaCategoria.reduce((acc, gasto) => acc + gasto.valor,0);
                 if(novoGasto.numeroParcelas>1){
-                    totalGastoCategoria = gastosMesmaCategoria.reduce((acc, gasto) => acc + gasto.parcelas[0],0);
-                    totalGastoCategoria += novoGasto.parcelas[0]
+                    totalGastoCategoria += novoGasto.parcelas[0].valorParcela
                 }else{
-                    totalGastoCategoria = gastosMesmaCategoria.reduce((acc, gasto) => acc + gasto.valorTotal,0);
                     totalGastoCategoria += novoGasto.valorTotal
                 }
                 if(novoGasto.categoria.limiteDeGasto < totalGastoCategoria) excedeu = true;
             }
             setGastos(prevGastos => [...prevGastos, novoGasto]);
-            
+            fetchGastosMes()
             return {
                 novoGasto,
                 excedeu
@@ -158,7 +177,7 @@ export const ExpenseProvider = ({ children }) => {
     const editarGasto = async (id, data) => {
         try {
             const gastoAtualizado = await apiEditarGasto(id, data);
-            
+            fetchGastosMes()
             setGastos(prevGastos => 
                 prevGastos.map(gasto => gasto.id === id ? gastoAtualizado : gasto
                 )
@@ -171,26 +190,34 @@ export const ExpenseProvider = ({ children }) => {
     };
 
     const inactiveGastos = async (data) => {
+        setLoadingDelete(true)
         try {
             await apiInactiveGastos(data);
             fetchGastos()
             fetchValores()
             fetchGastosInativos()
+            fetchGastosMes()
         } catch (error) {
             console.error("Erro ao apagar lista de gastos:", error);
             throw error;
+        }finally{
+            setLoadingDelete(false)
         }
     };
 
     const inactiveGasto = async (data) => {
+        setLoadingDelete(true)
         try {
             await apiInactiveGasto(data);
             fetchGastos()
             fetchValores()
             fetchGastosInativos()
+            fetchGastosMes()
         } catch (error) {
             console.error("Erro ao remover o gasto:", error);
             throw error;
+        }finally{
+            setLoadingDelete(false)
         }
     };
 
@@ -200,6 +227,7 @@ export const ExpenseProvider = ({ children }) => {
             fetchGastosInativos();
             fetchGastos()
             fetchValores()
+            fetchGastosMes()
         } catch (error) {
             console.error("Erro ao ativar o gastos:", error);
             throw error;
@@ -207,12 +235,15 @@ export const ExpenseProvider = ({ children }) => {
     };
 
     const deleteGastos = async (data) => {
+        setLoadingDelete(true)
         try {
             await apiDeleteGastos(data);
             fetchGastosInativos()
         } catch (error) {
             console.error("Erro ao apagar lista de gastos:", error);
             throw error;
+        }finally{
+            setLoadingDelete(false)
         }
     };
     
@@ -297,16 +328,18 @@ export const ExpenseProvider = ({ children }) => {
                     setLoading(true);
                     setLoadingGasto(true);
                     setLoadingValores(true)
-                    const [gastosData, categoriasData, gastosInativosData, valoresData] = await Promise.all([
+                    const [gastosData, categoriasData, gastosInativosData, valoresData, gastosMesData] = await Promise.all([
                         apiFetchGastos(),
                         apiFetchCategorias(),
                         apiFetchGastosInativos(),
-                        apiFetchValores()
+                        apiFetchValores(),
+                        apiFetchGastosMes()
                     ]);
 
                     setGastos(gastosData);
                     setCategorias(categoriasData);
                     setGastosInativos(gastosInativosData);
+                    setGastosMes(gastosMesData);
 
                     const valoresFormatados = transformarDadosDeValores(valoresData);
                     if (valoresFormatados.length === 0) {
@@ -337,13 +370,14 @@ export const ExpenseProvider = ({ children }) => {
                 setValorAtual(0)
                 setValoresFuturos([])
                 setGastosInativos([])
+                setGastosMes([])
             }
         }
 
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, editarCategoria, gerarRelatorioPdf};
+    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, editarCategoria, gerarRelatorioPdf, gastosMes, loadingDelete};
 
     return (
         <ExpenseContext.Provider value={value}>

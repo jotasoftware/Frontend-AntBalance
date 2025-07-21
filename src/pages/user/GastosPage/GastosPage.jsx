@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useRouteError } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { IoPrintOutline } from 'react-icons/io5';
 import { FaSquarePlus, FaPlus, FaTrash } from 'react-icons/fa6';
@@ -31,9 +31,12 @@ function GastosPage() {
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
     const { createSplit } = useSplit();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias } = useExpenses();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias, loadingDelete } = useExpenses();
     const [findInput, setFindInput] = useState('')
     const { isMobile } = useOutletContext();
+    const {userRole} = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
     //dados modais e popup
     const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
@@ -315,19 +318,22 @@ function GastosPage() {
     };
     
     const handleAddCategoria = async (novaCategoria) => {
-        console.log(novaCategoria)
         if (!categorias.includes(novaCategoria)) {
             try {
+                setIsLoading(true)
                 await createCategoria({ nome: novaCategoria });
                 toast.success(`Categoria "${novaCategoria}" criada com sucesso!`);
             } catch (error) {
                 toast.error("Não foi possível criar a categoria.");
+            }finally{
+                setIsLoading(false)
             }
         }
     };
     
     const handleDeleteCategoria = async (categoria) => {
         try {
+            setIsLoadingDelete(true)
             await deleteCategoria(categoria.id);
     
             if (categoria.id === categoriaId) {
@@ -338,6 +344,9 @@ function GastosPage() {
         } catch (error) {
             toast.error(error.response.data.mensagem);
             console.error("Erro ao excluir categoria:", error);
+        }finally{
+            console.log('falso')
+            setIsLoadingDelete(false)
         }
     };
 
@@ -434,6 +443,7 @@ function GastosPage() {
                     }}
                     isMobile={isMobile}
                     loading={loadingGasto}
+                    role={userRole}
                 />
 
                 <SharePopup
@@ -451,6 +461,7 @@ function GastosPage() {
                     onClose={handleCloseDeletePopup}
                     onConfirm={handleDeleteGastoTrue}
                     infoToDelete={gastoToDelete}
+                    loading={loadingDelete}
                 />
 
                 <DeleteMultiplePopup
@@ -460,6 +471,7 @@ function GastosPage() {
                     selectedItems={selectedGastos}
                     itemList={gastosOrdenados}
                     itemLabel="gasto"
+                    loading={loadingDelete}
                 />
 
                 <EditPopup
@@ -494,6 +506,9 @@ function GastosPage() {
                 categorias={categorias}
                 onAddCategoria={handleAddCategoria}
                 onDeleteCategoria={handleDeleteCategoria}
+                role={userRole}
+                loadingAdd={isLoading}
+                loadingDelete={isLoadingDelete}
             />
         </div>
     );

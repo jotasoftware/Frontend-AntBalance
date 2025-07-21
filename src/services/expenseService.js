@@ -31,6 +31,16 @@ export const fetchGastos = async () => {
   }
 };
 
+export const fetchGastosMes = async () => {
+  try {
+    const response = await api.get(API_CONFIG.expenses.getAllMonths);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar gastos:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const fetchGastosInativos = async () => {
   try {
     const response = await api.get(API_CONFIG.expenses.getAllInactives);
