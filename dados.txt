@@ -46,5 +46,9 @@ trash: import { TbTrash } from "react-icons/tb";
 
 categoria: import { TbCategory } from "react-icons/tb";
 
+add funcionario: import { IoPersonAdd } from "react-icons/io5";
+
+remove funcionario: import { IoPersonRemove } from "react-icons/io5";
+
 
 
