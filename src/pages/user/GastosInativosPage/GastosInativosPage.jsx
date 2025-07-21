@@ -150,7 +150,7 @@ function GastosInativosPage() {
             <GridCard flex={1}>
                 <div className={styles.gastosHeaderContainer}>
                     <div className={styles.gastosTitle}>
-                        <h4>Gastos Inativos</h4>
+                        <h4>Lixeira de gastos</h4>
                         <div className={styles.sortContainer}>
                             <label htmlFor="sort">Ordenar por </label>
                             <select

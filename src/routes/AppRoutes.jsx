@@ -21,7 +21,7 @@ import DashboardPageCompany from '@/pages/company/DashboardPageCompany/Dashboard
 export default function PrivateRoutes() {
     const { userRole, loadingAuth } = useAuth();
 
-    if (loadingAuth) return <Loading />;
+    // if (loadingAuth) return <Loading />;
 
     return (
         <Routes>

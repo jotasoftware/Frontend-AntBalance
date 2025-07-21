@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './EditPopup.module.css';
 
-export function EditPopup({ show, editFormData, handleEditChange,setModalCategoriaAberto, handleCloseEditPopup, submitEditGasto}) {
+export function EditPopup({ show, editFormData, handleEditChange,setModalCategoriaAberto, handleCloseEditPopup, submitEditGasto, loading}) {
     if (!show) return null;
 
     return (
@@ -63,10 +63,11 @@ export function EditPopup({ show, editFormData, handleEditChange,setModalCategor
                 Cancelar
             </button>
             <button
-                className={styles.buttonSubmit}
+                className={`${styles.buttonSubmit} ${loading ? styles.loading : ''}`}
                 onClick={submitEditGasto}
-            >
-                Salvar alterações
+                disabled={loading}
+                >
+                {loading ? 'Salvando...' : 'Salvar alterações'}
             </button>
             </div>
         </div>

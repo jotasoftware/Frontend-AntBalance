@@ -217,7 +217,7 @@
 .categoriaSelectButton {
     width: 100%;
     padding: 12px 16px;
-    font-size: 16px;
+    font-size: 14px;
     border: 1px solid #CFCFCF;
     border-radius: 8px;
     background-color: #fafafa;
@@ -227,6 +227,7 @@
     box-sizing: border-box;
     text-align: left;
     cursor: pointer;
+    font-family: 'Poppins', sans-serif;
 }
 
 .categoriaSelectButton:hover {
@@ -238,6 +239,12 @@
     border-color: #1a45b8;
     background-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
+}
+
+.loading {
+    background-color: #6c757d !important;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 @media (max-width: 768px) {

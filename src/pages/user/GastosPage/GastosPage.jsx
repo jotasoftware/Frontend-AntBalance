@@ -30,13 +30,15 @@ function GastosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedGastos, setSelectedGastos] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const { createSplit, fetchPedidosList } = useSplit();
-    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias, loadingDelete } = useExpenses();
+    const { createSplit, fetchPedidosList, loadingSplit } = useSplit();
+    const {gastos, inactiveGastos, inactiveGasto, loadingGasto, categorias, editarGasto, gerarRelatorioPdf, deleteCategoria, createCategoria, fetchCategorias, loadingDelete, loadingEdit } = useExpenses();
     const [findInput, setFindInput] = useState('')
     const { isMobile } = useOutletContext();
     const {userRole} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+
+    useEffect(()=>{console.log(loadingSplit)},[loadingSplit])
 
     //dados modais e popup
     const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
@@ -468,6 +470,7 @@ function GastosPage() {
                     handleCloseSharePopup={handleCloseSharePopup}
                     submitShareGasto={submitShareGasto}
                     pedidos={pedidosDivisaoList}
+                    loading={loadingSplit}
                 />
 
                 <DeletePopup
@@ -495,6 +498,7 @@ function GastosPage() {
                     setModalCategoriaAberto={setModalCategoriaAberto}
                     handleCloseEditPopup={handleCloseEditPopup}
                     submitEditGasto={submitEditGasto}
+                    loading={loadingEdit}
                 />
                             
                 {selectedGastos.length > 0 && (

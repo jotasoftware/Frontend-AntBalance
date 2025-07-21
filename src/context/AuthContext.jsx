@@ -6,6 +6,7 @@ export const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loadingAuth, setLoadingAuth] = useState(true);
+    const [loadingRecover, setLoadingRecover] = useState(true);
     const [userName, setUserName] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [tokenAuth, setTokenAuth] = useState(null);
@@ -62,10 +63,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     const recover = async (email) => {
-        setLoadingAuth(true)
+        setLoadingRecover(true)
         try {
             const response = await apiRecover(email);
-            setLoadingAuth(false)
+            setLoadingRecover(false)
             return response.message
         } catch (error) {
             throw error;
@@ -100,7 +101,7 @@ export const AuthProvider = ({ children }) => {
         setTokenAuth(null)
     };
 
-    const value = { isLoggedIn, loadingAuth, login, logout, register, edit, userName, recover, editPassword, setUserName, userRole, tokenAuth};
+    const value = { isLoggedIn, loadingAuth, login, logout, register, edit, userName, recover, editPassword, setUserName, userRole, tokenAuth, loadingRecover};
 
     return (
         <AuthContext.Provider value={value}>

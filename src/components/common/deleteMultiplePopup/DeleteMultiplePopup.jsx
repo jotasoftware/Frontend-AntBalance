@@ -7,10 +7,6 @@ const DeleteMultiplePopup = ({ show, onClose, onConfirm, selectedItems, itemList
     const selected = itemList.filter(item => selectedItems.includes(item.id));
     const total = selected.reduce((sum, item) => sum + item.valorTotal, 0);
 
-    useEffect(()=>{
-      console.log(loading)
-    }, [loading])
-
     return (
         <div className={styles.popupOverlay}>
           <div className={styles.popup}>

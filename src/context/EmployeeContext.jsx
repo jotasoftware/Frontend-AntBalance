@@ -25,7 +25,8 @@ export const EmployeeProvider = ({ children }) => {
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [loadingFuncionario, setLoadingFuncionario] = useState(true);
     const [loadingValoresSetor, setLoadingValoresSetor] = useState(true);
-    const [loadingInativo, setLoadingInativo] = useState(true);
+    const [loadingInativo, setLoadingInativo] = useState(false);
+    const [loadingEdit, setLoadingEdit] = useState(false);
     const [funcionarios, setFuncionarios] = useState([]);
     const [valoresSetor, setValoresSetor] = useState([]);
     const [funcionariosInativos, setFuncionariosInativos] = useState([]);
@@ -105,6 +106,7 @@ export const EmployeeProvider = ({ children }) => {
 
     const editarFuncionario = async (id, data) => {
         try {
+            setLoadingEdit(true)
             const funcionarioAtualizado = await apiEditarFuncionario(id, data);
 
             setFuncionarios(prevFuncionarios =>
@@ -115,6 +117,8 @@ export const EmployeeProvider = ({ children }) => {
         } catch (error) {
             console.error("Erro ao atualizar funcionario:", error);
             throw error;
+        }finally{
+            setLoadingEdit(false)
         }
     };
 
@@ -240,7 +244,7 @@ export const EmployeeProvider = ({ children }) => {
     }, [isLoggedIn]);
     
 
-    const value = { createFuncionario, createSetor, setores, funcionarios, fetchSetores, fetchFuncionarios, inactiveFuncionario, editarFuncionario, inactiveFuncionarios, deleteSetor, activeFuncionario, deleteFuncionarios, funcionariosInativos, fetchFuncionariosInativos, loadingFuncionario, loadingInativo, fetchValoresSetor, valoresSetor, loadingValoresSetor, loadingDelete, gerarRelatorioPdf };
+    const value = { createFuncionario, createSetor, setores, funcionarios, fetchSetores, fetchFuncionarios, inactiveFuncionario, editarFuncionario, inactiveFuncionarios, deleteSetor, activeFuncionario, deleteFuncionarios, funcionariosInativos, fetchFuncionariosInativos, loadingFuncionario, loadingInativo, fetchValoresSetor, valoresSetor, loadingValoresSetor, loadingDelete, gerarRelatorioPdf, loadingEdit };
 
     return (
         <EmployeeContext.Provider value={value}>

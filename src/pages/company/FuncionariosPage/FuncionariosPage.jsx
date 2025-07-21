@@ -34,7 +34,7 @@ function FuncionariosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedFuncionarios, setSelectedFuncionarios] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const {funcionarios, createSetor, setores, fetchFuncionarios, inactiveFuncionario, fetchSetores, editarFuncionario, deleteSetor, inactiveFuncionarios, loadingFuncionario, loadingDelete, gerarRelatorioPdf } = useEmployee();
+    const {funcionarios, createSetor, setores, fetchFuncionarios, inactiveFuncionario, fetchSetores, editarFuncionario, deleteSetor, inactiveFuncionarios, loadingFuncionario, loadingDelete, loadingEdit, gerarRelatorioPdf } = useEmployee();
     const [findInput, setFindInput] = useState('')
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingDelete, setIsLoadingDelete] = useState(false);
@@ -43,8 +43,8 @@ function FuncionariosPage() {
         fetchSetores()
     },[])
     useEffect(()=>{
-        console.log(loadingDelete)
-    },[loadingDelete])
+        console.log(loadingEdit)
+    },[loadingEdit])
 
     //dados modais e popup
     const [modalSetorAberto, setModalSetorAberto] = useState(false);
@@ -53,7 +53,6 @@ function FuncionariosPage() {
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [showChangeSalaryPopup, setShowChangeSalaryPopup] = useState(false);
     const [funcionarioAtual, setFuncionarioAtual] = useState(null)
-    const [shareEmail, setShareEmail] = useState('');
     const [funcionarioToDelete, setFuncionarioToDelete] = useState(null);
     const [funcionarioToEdit, setFuncionarioToEdit] = useState(null);
     const [editFormData, setEditFormData] = useState({
@@ -483,6 +482,7 @@ function FuncionariosPage() {
                     setModalSetorAberto={setModalSetorAberto}
                     handleCloseEditPopup={handleCloseEditPopup}
                     submitEditFuncionario={submitEditFuncionario}
+                    loading={loadingEdit}
                 />
                             
                 {selectedFuncionarios.length > 0 && (

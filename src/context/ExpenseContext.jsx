@@ -29,6 +29,7 @@ export const ExpenseProvider = ({ children }) => {
     const [loadingValores, setLoadingValores] = useState(true);
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [loadingGasto, setLoadingGasto] = useState(true);
+    const [loadingEdit, setLoadingEdit] = useState(false);
     const [loadingInativo, setLoadingInativo] = useState(true);
     const [gastos, setGastos] = useState([]);
     const [gastosMes, setGastosMes] = useState([]);
@@ -176,6 +177,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const editarGasto = async (id, data) => {
         try {
+            setLoadingEdit(true)
             const gastoAtualizado = await apiEditarGasto(id, data);
             fetchGastosMes()
             setGastos(prevGastos => 
@@ -186,6 +188,8 @@ export const ExpenseProvider = ({ children }) => {
         } catch (error) {
             console.error("Erro ao atualizar gasto:", error);
             throw error;
+        }finally{
+            setLoadingEdit(false)
         }
     };
 
@@ -377,7 +381,7 @@ export const ExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, editarCategoria, gerarRelatorioPdf, gastosMes, loadingDelete};
+    const value = { loading, loadingValores, loadingGasto, loadingInativo, gastos, categorias, valorAtual, valoresFuturos, createGasto, createCategoria, fetchGastos, fetchCategorias, fetchValores, fetchGastosInativos, gastosInativos, valores, deleteGastos, deleteCategoria, inactiveGastos, inactiveGasto, activeGasto, editarGasto, editarCategoria, gerarRelatorioPdf, gastosMes, loadingDelete, loadingEdit};
 
     return (
         <ExpenseContext.Provider value={value}>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from './SharePopup.module.css';
 import Avatar from '@/components/common/avatar/Avatar';
 
-export function SharePopup({show, shareEmail, valorDivisao, handleChangeShareEmail, handleShareValor, handleCloseSharePopup, submitShareGasto, pedidos}) {
+export function SharePopup({show, shareEmail, valorDivisao, handleChangeShareEmail, handleShareValor, handleCloseSharePopup, submitShareGasto, pedidos, loading}) {
 
     if (!show) return null;
 
@@ -79,10 +79,11 @@ export function SharePopup({show, shareEmail, valorDivisao, handleChangeShareEma
                 Cancelar
             </button>
             <button
-                className={styles.buttonSubmit}
+                className={`${styles.buttonSubmit} ${loading ? styles.loading : ''}`}
                 onClick={submitShareGasto}
-            >
-                Compartilhar
+                disabled={loading}
+                >
+                {loading ? 'Compartilhando...' : 'Compartilhar'}
             </button>
             </div>
         </div>

@@ -73,3 +73,26 @@
 .actions .refuse:hover{
   background-color: rgb(255, 33, 33);
 }
+
+.iconLoader {
+  width: 8px;
+  height: 8px;
+}
+
+.iconWrapper {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingWrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loadingWrapper > div{
+  width: 22px;
+  height: 22px;
+}
