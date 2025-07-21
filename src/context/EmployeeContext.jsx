@@ -12,7 +12,8 @@ import {
     deleteFuncionarios as apiDeleteFuncionarios,
     deleteSetor as apiDeleteSetor,
     editarFuncionario as apiEditarFuncionario,
-    fetchValoresSetor as apiFetchValoresSetor
+    fetchValoresSetor as apiFetchValoresSetor,
+    gerarRelatorioPdf as apiGerarRelatorioPdf
 } from '../services/employeeService';
 import { converterStringParaNumero } from "@/utils/converterStringNumero";
 
@@ -194,6 +195,16 @@ export const EmployeeProvider = ({ children }) => {
         }
     };
 
+    const gerarRelatorioPdf = async (data) => {
+        try {
+            const pdfBlob = await apiGerarRelatorioPdf(data, tokenAuth);
+            return pdfBlob;
+        } catch (error) {
+            console.error("Erro ao gerar relatório PDF:", error);
+            throw error;
+        }
+    };
+
     useEffect(() => {
         const loadFuncionarioAndSetores = async () => {
             if (isLoggedIn) {
@@ -229,7 +240,7 @@ export const EmployeeProvider = ({ children }) => {
     }, [isLoggedIn]);
     
 
-    const value = { createFuncionario, createSetor, setores, funcionarios, fetchSetores, fetchFuncionarios, inactiveFuncionario, editarFuncionario, inactiveFuncionarios, deleteSetor, activeFuncionario, deleteFuncionarios, funcionariosInativos, fetchFuncionariosInativos, loadingFuncionario, loadingInativo, fetchValoresSetor, valoresSetor, loadingValoresSetor, loadingDelete };
+    const value = { createFuncionario, createSetor, setores, funcionarios, fetchSetores, fetchFuncionarios, inactiveFuncionario, editarFuncionario, inactiveFuncionarios, deleteSetor, activeFuncionario, deleteFuncionarios, funcionariosInativos, fetchFuncionariosInativos, loadingFuncionario, loadingInativo, fetchValoresSetor, valoresSetor, loadingValoresSetor, loadingDelete, gerarRelatorioPdf };
 
     return (
         <EmployeeContext.Provider value={value}>

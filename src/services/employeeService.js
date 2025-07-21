@@ -138,22 +138,22 @@ export const editarSetor = async (id, data) => {
   }
 };
 
-// export const gerarRelatorioPdf = async (ids, token) => {
-//   try {
-//     const config = {
-//       headers: { 
-//         Authorization: `Bearer ${token}`,
-//         'Content-Type': 'application/json'
-//       },
-//       responseType: 'blob' 
-//     };
+export const gerarRelatorioPdf = async (ids, token) => {
+  try {
+    const config = {
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      responseType: 'blob' 
+    };
     
-//     console.log(ids)
+    console.log(ids)
   
-//     const response = await api.post(API_CONFIG.relatorios.gerarPdf, { funcionarioIds: ids });
-//     return response.data;
-//   } catch (error) {
-//     console.error('Erro ao gerar relatório:', error);
-//     alert('Erro ao gerar relatório PDF');
-//   } 
-// };
+    const response = await api.post(API_CONFIG.relatorios.gerarPdfFuncionarios, { gastoIds: ids }, config);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao gerar relatório:', error);
+    throw error;
+  } 
+};

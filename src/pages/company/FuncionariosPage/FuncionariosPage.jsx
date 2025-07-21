@@ -34,7 +34,7 @@ function FuncionariosPage() {
     const [sortOrder, setSortOrder] = useState('recentes');
     const [selectedFuncionarios, setSelectedFuncionarios] = useState([]); 
     const [selectAll, setSelectAll] = useState(false); 
-    const {funcionarios, createSetor, setores, fetchFuncionarios, inactiveFuncionario, fetchSetores, editarFuncionario, deleteSetor, inactiveFuncionarios, loadingFuncionario, loadingDelete } = useEmployee();
+    const {funcionarios, createSetor, setores, fetchFuncionarios, inactiveFuncionario, fetchSetores, editarFuncionario, deleteSetor, inactiveFuncionarios, loadingFuncionario, loadingDelete, gerarRelatorioPdf } = useEmployee();
     const [findInput, setFindInput] = useState('')
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingDelete, setIsLoadingDelete] = useState(false);
@@ -368,33 +368,33 @@ function FuncionariosPage() {
     }
     
     const handleImprimirRelatorio = async () => {
-        // try {
+        try {
+            console.log(selectedFuncionarios)
+            const pdfBlob = await gerarRelatorioPdf(selectedFuncionarios);
     
-        //     const pdfBlob = await gerarRelatorioPdf(selectedFuncionarios);
+            if (!pdfBlob) {
+                throw new Error('Não foi possível gerar o relatório');
+            }
     
-        //     if (!pdfBlob) {
-        //         throw new Error('Não foi possível gerar o relatório');
-        //     }
-    
-        //     const url = window.URL.createObjectURL(new Blob([pdfBlob], { type: 'application/pdf' }));
-        //     const link = document.createElement('a');
-        //     link.href = url;
+            const url = window.URL.createObjectURL(new Blob([pdfBlob], { type: 'application/pdf' }));
+            const link = document.createElement('a');
+            link.href = url;
             
-        //     const dataAtual = new Date().toISOString().split('T')[0];
-        //     link.setAttribute('download', `relatorio_gastos_${dataAtual}.pdf`);
+            const dataAtual = new Date().toISOString().split('T')[0];
+            link.setAttribute('download', `relatorio_funcionarios_${dataAtual}.pdf`);
             
-        //     document.body.appendChild(link);
-        //     link.click();
-        //     link.remove();
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
             
-        //     window.URL.revokeObjectURL(url);
+            window.URL.revokeObjectURL(url);
             
-        //     toast.success('Relatório gerado com sucesso!');
+            toast.success('Relatório gerado com sucesso!');
             
-        // } catch (error) {
-        //     console.error('Erro ao gerar relatório:', error);
-        //     toast.error('Erro ao gerar relatório PDF. Tente novamente.');
-        // }
+        } catch (error) {
+            console.error('Erro ao gerar relatório:', error);
+            toast.error('Erro ao gerar relatório PDF. Tente novamente.');
+        }
     };    
 
     useEffect(() => {
@@ -429,7 +429,7 @@ function FuncionariosPage() {
                     <div className={styles.gastosActions}>
                         {!isMobile && <FindInput find={findInput} onChangeFind={handleChangeSearch}></FindInput>}
                         <Link to="/cadastrofuncionario">
-                            {isMobile ? <Botao icon={<FaPlus size={24} color={"white"}/>} /> : <Botao icon={<IoPersonAdd size={18} color={"white"}/>} name={"Adicionar"}/>}
+                            {isMobile ? <Botao icon={<IoPersonAdd size={18} color={"white"}/>} /> : <Botao icon={<IoPersonAdd size={18} color={"white"}/>} name={"Adicionar"}/>}
                         </Link>
                         {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} onClick={handleImprimirRelatorio} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"} onClick={handleImprimirRelatorio}/>}
                     </div>

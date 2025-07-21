@@ -33,6 +33,7 @@ export const API_CONFIG = {
     },
     relatorios: {
         gerarPdf: `${URL}/relatorios/gastos/pdf`,
+        gerarPdfFuncionarios: `${URL}/relatorios/funcionarios/pdf`,
     },
     categories: {
         getAll: `${URL}/categorias/usuario`,

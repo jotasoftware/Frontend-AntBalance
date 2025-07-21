@@ -308,14 +308,14 @@ export const ExpenseProvider = ({ children }) => {
     };
 
     const gerarRelatorioPdf = async (data) => {
-    try {
-        const pdfBlob = await apiGerarRelatorioPdf(data, tokenAuth);
-        return pdfBlob;
-    } catch (error) {
-        console.error("Erro ao gerar relatório PDF:", error);
-        throw error;
-    }
-};
+        try {
+            const pdfBlob = await apiGerarRelatorioPdf(data, tokenAuth);
+            return pdfBlob;
+        } catch (error) {
+            console.error("Erro ao gerar relatório PDF:", error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
         const loadInitialData = async () => {
