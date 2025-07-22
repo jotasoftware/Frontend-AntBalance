@@ -49,7 +49,7 @@ function DashboardPage() {
                     <Valores mensagem="Proximos meses" dadosMensais={valoresFuturos} bgColor={'transparent'} mesColor={'black'} valorColor={'#1a45b8'}></Valores>
                 </GridCard>
                 <GridCard flex={3}>
-                    <Charts gastos={gastos} valores={valores}></Charts>
+                    <Charts gastos={gastos} valores={valores} gastosMes={gastosMes}></Charts>
                 </GridCard>
             </div>
         </div>

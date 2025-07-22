@@ -6,8 +6,9 @@ import { TbChartDonutFilled, TbCategory } from "react-icons/tb";
 import { IoBarChart } from "react-icons/io5";
 import { PiChartBarHorizontalFill } from "react-icons/pi";
 import { useOutletContext } from 'react-router-dom';
+import { getMesAtualFormatado } from '@/utils/getMesAtualFormatado';
 
-const Charts = ({gastos, valores}) => {
+const Charts = ({gastos, valores, gastosMes}) => {
 
   const [selected, setSelected] = useState(0);
   const [view, setView] = useState('atual');
@@ -44,32 +45,29 @@ const Charts = ({gastos, valores}) => {
   const dadosPorCategoria = useMemo(() => {
   const retorno = {};
 
-  gastos.forEach((gasto) => {
-    const categoriaNome = gasto.categoria?.nome || 'Sem Categoria';
+   if (view === "atual") {
+    const mesAtual = getMesAtualFormatado();
+    const gastosDoMes = gastosMes.find(mes => mes.mes === mesAtual)?.gastos || [];
     
-    if(gasto.numeroParcelas > 1) {
-      console.log('Gasto parcelado:', {
-        categoria: categoriaNome,
-        numeroParcelas: gasto.numeroParcelas,
-        parcelas: gasto.parcelas,
-        primeiraParcelaExiste: gasto.parcelas && gasto.parcelas[0],
-        valorPrimeiraParcela: gasto.parcelas?.[0]
-      });
-    }
+    gastosDoMes.forEach((gasto) => {
+      const categoriaNome = gasto.categoria || 'Sem Categoria';
+      retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.valor;
+    });
+  } 
 
-    if(gasto.numeroParcelas > 1){
-      retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.parcelas[0].valorParcela;
-    } else {
+  else if (view === "todos") {
+    gastos.forEach((gasto) => {
+      const categoriaNome = gasto.categoria?.nome || 'Sem Categoria';
       retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.valorTotal;
-    }
-  });
+    });
+  }
 
     return {
       labels: Object.keys(retorno),
       dados: Object.values(retorno),
     };
 
-  }, [gastos]);
+  }, [gastos, gastosMes, view]);
 
   const dadosPorLimiteCategoria = useMemo(() => { //novos retornos para manipular cada tipo de dados
     const retorno = {
@@ -101,7 +99,7 @@ const Charts = ({gastos, valores}) => {
     });
 
     return retorno;
-  }, [gastos, dadosPorCategoria]);
+  }, [gastos, dadosPorCategoria, gastosMes, view]);
 
   const dadosPorData = useMemo(() => {
     const retorno = {};
@@ -129,14 +127,21 @@ const Charts = ({gastos, valores}) => {
    const dadosPorFonte = useMemo(() => {
     const retorno = {};
 
-    gastos.forEach((gasto) => {
-      const fonte = gasto.fonte || 'Sem Fonte';
-        if(gasto.numeroParcelas > 1){
-        retorno[fonte] = (retorno[fonte] || 0) + gasto.parcelas[0].valorParcela;
-      } else {
-        retorno[fonte] = (retorno[fonte] || 0) + gasto.valorTotal;
+      if (view === "atual") {
+        const mesAtual = getMesAtualFormatado();
+        const gastosDoMes = gastosMes.find(mes => mes.mes === mesAtual)?.gastos || [];
+        
+        gastosDoMes.forEach((gasto) => {
+          const fonte = gasto.fonte || 'Sem Fonte';
+          retorno[fonte] = (retorno[fonte] || 0) + gasto.valor;
+        });
+      } 
+      else if (view === "todos") {
+        gastos.forEach((gasto) => {
+          const fonte = gasto.fonte || 'Sem Fonte';
+          retorno[fonte] = (retorno[fonte] || 0) + gasto.valorTotal;
+        });
       }
-    });
 
     const ordenarDados = Object.entries(retorno)
     .map(([label, valor]) => ({ label, valor }))
@@ -147,7 +152,7 @@ const Charts = ({gastos, valores}) => {
     dados: ordenarDados.map(item => item.valor),
     };
 
-  }, [gastos]);
+  }, [gastos, gastosMes, view]);
 
 
   return (
@@ -163,7 +168,7 @@ const Charts = ({gastos, valores}) => {
                   className={styles.sortSelect}
               >
                   <option value="atual">Esse mês</option>
-                  <option value="todos">Todos os meses</option>
+                  <option value="todos">Todos os gastos</option>
               </select>
           </div>}
         </div>
@@ -176,7 +181,7 @@ const Charts = ({gastos, valores}) => {
                   className={styles.sortSelect}
               >
                   <option value="atual">Esse mês</option>
-                  <option value="todos">Todos os meses</option>
+                  <option value="todos">Todos os gastos</option>
               </select>
           </div>}
           <div className={styles.graficosType}>

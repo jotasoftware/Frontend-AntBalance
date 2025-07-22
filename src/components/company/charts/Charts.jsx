@@ -7,8 +7,9 @@ import { Doughnut, Bar, Line, Radar } from 'react-chartjs-2';
 import { TbChartDonutFilled, TbCategory } from "react-icons/tb";
 import { IoBarChart } from "react-icons/io5";
 import { PiChartBarHorizontalFill } from "react-icons/pi"; 
+import { getMesAtualFormatado } from '@/utils/getMesAtualFormatado';
 
-const Charts = ({gastos, valores, funcionarios}) => {
+const Charts = ({gastos, valores, valoresSetor}) => {
 
   const [selected, setSelected] = useState(0);
   const [view, setView] = useState('atual');
@@ -45,15 +46,22 @@ const Charts = ({gastos, valores, funcionarios}) => {
   const dadosPorCategoria = useMemo(() => {
   const retorno = {};
 
-  gastos.forEach((gasto) => {
-    const categoriaNome = gasto.categoria?.nome || 'Sem Categoria';
-
-    if(gasto.numeroParcelas > 1){
-      retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.parcelas[0].valorParcela;
-    } else {
-      retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.valorTotal;
+   if (view === "atual") {
+      const mesAtual = getMesAtualFormatado();
+      const gastosDoMes = gastosMes.find(mes => mes.mes === mesAtual)?.gastos || [];
+      
+      gastosDoMes.forEach((gasto) => {
+        const categoriaNome = gasto.categoria || 'Sem Categoria';
+        retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.valor;
+      });
+    } 
+  
+    else if (view === "todos") {
+      gastos.forEach((gasto) => {
+        const categoriaNome = gasto.categoria?.nome || 'Sem Categoria';
+        retorno[categoriaNome] = (retorno[categoriaNome] || 0) + gasto.valorTotal;
+      });
     }
-  });
 
     return {
       labels: Object.keys(retorno),
@@ -120,14 +128,21 @@ const Charts = ({gastos, valores, funcionarios}) => {
    const dadosPorFonte = useMemo(() => {
     const retorno = {};
 
-    gastos.forEach((gasto) => {
-      const fonte = gasto.fonte || 'Sem Fonte';
-        if(gasto.numeroParcelas > 1){
-        retorno[fonte] = (retorno[fonte] || 0) + gasto.parcelas[0].valorParcela;
-      } else {
+    if (view === "atual") {
+      const mesAtual = getMesAtualFormatado();
+      const gastosDoMes = gastosMes.find(mes => mes.mes === mesAtual)?.gastos || [];
+      
+      gastosDoMes.forEach((gasto) => {
+        const fonte = gasto.fonte || 'Sem Fonte';
+        retorno[fonte] = (retorno[fonte] || 0) + gasto.valor;
+      });
+    } 
+    else if (view === "todos") {
+      gastos.forEach((gasto) => {
+        const fonte = gasto.fonte || 'Sem Fonte';
         retorno[fonte] = (retorno[fonte] || 0) + gasto.valorTotal;
-      }
-    });
+      });
+    }
 
     const ordenarDados = Object.entries(retorno)
     .map(([label, valor]) => ({ label, valor }))
@@ -140,21 +155,22 @@ const Charts = ({gastos, valores, funcionarios}) => {
 
   }, [gastos]);
 
-// const dadosPorSetor = useMemo(() => {
-//   funcionarios.forEach((funcionario) => {
-//     const retorno = {};
 
-//     const setorNome = funcionario.setor?.nome || 'Sem Setores';
-//       retorno[setorNome] = (retorno[setorNome] || 0) + funcionario.salario;
+const dadosPorSetor = useMemo(() => {
+  valoresSetor.forEach((valoresSetor) => {
+    const retorno = {};
+
+    const setorNome = valoresSetor.setorNome|| 'Sem Setores';
+    retorno[setorNome] = (retorno[setorNome] || 0) + valoresSetor.totalSalarios;
     
-//   });
+  });
 
-//   return {
-//     labels: Object.keys(retorno),
-//     dados: Object.values(retorno),
-//   };
+  return {
+    labels: Object.keys(retorno),
+    dados: Object.values(retorno),
+  };
 
-// }, [funcionarios]);
+}, [funcionarios]);
 
 
   return (
@@ -198,16 +214,16 @@ const Charts = ({gastos, valores, funcionarios}) => {
             <PiChartBarHorizontalFill style={{ color: (selected === 2) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
           <div className={styles.typeIconDiv} onClick={() => setSelected(3)}>
-          <TbCategory style={{ color: (selected === 3) ? "white" : "black" }} className={styles.typeIcon}/>
+            <TbCategory style={{ color: (selected === 3) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
           <div className={styles.typeIconDiv} onClick={() => setSelected(4)}>
-          <TbChartDonutFilled style={{ color: (selected === 4) ? "white" : "black" }} className={styles.typeIcon}/>
+            <TbChartDonutFilled style={{ color: (selected === 4) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
         </div>
         </div>
       </div>
 
-      {selected === 0 && (
+  {selected === 0 && (
   <div className={styles.graficoCard}>
     <div className={styles.graficoInput}>
       <Doughnut
@@ -482,7 +498,7 @@ const Charts = ({gastos, valores, funcionarios}) => {
   </div>
 )}
 
-{/* {selected === 4 && (
+{selected === 4 && (
 <div className={styles.graficoCard}>
     <div className={styles.graficoInput}>
       <Doughnut
@@ -542,7 +558,7 @@ const Charts = ({gastos, valores, funcionarios}) => {
 
     </div>
   </div>
-)} */}
+)}
 
       
   </div>
