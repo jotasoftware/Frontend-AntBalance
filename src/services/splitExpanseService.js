@@ -36,7 +36,7 @@ export const refuseSplit = async (credentials) => {
     const config = {
       data: credentials,
     };
-    const response = await api.delete(API_CONFIG.split.refuse);
+    const response = await api.delete(API_CONFIG.split.refuse, config);
     return response.data;
   } catch (error) {
     console.error("Erro ao recusar gasto dividido:", error.response?.data || error.message);

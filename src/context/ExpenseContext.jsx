@@ -96,7 +96,6 @@ export const ExpenseProvider = ({ children }) => {
             console.error("Erro ao buscar categorias:", error);
             throw error;
         } finally {
-            console.log(loading)
             setLoading(false);
         }
     };
@@ -176,8 +175,8 @@ export const ExpenseProvider = ({ children }) => {
     };
 
     const editarGasto = async (id, data) => {
+        setLoadingEdit(true)
         try {
-            setLoadingEdit(true)
             const gastoAtualizado = await apiEditarGasto(id, data);
             fetchGastosMes()
             setGastos(prevGastos => 

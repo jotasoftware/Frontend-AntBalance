@@ -3,7 +3,7 @@ import styles from './EditPopup.module.css';
 
 export function EditPopup({ show, editFormData, handleEditChange,setModalCategoriaAberto, handleCloseEditPopup, submitEditGasto, loading}) {
     if (!show) return null;
-
+    
     return (
         <div className={styles.popupOverlay}>
         <div className={styles.popup}>

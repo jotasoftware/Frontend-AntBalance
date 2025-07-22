@@ -38,8 +38,6 @@ function GastosPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-    useEffect(()=>{console.log(loadingSplit)},[loadingSplit])
-
     //dados modais e popup
     const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -292,7 +290,6 @@ function GastosPage() {
     const handleDeleteGastoUnico = async(gasto) => {
         setGastoToDelete(gasto);
         setShowDeletePopup(true);
-        console.log(showDeletePopup)
     };
 
     const handleDeleteGastoTrue = async() => {
@@ -356,7 +353,6 @@ function GastosPage() {
             toast.error(error.response.data.mensagem);
             console.error("Erro ao excluir categoria:", error);
         }finally{
-            console.log('falso')
             setIsLoadingDelete(false)
         }
     };
@@ -400,10 +396,6 @@ function GastosPage() {
             setSelectAll(selectedGastos.length === gastosOrdenados.length);
         }
     }, [gastosOrdenados.length, selectedGastos.length]);
-
-    useEffect(() => {
-        console.log(pedidosDivisaoList)
-    }, [pedidosDivisaoList]);
 
     return (
         <div className={styles.gastosContainer}>

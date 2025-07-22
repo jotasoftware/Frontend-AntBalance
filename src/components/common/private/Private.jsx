@@ -6,7 +6,6 @@ import styles from './Private.module.css';
 
 const Private = ({ children }) => {
   const { isLoggedIn, loadingAuth } = useAuth();
-  console.log(loadingAuth)
   if (loadingAuth) {
     return (
       <div className={styles.loadingContainer}>
