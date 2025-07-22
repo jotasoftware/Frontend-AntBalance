@@ -50,5 +50,12 @@ add funcionario: import { IoPersonAdd } from "react-icons/io5";
 
 remove funcionario: import { IoPersonRemove } from "react-icons/io5";
 
+logo react: import { IoLogoReact } from "react-icons/io5";
+
+logo spring boot: import { SiSpringboot } from "react-icons/si";
+
+logo postgre: import { BiLogoPostgresql } from "react-icons/bi";
+
+
 
 
