@@ -24,7 +24,6 @@ const Charts = ({gastos, valores, valoresSetor, gastosMes}) => {
     "Gastos por categorias",
     "Gastos por mês",
     "Gastos por fonte",
-    "Gastos por limite",
     "Gastos por Setor"
   ]
 
@@ -216,9 +215,6 @@ const dadosPorSetor = useMemo(() => {
             <PiChartBarHorizontalFill style={{ color: (selected === 2) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
           <div className={styles.typeIconDiv} onClick={() => setSelected(3)}>
-            <TbCategory style={{ color: (selected === 3) ? "white" : "black" }} className={styles.typeIcon}/>
-          </div>
-          <div className={styles.typeIconDiv} onClick={() => setSelected(4)}>
             <IoPeopleOutline style={{ color: (selected === 4) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
         </div>
@@ -226,6 +222,7 @@ const dadosPorSetor = useMemo(() => {
       </div>
 
   {selected === 0 && (
+   
   <div className={styles.graficoCard}>
     <div className={styles.graficoInput}>
       <Doughnut
@@ -372,7 +369,7 @@ const dadosPorSetor = useMemo(() => {
   </div>
 )}
 
-{selected === 3 && (
+{/* {selected === 3 && (
 <div className={styles.graficoCard}>
     <div className={styles.graficoInput}>
       <Bar
@@ -498,9 +495,9 @@ const dadosPorSetor = useMemo(() => {
       />
     </div>
   </div>
-)}
+)} */}
 
-{selected === 4 && (
+{selected === 3 && (
 <div className={styles.graficoCard}>
     <div className={styles.graficoInput}>
       <Doughnut
