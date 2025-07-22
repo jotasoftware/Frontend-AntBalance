@@ -420,10 +420,10 @@ function GastosPage() {
                     </div>
                     <div className={styles.gastosActions}>
                         {!isMobile && <FindInput find={findInput} onChangeFind={handleChangeSearch}></FindInput>}
+                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} onClick={handleImprimirRelatorio} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"} onClick={handleImprimirRelatorio}/>}
                         <Link to="/cadastrogasto">
                             {isMobile ? <Botao icon={<FaPlus size={24} color={"white"}/>} /> : <Botao icon={<FaSquarePlus size={24} color={"white"}/>} name={"Adicionar"}/>}
                         </Link>
-                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} onClick={handleImprimirRelatorio} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"} onClick={handleImprimirRelatorio}/>}
                     </div>
                     {isMobile && 
                         <div className={styles.searchMobileAction}>

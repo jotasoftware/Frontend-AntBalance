@@ -427,10 +427,10 @@ function FuncionariosPage() {
                     </div>
                     <div className={styles.gastosActions}>
                         {!isMobile && <FindInput find={findInput} onChangeFind={handleChangeSearch}></FindInput>}
+                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} onClick={handleImprimirRelatorio} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"} onClick={handleImprimirRelatorio}/>}
                         <Link to="/cadastrofuncionario">
                             {isMobile ? <Botao icon={<IoPersonAdd size={18} color={"white"}/>} /> : <Botao icon={<IoPersonAdd size={18} color={"white"}/>} name={"Adicionar"}/>}
                         </Link>
-                        {isMobile ? <Botao icon={<IoPrintOutline size={24} color={"white"} onClick={handleImprimirRelatorio} />} />: <Botao icon={<IoPrintOutline size={24} color={"white"}/>} name={"Imprimir"} onClick={handleImprimirRelatorio}/>}
                     </div>
                     {isMobile && 
                         <div className={styles.searchMobileAction}>

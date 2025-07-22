@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
 import { useExpenses } from '@/context/ExpenseContext';
 import { Chart as ChartJS } from 'chart.js/auto';
 import { Doughnut, Line } from 'react-chartjs-2';
-import Charts from '@/components/user/charts/Charts';
+import Charts from '@/components/company/charts/Charts';
 import Loading from '@/components/common/loading/Loading';
 import { useEmployee } from '@/context/EmployeeContext';
 import { IoPersonAdd } from "react-icons/io5";

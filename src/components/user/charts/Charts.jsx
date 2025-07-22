@@ -30,11 +30,11 @@ const Charts = ({gastos, valores, gastosMes}) => {
   const left = selected * (itemWidth + gap);
 
   const coresPaleta = [
-    '#1a45b8', // Azul principal
-    '#6366f1', // Índigo
-    '#ec4899', // Rosa
     '#8b5cf6', // Violeta
     '#f59e0b', // Laranja
+    '#ec4899', // Rosa
+    '#1a45b8', // Azul principal
+    '#6366f1', // Índigo
     '#10b981', // Verde
     '#06b6d4', // Ciano
     '#3b82f6', // Azul médio

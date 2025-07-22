@@ -5,11 +5,12 @@ import { EmployeeContext, useEmployee } from '@/context/EmployeeContext';
 import { Chart as ChartJS, Colors } from 'chart.js/auto';
 import { Doughnut, Bar, Line, Radar } from 'react-chartjs-2';
 import { TbChartDonutFilled, TbCategory } from "react-icons/tb";
-import { IoBarChart } from "react-icons/io5";
+import { IoBarChart, IoPeopleOutline } from "react-icons/io5";
 import { PiChartBarHorizontalFill } from "react-icons/pi"; 
 import { getMesAtualFormatado } from '@/utils/getMesAtualFormatado';
+import { useOutletContext } from 'react-router-dom';
 
-const Charts = ({gastos, valores, valoresSetor}) => {
+const Charts = ({gastos, valores, valoresSetor, gastosMes}) => {
 
   const [selected, setSelected] = useState(0);
   const [view, setView] = useState('atual');
@@ -23,7 +24,8 @@ const Charts = ({gastos, valores, valoresSetor}) => {
     "Gastos por categorias",
     "Gastos por mês",
     "Gastos por fonte",
-    "Gastos por limite"
+    "Gastos por limite",
+    "Gastos por Setor"
   ]
 
   const itemWidth = 30;
@@ -31,10 +33,10 @@ const Charts = ({gastos, valores, valoresSetor}) => {
   const left = selected * (itemWidth + gap);
 
   const coresPaleta = [
-    '#1a45b8', // Azul principal
+    '#8b5cf6', // Violeta
     '#f59e0b', // Laranja
     '#ec4899', // Rosa
-    '#8b5cf6', // Violeta
+    '#1a45b8', // Azul principal
     '#6366f1', // Índigo
     '#10b981', // Verde
     '#06b6d4', // Ciano
@@ -68,7 +70,7 @@ const Charts = ({gastos, valores, valoresSetor}) => {
       dados: Object.values(retorno),
     };
 
-  }, [gastos]);
+  }, [gastos, gastosMes, view]);
 
   const dadosPorLimiteCategoria = useMemo(() => { //novos retornos para manipular cada tipo de dados
     const retorno = {
@@ -123,7 +125,7 @@ const Charts = ({gastos, valores, valoresSetor}) => {
       labels: ordenarMeses,
       dados: ordenarMeses.map((mes) => retorno[mes]),
     };
-  }, [gastos]);
+  }, [gastos, gastosMes]);
 
    const dadosPorFonte = useMemo(() => {
     const retorno = {};
@@ -153,24 +155,24 @@ const Charts = ({gastos, valores, valoresSetor}) => {
     dados: ordenarDados.map(item => item.valor),
     };
 
-  }, [gastos]);
+  }, [gastos, gastosMes, view]);
 
 
 const dadosPorSetor = useMemo(() => {
-  valoresSetor.forEach((valoresSetor) => {
-    const retorno = {};
+  const retorno = {};
+    valoresSetor.forEach((valoresSetor) => {
 
-    const setorNome = valoresSetor.setorNome|| 'Sem Setores';
-    retorno[setorNome] = (retorno[setorNome] || 0) + valoresSetor.totalSalarios;
-    
-  });
+      const setorNome = valoresSetor.setorNome|| 'Sem Setores';
+      retorno[setorNome] = (retorno[setorNome] || 0) + valoresSetor.totalSalarios;
+      
+    });
 
   return {
     labels: Object.keys(retorno),
     dados: Object.values(retorno),
   };
 
-}, [funcionarios]);
+}, [valoresSetor]);
 
 
   return (
@@ -217,7 +219,7 @@ const dadosPorSetor = useMemo(() => {
             <TbCategory style={{ color: (selected === 3) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
           <div className={styles.typeIconDiv} onClick={() => setSelected(4)}>
-            <TbChartDonutFilled style={{ color: (selected === 4) ? "white" : "black" }} className={styles.typeIcon}/>
+            <IoPeopleOutline style={{ color: (selected === 4) ? "white" : "black" }} className={styles.typeIcon}/>
           </div>
         </div>
         </div>
