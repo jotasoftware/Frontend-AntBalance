@@ -108,7 +108,7 @@ export const SplitExpenseProvider = ({ children }) => {
         loadInitialData();
     }, [isLoggedIn]);
 
-    const value = { loadingSplit, splitGastos, createSplit, fetchSplitGastos, acceptSplit, refuseSplit, fetchPedidosList, loadingSplit };
+    const value = { loadingSplit, splitGastos, createSplit, fetchSplitGastos, acceptSplit, refuseSplit, fetchPedidosList };
 
     return (
         <SplitExpanseContext.Provider value={value}>

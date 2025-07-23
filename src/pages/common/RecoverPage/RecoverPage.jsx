@@ -87,7 +87,7 @@ function RecoverPage() {
                         onChange={handleChangeSenhaNova}
                     />
                 </div>
-                <button type="submit" className={styles.buttonSubmit}>Entrar</button>
+                <button type="submit" className={styles.buttonSubmit}>Salvar</button>
             </form>
         </div>
         </div>

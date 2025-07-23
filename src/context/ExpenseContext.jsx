@@ -253,6 +253,7 @@ export const ExpenseProvider = ({ children }) => {
 
     const createCategoria = async (data) => {
         try {
+            setLoadingEdit(true)
             let payloadParaAPI
             if(data.usarLimite){
                 const valorNumerico = converterStringParaNumero(data.limiteDeGasto)
@@ -270,21 +271,27 @@ export const ExpenseProvider = ({ children }) => {
         } catch (error) {
             console.error("Erro ao criar categoria:", error);
             throw error;
+        }finally{
+            setLoadingEdit(false)
         }
     };
 
     const deleteCategoria = async (data) => {
+        setLoadingDelete(true)
         try {
             await apiDeleteCategoria(data);
             fetchCategorias()
         } catch (error) {
             console.error("Erro ao apagar lista de Categoria:", error);
             throw error;
+        }finally{
+            setLoadingDelete(false)
         }
     };
 
     const editarCategoria = async (id, data) => {
         try {
+            setLoadingEdit(true)
             let payloadParaAPI
             if(data.usarLimite){
                 const valorNumerico = converterStringParaNumero(data.limiteDeGasto)
@@ -307,6 +314,8 @@ export const ExpenseProvider = ({ children }) => {
         } catch (error) {
             console.error("Erro ao atualizar categoria:", error);
             throw error;
+        } finally{
+            setLoadingEdit(false)
         }
     };
 

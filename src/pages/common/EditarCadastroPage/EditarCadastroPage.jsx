@@ -5,12 +5,13 @@ import styles from './EditarCadastroPage.module.css';
 import { toast } from 'react-toastify';
 import Botao from '../../../components/common/botao/Botao';
 import { FaSquarePlus } from "react-icons/fa6";
+import Loading from '@/components/common/loading/Loading';
 
 
 
 function EditarCadastroPage() {
     const navigate = useNavigate();
-    const { userName, edit, setUserName } = useAuth();
+    const { userName, edit, setUserName, loadingRecover } = useAuth();
     const [nome, setNome] = useState(userName);
     const [senhaAtual, setSenhaAtual] = useState('');
     const [senhaNova, setSenhaNova] = useState('');
@@ -113,13 +114,26 @@ function EditarCadastroPage() {
                 </div>
                 <button 
                     type="submit" 
-                    className={styles.buttonSubmit}
-                >
-                    <Botao 
+                    className={`${styles.buttonSubmit} ${loadingRecover ? styles.buttonLoading : ""}`}
+                    disabled={loadingRecover}
+                    >
+                    {loadingRecover ? (
+                        <>
+                        <Botao 
+                            icon={<div className={styles.loadingDiv}>
+                                        <Loading />
+                                    </div>} 
+                            name={"Carregando..."}
+                        />
+                        </>
+                    ) : (
+                        <Botao 
                         icon={<FaSquarePlus size={24} color={"white"}/>} 
                         name={"Editar"}
-                    />
-                </button>
+                        />
+                    )}
+                    </button>
+
             </form>
         </div>
     );

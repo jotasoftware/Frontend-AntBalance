@@ -273,3 +273,9 @@ input:checked + .slider:before {
     background-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(26, 69, 184, 0.1);
 }
+
+.loading {
+    background-color: #6c757d !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}

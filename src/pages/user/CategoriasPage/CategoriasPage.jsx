@@ -17,7 +17,7 @@ import Loading from '@/components/common/loading/Loading';
 
 function CategoriasPage() {
 
-    const { createCategoria, fetchCategorias, categorias, editarCategoria, deleteCategoria, loading } = useExpenses();
+    const { createCategoria, fetchCategorias, categorias, editarCategoria, deleteCategoria, loading, loadingEdit, loadingDelete } = useExpenses();
 
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [showEditPopup, setShowEditPopup] = useState(false);
@@ -223,7 +223,8 @@ function CategoriasPage() {
                     formData={editFormData}
                     handleChange={handleEditChange}
                     handleClosePopup={handleCloseEditPopup}
-                    submitCategoria={submitEditCategoria}    
+                    submitCategoria={submitEditCategoria}
+                    loading={loadingEdit}
                 />
                 <FormCategoriaPopup
                     show={showCreatePopup}
@@ -231,6 +232,7 @@ function CategoriasPage() {
                     handleChange={handleCreateChange}
                     handleClosePopup={handleCloseCreatePopup}
                     submitCategoria={submitCreateCategoria}    
+                    loading={loadingEdit}
                 />
                 <DeletePopup
                     show={showDeletePopup}
@@ -238,6 +240,7 @@ function CategoriasPage() {
                     onConfirm={handleDeleteCategoriaTrue}
                     infoToDelete={categoriaToDelete}
                     type={'CATEGORIA'}
+                    loading={loadingDelete}
                 />
             </GridCard>
         </div>

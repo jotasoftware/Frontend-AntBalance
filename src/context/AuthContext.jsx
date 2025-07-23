@@ -6,7 +6,7 @@ export const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loadingAuth, setLoadingAuth] = useState(true);
-    const [loadingRecover, setLoadingRecover] = useState(true);
+    const [loadingRecover, setLoadingRecover] = useState(false);
     const [userName, setUserName] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [tokenAuth, setTokenAuth] = useState(null);
@@ -74,11 +74,14 @@ export const AuthProvider = ({ children }) => {
     };
 
     const edit = async (credentials) => {
+        setLoadingRecover(true)
         try {
             const response = await apiEdit(credentials, tokenAuth);
             return response
         } catch (error) {
             throw error;
+        }finally{
+            setLoadingRecover(false)
         }
     };
 

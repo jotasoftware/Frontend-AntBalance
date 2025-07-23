@@ -11,14 +11,14 @@ import { Link } from 'react-router-dom'
 import { useExpenses } from '@/context/ExpenseContext';
 import { Chart as ChartJS } from 'chart.js/auto';
 import { Doughnut, Line } from 'react-chartjs-2';
-import Charts from '@/components/company/charts/Charts';
+import Charts from '@/components/user/charts/Charts';
 import Loading from '@/components/common/loading/Loading';
 import { useEmployee } from '@/context/EmployeeContext';
 import { IoPersonAdd } from "react-icons/io5";
 
 function DashboardPageCompany() {
 
-    const { valorAtual, valoresFuturos, gastos, valores, loadingValores, gastosMes } = useExpenses();
+    const { valorAtual, valoresFuturos, gastos, valores, loadingValores } = useExpenses();
     const { valoresSetor, loadingValoresSetor } = useEmployee();
 
     useEffect(() => {
@@ -65,7 +65,7 @@ function DashboardPageCompany() {
                     <Valores mensagem="Salários" dadosMensais={valoresSetor} bgColor={'transparent'} mesColor={'black'} valorColor={'#1a45b8'}></Valores>
                 </GridCard>
                 <GridCard flex={3}>
-                    <Charts gastos={gastos} valores={valores} gastosMes={gastosMes} valoresSetor={valoresSetor}></Charts>
+                    <Charts gastos={gastos} valores={valores}></Charts>
                 </GridCard>
             </div>
         </div>

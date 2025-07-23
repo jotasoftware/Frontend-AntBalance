@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './FormCategoriaPopup.module.css';
 
-export function FormCategoriaPopup({show, formData, handleChange, handleClosePopup, submitCategoria}) {
+export function FormCategoriaPopup({show, formData, handleChange, handleClosePopup, submitCategoria, loading}) {
     if (!show) return null;
 
     return (
@@ -67,11 +67,14 @@ export function FormCategoriaPopup({show, formData, handleChange, handleClosePop
                 Cancelar
             </button>
             <button
-                className={styles.buttonSubmit}
+                className={`${styles.buttonSubmit} ${loading ? styles.loading : ''}`}
                 onClick={submitCategoria}
-            >
-                Salvar alterações
-            </button>
+                disabled={loading}
+              >
+                {loading
+                  ? 'Salvando...'
+                  : `Salvar alterações`}
+              </button>
             </div>
         </div>
         </div>
