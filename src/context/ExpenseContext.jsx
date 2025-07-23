@@ -18,7 +18,7 @@ import {
     gerarRelatorioPdf as apiGerarRelatorioPdf,
 } from '../services/expenseService';
 import { converterStringParaNumero } from "../utils/converterStringNumero";
-import { getMesAtualFormatado } from "@/utils/getMesAtualFormatado";
+import { getMesAtualFormatado, getMesAtualFormatadoValores } from "@/utils/getMesAtualFormatado";
 
 export const ExpenseContext = createContext(null);
 
@@ -105,19 +105,22 @@ export const ExpenseProvider = ({ children }) => {
         try {
             const response = await apiFetchValores();
             const valoresFormatados = transformarDadosDeValores(response);
-
+            
             if (valoresFormatados.length === 0) {
                 setValores([]);
                 setValorAtual(null);
                 setValoresFuturos([]);
                 return;
             }
-
-            const valorAtual = valoresFormatados[0];
-            const valoresFuturos = valoresFormatados.slice(1);
-            setValores(valoresFormatados);
-            setValorAtual(valorAtual?.valor)
-            setValoresFuturos(valoresFuturos);
+            const mesAtual = getMesAtualFormatadoValores().toLowerCase();
+            const indexMesAtual = valoresFormatados.findIndex(v => v.mes.toLowerCase() === mesAtual);
+            if(indexMesAtual != -1){
+                const valorAtual = valoresFormatados[indexMesAtual];
+                const valoresFuturos = valoresFormatados.slice(indexMesAtual+1);
+                setValores(valoresFormatados);
+                setValorAtual(valorAtual?.valor)
+                setValoresFuturos(valoresFuturos);
+            }
         } catch (error) {
             console.error("Erro ao buscar valores:", error);
             throw error;
@@ -359,11 +362,15 @@ export const ExpenseProvider = ({ children }) => {
                         setValorAtual(null);
                         setValoresFuturos([]);
                     } else {
-                        const valorAtual = valoresFormatados[0];
-                        const valoresFuturos = valoresFormatados.slice(1);
-                        setValores(valoresFormatados);
-                        setValorAtual(valorAtual?.valor);
-                        setValoresFuturos(valoresFuturos);
+                        const mesAtual = getMesAtualFormatadoValores().toLowerCase();
+                        const indexMesAtual = valoresFormatados.findIndex(v => v.mes.toLowerCase() === mesAtual);
+                        if(indexMesAtual != -1){
+                            const valorAtual = valoresFormatados[indexMesAtual];
+                            const valoresFuturos = valoresFormatados.slice(indexMesAtual+1);
+                            setValores(valoresFormatados);
+                            setValorAtual(valorAtual?.valor)
+                            setValoresFuturos(valoresFuturos);
+                        }
                     }
 
                     setInitialDataLoaded(true);

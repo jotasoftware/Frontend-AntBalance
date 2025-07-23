@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
         const hasExpired = !loginTime || Date.now() - Number(loginTime) > EXPIRATION_TIME;
 
         if (token && !hasExpired) {
+            console.log(token)
             setIsLoggedIn(true);
             setUserName(storedName);
             setUserRole(storedRole);
