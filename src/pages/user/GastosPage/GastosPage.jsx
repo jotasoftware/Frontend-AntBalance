@@ -362,6 +362,10 @@ function GastosPage() {
     }
     
     const handleImprimirRelatorio = async () => {
+        if(selectedGastos.length == 0){
+            toast.warn("Selecione pelo menos um gasto para a impressão.");
+            return
+        }
         try {
     
             const pdfBlob = await gerarRelatorioPdf(selectedGastos);

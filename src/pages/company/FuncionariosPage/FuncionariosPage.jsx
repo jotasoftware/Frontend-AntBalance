@@ -367,8 +367,11 @@ function FuncionariosPage() {
     }
     
     const handleImprimirRelatorio = async () => {
+        if(selectedFuncionarios.length == 0){
+            toast.warn("Selecione pelo menos um funcionário para a impressão.");
+            return
+        }
         try {
-            console.log(selectedFuncionarios)
             const pdfBlob = await gerarRelatorioPdf(selectedFuncionarios);
     
             if (!pdfBlob) {

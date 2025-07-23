@@ -10,18 +10,29 @@ export const AuthProvider = ({ children }) => {
     const [userName, setUserName] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [tokenAuth, setTokenAuth] = useState(null);
+    const EXPIRATION_TIME = 45 * 60 * 1000;
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         const storedName = localStorage.getItem('userName');
         const storedRole = localStorage.getItem('userRole');
-        if (token) {
-            console.log(token)
+        const loginTime = localStorage.getItem('loginTime');
+
+        const hasExpired = !loginTime || Date.now() - Number(loginTime) > EXPIRATION_TIME;
+
+        if (token && !hasExpired) {
             setIsLoggedIn(true);
             setUserName(storedName);
             setUserRole(storedRole);
-            setTokenAuth(token)
+            setTokenAuth(token);
+            const remainingTime = EXPIRATION_TIME - (Date.now() - Number(loginTime));
+            setTimeout(() => {
+                logout();
+            }, remainingTime);
+        } else {
+            logout();
         }
+
         setLoadingAuth(false);
     }, []);
 
@@ -32,6 +43,7 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('userName', response.name);
                 localStorage.setItem('userRole', response.role);
+                localStorage.setItem('loginTime', Date.now().toString());
                 setIsLoggedIn(true);
                 setUserName(response.name);
                 setUserRole(response.role);
